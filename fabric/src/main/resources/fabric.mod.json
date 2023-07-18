@@ -29,8 +29,6 @@
 		"minecraft": "${minecraft_version_range}",
 		"java": ">=17",
 		"fabric": "*",
-		"forgeconfigapiport": "${forgeconfigapiport_version_range}",
-		"com_electronwill_night-config_core": "*",
-		"com_electronwill_night-config_toml": "*"
+		"forgeconfigapiport": "${forgeconfigapiport_version_range}"
 	}
 }

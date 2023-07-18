@@ -17,11 +17,9 @@ import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Positi
 public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
     private final Minecraft mc;
-    private final GuiComponent gui;
 
-    public BarDisplay(Minecraft mc, GuiComponent gui) {
+    public BarDisplay(Minecraft mc) {
         this.mc = mc;
-        this.gui = gui;
     }
 
     private String getEntityName(LivingEntity entity) {
@@ -96,12 +94,12 @@ public class BarDisplay {
 
     private void renderArmorIcon(PoseStack poseStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        gui.blit(poseStack, x, 1, 34, 9, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 34, 9, 9, 9);
     }
 
     private void renderHeartIcon(PoseStack poseStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        gui.blit(poseStack, x, 1, 16, 0, 9, 9);
-        gui.blit(poseStack, x, 1, 52, 0, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 16, 0, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 52, 0, 9, 9);
     }
 }

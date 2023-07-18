@@ -26,9 +26,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
-    implementation "com.electronwill.night-config:core:${nightconfig_version}"
-    implementation "com.electronwill.night-config:toml:${nightconfig_version}"
-    modApi "net.minecraftforge:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
 }
 
 loom {

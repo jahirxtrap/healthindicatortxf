@@ -6,11 +6,11 @@ import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.CommonUtils.EntityType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Matrix4f;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 

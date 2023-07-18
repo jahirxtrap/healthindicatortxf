@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 
@@ -65,7 +65,7 @@ public class HealthBarRenderer {
         float b = (color & 255) / 255.0F;
 
         RenderSystem.setShaderColor(r, g, b, 1);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
         RenderSystem.enableBlend();
 

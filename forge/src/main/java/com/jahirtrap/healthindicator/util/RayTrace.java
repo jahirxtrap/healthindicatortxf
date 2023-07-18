@@ -89,7 +89,7 @@ public class RayTrace implements BlockGetter {
             return this.clipWithInteractionOverride(c.getFrom(), c.getTo(), pos, voxelshape, block);
         }, (c) -> {
             Vec3 vec3 = c.getFrom().subtract(c.getTo());
-            return BlockHitResult.miss(c.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), new BlockPos(c.getTo()));
+            return BlockHitResult.miss(c.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), BlockPos.containing(c.getTo()));
         });
     }
 

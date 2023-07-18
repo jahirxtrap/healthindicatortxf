@@ -5,7 +5,7 @@ import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 public class Hud extends Screen {
-    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
+    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge", "bosses"));
     private final BarDisplay barDisplay;
     private LivingEntity entity;
     private int age;
@@ -22,7 +22,7 @@ public class Hud extends Screen {
     public Hud() {
         super(Component.literal("Health Indicator TXF HUD"));
         this.minecraft = Minecraft.getInstance();
-        barDisplay = new BarDisplay(Minecraft.getInstance(), this);
+        barDisplay = new BarDisplay(Minecraft.getInstance());
     }
 
     public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {

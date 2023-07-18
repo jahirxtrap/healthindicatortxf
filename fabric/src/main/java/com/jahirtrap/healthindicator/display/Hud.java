@@ -7,13 +7,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class Hud extends Screen {
-    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.of(Registry.ENTITY_TYPE_KEY, new Identifier("c", "bosses"));
+    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier("c", "bosses"));
     private final BarDisplay barDisplay;
     private LivingEntity entity;
     private int age;
@@ -21,7 +21,7 @@ public class Hud extends Screen {
     public Hud() {
         super(Text.literal("Health Indicator TXF HUD"));
         this.client = MinecraftClient.getInstance();
-        barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
+        barDisplay = new BarDisplay(MinecraftClient.getInstance());
     }
 
     public void draw(MatrixStack matrixStack) {

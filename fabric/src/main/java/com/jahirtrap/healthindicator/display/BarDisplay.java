@@ -9,7 +9,6 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -18,11 +17,9 @@ import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Positi
 public class BarDisplay {
     private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
     private final MinecraftClient mc;
-    private final DrawableHelper gui;
 
-    public BarDisplay(MinecraftClient mc, DrawableHelper gui) {
+    public BarDisplay(MinecraftClient mc) {
         this.mc = mc;
-        this.gui = gui;
     }
 
     private String getEntityName(LivingEntity entity) {
@@ -35,7 +32,7 @@ public class BarDisplay {
         int xOffset = 1;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
         RenderSystem.enableBlend();
         int armorValue = entity.getArmor();
@@ -77,7 +74,7 @@ public class BarDisplay {
         else if (position == BOTTOM_RIGHT || position == TOP_RIGHT) xOffset = right;
 
         if (showName && showHealth && showArmor)
-            DrawableHelper.drawTextWithShadow(matrixStack, mc.textRenderer, Text.of(""), xOffset, 2, 0xffffff);
+            DrawableHelper.drawTextWithShadow(matrixStack, mc.textRenderer, "", xOffset, 2, 0xffffff);
 
         if (showName) {
             mc.textRenderer.drawWithShadow(matrixStack, name, xOffset, 2, 0xffffff);
@@ -98,12 +95,12 @@ public class BarDisplay {
 
     private void renderArmorIcon(MatrixStack matrixStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        gui.drawTexture(matrixStack, x, 1, 34, 9, 9, 9);
+        DrawableHelper.drawTexture(matrixStack, x, 1, 34, 9, 9, 9);
     }
 
     private void renderHeartIcon(MatrixStack matrixStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        gui.drawTexture(matrixStack, x, 1, 16, 0, 9, 9);
-        gui.drawTexture(matrixStack, x, 1, 52, 0, 9, 9);
+        DrawableHelper.drawTexture(matrixStack, x, 1, 16, 0, 9, 9);
+        DrawableHelper.drawTexture(matrixStack, x, 1, 52, 0, 9, 9);
     }
 }
