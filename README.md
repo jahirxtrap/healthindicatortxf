@@ -1,0 +1,20 @@
+<h2><strong>Health Indicator TXF mod</strong></h2>
+<p><a href="https://www.curseforge.com/minecraft/mc-mods/health-indicator-txf"><img src="https://cf.way2muchnoise.eu/full_883384_downloads.svg?badge_style=flat" alt="CurseForge downloads" /></a> <a href="https://modrinth.com/mod/health-indicator-txf"><img src="https://img.shields.io/badge/dynamic/json?color=2d2d2d&amp;colorA=17b85a&amp;style=flat-square&amp;label=&amp;suffix= downloads&amp;query=downloads&amp;url=https://api.modrinth.com/v2/project/N56hoqkq&amp;logo=modrinth&amp;logoColor=2d2d2d" alt="Modrinth downloads" /></a></p>
+
+Health indicator on player screen
+
+<strong>This mod adds:</strong>
+
+- HUD displays entity name, armor, health in numeric and bar format
+- Colors and other features can be configured in mod config
+
+<strong>Forge dependencies:</strong>
+
+- <a href="https://www.curseforge.com/minecraft/mc-mods/configured" target="_blank">Configured mod</a> or <a href="https://www.curseforge.com/minecraft/mc-mods/config-menus-forge" target="_blank">Forge Config Screens mod</a> <strong>(Optional)</strong>
+
+<strong>Fabric/Quilt dependencies:</strong>
+
+- <a href="https://www.curseforge.com/minecraft/mc-mods/configured-fabric" target="_blank">Configured mod</a> or <a href="https://www.curseforge.com/minecraft/mc-mods/config-menus-forge" target="_blank">Forge Config Screens mod</a> <strong>(Optional)</strong>
+- <a href="https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port-fabric" target="_blank">Forge Config Api Port mod</a> <strong>(Required)</strong>
+
+<img src="https://cdn.modrinth.com/data/N56hoqkq/images/f61d2dadc16d223d3b35ba8d13b6a3ba3c7eb035.png">
