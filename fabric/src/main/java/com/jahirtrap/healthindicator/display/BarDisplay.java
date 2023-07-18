@@ -5,9 +5,8 @@ import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -26,7 +25,7 @@ public class BarDisplay {
         return entity.getDisplayName().getString();
     }
 
-    public void draw(MatrixStack matrixStack, Position position, LivingEntity entity) {
+    public void draw(DrawContext context, Position position, LivingEntity entity) {
         int barWidth = 128;
         int barHeight = 6;
         int xOffset = 1;
@@ -39,7 +38,7 @@ public class BarDisplay {
         boolean armor = armorValue > 0;
 
         if (HealthIndicatorModConfig.SHOW_BAR.get())
-            HealthBarRenderer.render(matrixStack, entity, barWidth, barHeight, armor);
+            HealthBarRenderer.render(context.getMatrices(), entity, barWidth, barHeight, armor);
 
         String name = getEntityName(entity);
         int healthMax = MathHelper.ceil(entity.getMaxHealth());
@@ -73,34 +72,33 @@ public class BarDisplay {
         if (position == BOTTOM_CENTER || position == TOP_CENTER) xOffset = center;
         else if (position == BOTTOM_RIGHT || position == TOP_RIGHT) xOffset = right;
 
-        if (showName && showHealth && showArmor)
-            DrawableHelper.drawTextWithShadow(matrixStack, mc.textRenderer, "", xOffset, 2, 0xffffff);
+        if (showName && showHealth && showArmor) context.drawTextWithShadow(mc.textRenderer, "", xOffset, 2, 0xffffff);
 
         if (showName) {
-            mc.textRenderer.drawWithShadow(matrixStack, name, xOffset, 2, 0xffffff);
+            context.drawTextWithShadow(mc.textRenderer, name, xOffset, 2, 0xffffff);
             xOffset += mc.textRenderer.getWidth(name) + 5;
         }
         if (showHealth) {
-            renderHeartIcon(matrixStack, xOffset);
+            renderHeartIcon(context, xOffset);
             xOffset += 10;
-            mc.textRenderer.drawWithShadow(matrixStack, healthText, xOffset, 2, 0xffffff);
+            context.drawTextWithShadow(mc.textRenderer, healthText, xOffset, 2, 0xffffff);
             xOffset += mc.textRenderer.getWidth(healthText) + 5;
         }
         if (armor && showArmor) {
-            renderArmorIcon(matrixStack, xOffset);
+            renderArmorIcon(context, xOffset);
             xOffset += 10;
-            mc.textRenderer.drawWithShadow(matrixStack, armorText, xOffset, 2, 0xffffff);
+            context.drawTextWithShadow(mc.textRenderer, armorText, xOffset, 2, 0xffffff);
         }
     }
 
-    private void renderArmorIcon(MatrixStack matrixStack, int x) {
+    private void renderArmorIcon(DrawContext context, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 34, 9, 9, 9);
+        context.drawTexture(ICON_TEXTURES, x, 1, 34, 9, 9, 9);
     }
 
-    private void renderHeartIcon(MatrixStack matrixStack, int x) {
+    private void renderHeartIcon(DrawContext context, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 16, 0, 9, 9);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 52, 0, 9, 9);
+        context.drawTexture(ICON_TEXTURES, x, 1, 16, 0, 9, 9);
+        context.drawTexture(ICON_TEXTURES, x, 1, 52, 0, 9, 9);
     }
 }

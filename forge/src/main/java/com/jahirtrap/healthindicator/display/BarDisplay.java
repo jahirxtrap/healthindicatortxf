@@ -6,7 +6,7 @@ import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -26,7 +26,7 @@ public class BarDisplay {
         return entity.getDisplayName().getString();
     }
 
-    public void draw(Position position, PoseStack poseStack, LivingEntity entity) {
+    public void draw(GuiGraphics guiGraphics, Position position, PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128;
         int barHeight = 6;
         int xOffset = 1;
@@ -73,33 +73,33 @@ public class BarDisplay {
         if (position == BOTTOM_CENTER || position == TOP_CENTER) xOffset = center;
         else if (position == BOTTOM_RIGHT || position == TOP_RIGHT) xOffset = right;
 
-        if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
+        if (showName && showHealth && showArmor) guiGraphics.drawString(mc.font, "", xOffset, 2, 0xffffff);
 
         if (showName) {
-            mc.font.drawShadow(poseStack, name, xOffset, 2, 0xffffff);
+            guiGraphics.drawString(mc.font, name, xOffset, 2, 0xffffff);
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
-            renderHeartIcon(poseStack, xOffset);
+            renderHeartIcon(guiGraphics, xOffset);
             xOffset += 10;
-            mc.font.drawShadow(poseStack, healthText, xOffset, 2, 0xffffff);
+            guiGraphics.drawString(mc.font, healthText, xOffset, 2, 0xffffff);
             xOffset += mc.font.width(healthText) + 5;
         }
         if (armor && showArmor) {
-            renderArmorIcon(poseStack, xOffset);
+            renderArmorIcon(guiGraphics, xOffset);
             xOffset += 10;
-            mc.font.drawShadow(poseStack, armorText, xOffset, 2, 0xffffff);
+            guiGraphics.drawString(mc.font, armorText, xOffset, 2, 0xffffff);
         }
     }
 
-    private void renderArmorIcon(PoseStack poseStack, int x) {
+    private void renderArmorIcon(GuiGraphics guiGraphics, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        GuiComponent.blit(poseStack, x, 1, 34, 9, 9, 9);
+        guiGraphics.blit(ICON_TEXTURES, x, 1, 34, 9, 9, 9);
     }
 
-    private void renderHeartIcon(PoseStack poseStack, int x) {
+    private void renderHeartIcon(GuiGraphics guiGraphics, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        GuiComponent.blit(poseStack, x, 1, 16, 0, 9, 9);
-        GuiComponent.blit(poseStack, x, 1, 52, 0, 9, 9);
+        guiGraphics.blit(ICON_TEXTURES, x, 1, 16, 0, 9, 9);
+        guiGraphics.blit(ICON_TEXTURES, x, 1, 52, 0, 9, 9);
     }
 }

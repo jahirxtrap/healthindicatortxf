@@ -3,8 +3,8 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.RegistryKeys;
@@ -24,12 +24,12 @@ public class Hud extends Screen {
         barDisplay = new BarDisplay(MinecraftClient.getInstance());
     }
 
-    public void draw(MatrixStack matrixStack) {
+    public void draw(DrawContext context) {
         float scale = HealthIndicatorModConfig.SCALE.get().floatValue();
         if (this.client != null && this.client.options.debugEnabled) return;
         float x = determineX();
         float y = determineY();
-        draw(matrixStack, x, y, scale);
+        draw(context, x, y, scale);
     }
 
     private float determineX() {
@@ -84,15 +84,15 @@ public class Hud extends Screen {
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
 
-    private void draw(MatrixStack matrixStack, float x, float y, float scale) {
+    private void draw(DrawContext context, float x, float y, float scale) {
         if (entity == null) return;
 
         Position position = HealthIndicatorModConfig.POSITION.get();
 
-        matrixStack.push();
-        matrixStack.translate(x, y, 0);
-        matrixStack.scale(scale, scale, scale);
-        if (HealthIndicatorModConfig.ENABLE_MOD.get()) barDisplay.draw(matrixStack, position, entity);
-        matrixStack.pop();
+        context.getMatrices().push();
+        context.getMatrices().translate(x, y, 0);
+        context.getMatrices().scale(scale, scale, scale);
+        if (HealthIndicatorModConfig.ENABLE_MOD.get()) barDisplay.draw(context, position, entity);
+        context.getMatrices().pop();
     }
 }

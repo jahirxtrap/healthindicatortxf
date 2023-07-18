@@ -4,6 +4,7 @@ import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -25,12 +26,12 @@ public class Hud extends Screen {
         barDisplay = new BarDisplay(Minecraft.getInstance());
     }
 
-    public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+    public void draw(ForgeGui forgeGui, GuiGraphics guiGraphics, float v, int i, int j) {
         float scale = HealthIndicatorModConfig.SCALE.get().floatValue();
         if (this.minecraft != null && this.minecraft.options.renderDebug) return;
         float x = determineX();
         float y = determineY();
-        draw(poseStack, x, y, scale);
+        draw(guiGraphics, guiGraphics.pose(), x, y, scale);
     }
 
     private float determineX() {
@@ -85,7 +86,7 @@ public class Hud extends Screen {
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
 
-    private void draw(PoseStack poseStack, float x, float y, float scale) {
+    private void draw(GuiGraphics guiGraphics, PoseStack poseStack, float x, float y, float scale) {
         if (entity == null) return;
 
         Position position = HealthIndicatorModConfig.POSITION.get();
@@ -93,7 +94,7 @@ public class Hud extends Screen {
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
-        if (HealthIndicatorModConfig.ENABLE_MOD.get()) barDisplay.draw(position, poseStack, entity);
+        if (HealthIndicatorModConfig.ENABLE_MOD.get()) barDisplay.draw(guiGraphics, position, poseStack, entity);
         poseStack.popPose();
     }
 }
