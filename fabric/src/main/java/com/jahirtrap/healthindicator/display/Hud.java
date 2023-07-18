@@ -8,7 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.tag.TagKey;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -19,7 +19,7 @@ public class Hud extends Screen {
     private int age;
 
     public Hud() {
-        super(new LiteralText("Health Indicator TXF HUD"));
+        super(Text.literal("Health Indicator TXF HUD"));
         this.client = MinecraftClient.getInstance();
         barDisplay = new BarDisplay(MinecraftClient.getInstance(), this);
     }

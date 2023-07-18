@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class RayTrace implements BlockView {
-    private static final Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.collides();
+    private static final Predicate<Entity> isVisible = entity -> !entity.isSpectator() && entity.canHit();
     private static final MinecraftClient minecraft = MinecraftClient.getInstance();
 
     @Override

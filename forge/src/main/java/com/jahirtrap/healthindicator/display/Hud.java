@@ -6,11 +6,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 public class Hud extends Screen {
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
@@ -19,12 +20,12 @@ public class Hud extends Screen {
     private int age;
 
     public Hud() {
-        super(new TextComponent("Health Indicator TXF HUD"));
+        super(Component.literal("Health Indicator TXF HUD"));
         this.minecraft = Minecraft.getInstance();
         barDisplay = new BarDisplay(Minecraft.getInstance(), this);
     }
 
-    public void draw(PoseStack poseStack) {
+    public void draw(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
         float scale = HealthIndicatorModConfig.SCALE.get().floatValue();
         if (this.minecraft != null && this.minecraft.options.renderDebug) return;
         float x = determineX();
