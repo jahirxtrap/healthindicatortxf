@@ -4,21 +4,19 @@ import com.jahirtrap.healthindicator.bars.HealthBarRenderer;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-
-import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 
 public class BarDisplay {
-    private static final Identifier ICON_TEXTURES = new Identifier("textures/gui/icons.png");
-    private final MinecraftClient mc;
+    private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
+    private final Minecraft mc;
 
-    public BarDisplay(MinecraftClient mc) {
+    public BarDisplay(Minecraft mc) {
         this.mc = mc;
     }
 
@@ -26,26 +24,32 @@ public class BarDisplay {
         return entity.getDisplayName().getString();
     }
 
-    public void draw(MatrixStack matrixStack, Position position, LivingEntity entity) {
+    public void draw(Position position, PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128;
         int barHeight = 6;
         int xOffset = 1;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
         RenderSystem.enableBlend();
-        int armorValue = entity.getArmor();
+        int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
 
         if (HealthIndicatorModConfig.SHOW_BAR.get())
-            HealthBarRenderer.render(matrixStack, entity, barWidth, barHeight, armor);
+            HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
 
         String name = getEntityName(entity);
-        int healthMax = MathHelper.ceil(entity.getMaxHealth());
-        int healthCur = Math.min(MathHelper.ceil(entity.getHealth()), healthMax);
+        int healthMax = Mth.ceil(entity.getMaxHealth());
+        int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
+
+        switch (HealthIndicatorModConfig.HEALTH_TEXT_FORMAT.get()) {
+            case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
+            case MAX_HEALTH -> healthText = String.valueOf(healthMax);
+        }
+
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         int offAux = 0;
@@ -54,7 +58,7 @@ public class BarDisplay {
         boolean showHealth = HealthIndicatorModConfig.SHOW_HEALTH.get();
         boolean showArmor = HealthIndicatorModConfig.SHOW_ARMOR.get();
         if (showName) {
-            offAux += mc.textRenderer.getWidth(name);
+            offAux += mc.font.width(name);
             if (showHealth) {
                 offAux += 5;
                 aux = false;
@@ -62,45 +66,46 @@ public class BarDisplay {
             if (armor && showArmor) offAux += 5;
         }
         if (showHealth) {
-            offAux += mc.textRenderer.getWidth(healthText) + 10;
+            offAux += mc.font.width(healthText) + 10;
             if (armor && showArmor && aux) offAux += 5;
         }
-        if (armor && showArmor) offAux += mc.textRenderer.getWidth(armorText) + 10;
+        if (armor && showArmor) offAux += mc.font.width(armorText) + 10;
 
         int center = (barWidth / 2) - ((offAux) / 2);
         int right = barWidth - (offAux) - xOffset;
 
-        if (position == BOTTOM_CENTER || position == TOP_CENTER) xOffset = center;
-        else if (position == BOTTOM_RIGHT || position == TOP_RIGHT) xOffset = right;
+        switch (position) {
+            case BOTTOM_CENTER, TOP_CENTER -> xOffset = center;
+            case BOTTOM_RIGHT, TOP_RIGHT -> xOffset = right;
+        }
 
-        if (showName && showHealth && showArmor)
-            DrawableHelper.drawTextWithShadow(matrixStack, mc.textRenderer, "", xOffset, 2, 0xffffff);
+        if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
 
         if (showName) {
-            mc.textRenderer.drawWithShadow(matrixStack, name, xOffset, 2, 0xffffff);
-            xOffset += mc.textRenderer.getWidth(name) + 5;
+            mc.font.drawShadow(poseStack, name, xOffset, 2, 0xffffff);
+            xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
-            renderHeartIcon(matrixStack, xOffset);
+            renderHeartIcon(poseStack, xOffset);
             xOffset += 10;
-            mc.textRenderer.drawWithShadow(matrixStack, healthText, xOffset, 2, 0xffffff);
-            xOffset += mc.textRenderer.getWidth(healthText) + 5;
+            mc.font.drawShadow(poseStack, healthText, xOffset, 2, 0xffffff);
+            xOffset += mc.font.width(healthText) + 5;
         }
         if (armor && showArmor) {
-            renderArmorIcon(matrixStack, xOffset);
+            renderArmorIcon(poseStack, xOffset);
             xOffset += 10;
-            mc.textRenderer.drawWithShadow(matrixStack, armorText, xOffset, 2, 0xffffff);
+            mc.font.drawShadow(poseStack, armorText, xOffset, 2, 0xffffff);
         }
     }
 
-    private void renderArmorIcon(MatrixStack matrixStack, int x) {
+    private void renderArmorIcon(PoseStack poseStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 34, 9, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 34, 9, 9, 9);
     }
 
-    private void renderHeartIcon(MatrixStack matrixStack, int x) {
+    private void renderHeartIcon(PoseStack poseStack, int x) {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 16, 0, 9, 9);
-        DrawableHelper.drawTexture(matrixStack, x, 1, 52, 0, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 16, 0, 9, 9);
+        GuiComponent.blit(poseStack, x, 1, 52, 0, 9, 9);
     }
 }
