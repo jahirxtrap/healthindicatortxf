@@ -22,7 +22,7 @@
 		]
 	},
 	"mixins": [
-		"healthindicatortxf.mixins.json"
+		"${mod_id}.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "${loader_version_range}",
@@ -30,5 +30,8 @@
 		"java": ">=17",
 		"fabric": "*",
 		"forgeconfigapiport": "${forgeconfigapiport_version_range}"
-	}
+	},
+	"jars": [{
+      		"file": "META-INF/jars/ForgeConfigAPIPort-v8.0.0-1.20.1-Fabric.jar"
+    	}]
 }

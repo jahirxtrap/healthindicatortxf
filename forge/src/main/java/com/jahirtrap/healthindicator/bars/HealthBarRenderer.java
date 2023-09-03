@@ -20,7 +20,7 @@ public class HealthBarRenderer {
 
     public static void render(PoseStack poseStack, LivingEntity entity, float width, float height, boolean armor) {
         EntityType entityType = CommonUtils.getEntityType(entity);
-        int color = 0x8000ff, color2 = 0x400080;
+        int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080;
         if (entityType == EntityType.PASSIVE) {
             color = getColor(0x00ff00, HealthIndicatorModConfig.PASSIVE_COLOR.get());
             color2 = getColor(0x008000, HealthIndicatorModConfig.PASSIVE_COLOR_SECONDARY.get());
@@ -31,6 +31,7 @@ public class HealthBarRenderer {
             color = getColor(0x0000ff, HealthIndicatorModConfig.NEUTRAL_COLOR.get());
             color2 = getColor(0x000080, HealthIndicatorModConfig.NEUTRAL_COLOR_SECONDARY.get());
         }
+        color3 = getColor(0x808080, HealthIndicatorModConfig.BACKGROUND_COLOR.get());
 
         BarState state = BarStates.getState(entity);
 
@@ -39,8 +40,10 @@ public class HealthBarRenderer {
         int zOffset = 0;
 
         Matrix4f m4f = poseStack.last().pose();
-        drawBar(m4f, width, height, 1, 0x808080, zOffset++, true, armor);
-        drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
+        if (HealthIndicatorModConfig.SHOW_BAR_BACKGROUND.get())
+            drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
+        if (HealthIndicatorModConfig.SHOW_BAR_SECONDARY.get())
+            drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
         drawBar(m4f, width, height, percent, color, zOffset, false, armor);
     }
 

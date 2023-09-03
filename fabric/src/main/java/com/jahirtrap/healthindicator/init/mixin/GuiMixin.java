@@ -1,17 +1,17 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
 import com.jahirtrap.healthindicator.HealthIndicatorMod;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
-public class InGameHudMixin {
+@Mixin(Gui.class)
+public class GuiMixin {
     @Inject(method = "render", at = @At("RETURN"))
-    private void render(DrawContext context, float tickDelta, CallbackInfo info) {
-        HealthIndicatorMod.HUD.draw(context);
+    private void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        HealthIndicatorMod.HUD.draw(guiGraphics);
     }
 }
