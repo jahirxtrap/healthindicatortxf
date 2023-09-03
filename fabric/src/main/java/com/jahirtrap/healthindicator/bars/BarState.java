@@ -1,7 +1,7 @@
 package com.jahirtrap.healthindicator.bars;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 
 public class BarState {
     private static final float HEALTH_INDICATOR_DELAY = 10;
@@ -43,7 +43,7 @@ public class BarState {
     }
 
     private void handleHealthChange() {
-        lastDmg = MathHelper.ceil(lastHealth) - MathHelper.ceil(health);
+        lastDmg = Mth.ceil(lastHealth) - Mth.ceil(health);
         lastDmgCumulative += lastDmg;
 
         lastDmgDelay = HEALTH_INDICATOR_DELAY * 2;

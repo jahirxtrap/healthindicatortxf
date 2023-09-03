@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
-import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.*;
-
 public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
     private final Minecraft mc;
@@ -48,6 +46,12 @@ public class BarDisplay {
         int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
+
+        switch (HealthIndicatorModConfig.HEALTH_TEXT_FORMAT.get()) {
+            case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
+            case MAX_HEALTH -> healthText = String.valueOf(healthMax);
+        }
+
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         int offAux = 0;
@@ -72,8 +76,10 @@ public class BarDisplay {
         int center = (barWidth / 2) - ((offAux) / 2);
         int right = barWidth - (offAux) - xOffset;
 
-        if (position == BOTTOM_CENTER || position == TOP_CENTER) xOffset = center;
-        else if (position == BOTTOM_RIGHT || position == TOP_RIGHT) xOffset = right;
+        switch (position) {
+            case BOTTOM_CENTER, TOP_CENTER -> xOffset = center;
+            case BOTTOM_RIGHT, TOP_RIGHT -> xOffset = right;
+        }
 
         if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
 

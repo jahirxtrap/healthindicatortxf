@@ -23,5 +23,37 @@ public class CommonUtils {
         return color;
     }
 
+    //Damage Particle Utils
+    public static float getRedFromColor(int color) {
+        return ((color >> 16) & 0xff) / 255F;
+    }
+
+    public static float getGreenFromColor(int color) {
+        return ((color >> 8) & 0xff) / 255F;
+    }
+
+    public static float getBlueFromColor(int color) {
+        return ((color) & 0xff) / 255F;
+    }
+
+    public static float getAlphaFromColor(int color) {
+        return ((color >> 24) & 0xff) / 255F;
+    }
+
+    public static int getColorFromRGBA(float red, float green, float blue, float alpha) {
+        return ((int) (alpha * 255) << 24) |
+                ((int) (red * 255) << 16) |
+                ((int) (green * 255) << 8) |
+                (int) (blue * 255);
+    }
+
+    public static String formatDamageText(float amount) {
+        if (amount % 1.0 == 0) {
+            return String.format("%.0f", amount);
+        } else {
+            return String.format("%.1f", amount);
+        }
+    }
+
     public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
 }
