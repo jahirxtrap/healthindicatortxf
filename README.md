@@ -6,6 +6,7 @@ Health indicator on player screen
 <strong>This mod adds:</strong>
 
 - HUD displays entity name, armor, health in numeric and bar format
+- Damage particles when hitting an entity
 - Colors and other features can be configured in mod config
 
 <strong>Forge dependencies:</strong>
@@ -15,6 +16,5 @@ Health indicator on player screen
 <strong>Fabric/Quilt dependencies:</strong>
 
 - <a href="https://www.curseforge.com/minecraft/mc-mods/configured-fabric" target="_blank">Configured mod</a> or <a href="https://www.curseforge.com/minecraft/mc-mods/config-menus-forge" target="_blank">Forge Config Screens mod</a> <strong>(Optional)</strong>
-- <a href="https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port-fabric" target="_blank">Forge Config Api Port mod</a> <strong>(Required)</strong>
 
 <img src="https://cdn.modrinth.com/data/N56hoqkq/images/f61d2dadc16d223d3b35ba8d13b6a3ba3c7eb035.png">
