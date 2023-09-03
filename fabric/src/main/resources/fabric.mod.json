@@ -22,7 +22,7 @@
 		]
 	},
 	"mixins": [
-		"healthindicatortxf.mixins.json"
+		"${mod_id}.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "${loader_version_range}",
@@ -32,5 +32,8 @@
 		"forgeconfigapiport": "${forgeconfigapiport_version_range}",
 		"com_electronwill_night-config_core": "*",
 		"com_electronwill_night-config_toml": "*"
-	}
+	},
+	"jars": [{
+      		"file": "META-INF/jars/ForgeConfigAPIPort-v4.2.11-1.19.2-Fabric.jar"
+    	}]
 }

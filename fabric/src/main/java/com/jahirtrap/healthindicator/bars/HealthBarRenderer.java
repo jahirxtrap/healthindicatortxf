@@ -5,22 +5,22 @@ import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.CommonUtils.EntityType;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 
 public class HealthBarRenderer {
-    private static final Identifier GUI_BARS_TEXTURES = new Identifier(
+    private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(
             HealthIndicatorMod.MODID + ":textures/gui/bars.png");
 
-    public static void render(MatrixStack matrixStack, LivingEntity entity, float width, float height, boolean armor) {
+    public static void render(PoseStack poseStack, LivingEntity entity, float width, float height, boolean armor) {
         EntityType entityType = CommonUtils.getEntityType(entity);
-        int color = 0x8000ff, color2 = 0x400080;
+        int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080;
         if (entityType == EntityType.PASSIVE) {
             color = getColor(0x00ff00, HealthIndicatorModConfig.PASSIVE_COLOR.get());
             color2 = getColor(0x008000, HealthIndicatorModConfig.PASSIVE_COLOR_SECONDARY.get());
@@ -31,6 +31,7 @@ public class HealthBarRenderer {
             color = getColor(0x0000ff, HealthIndicatorModConfig.NEUTRAL_COLOR.get());
             color2 = getColor(0x000080, HealthIndicatorModConfig.NEUTRAL_COLOR_SECONDARY.get());
         }
+        color3 = getColor(0x808080, HealthIndicatorModConfig.BACKGROUND_COLOR.get());
 
         BarState state = BarStates.getState(entity);
 
@@ -38,11 +39,12 @@ public class HealthBarRenderer {
         float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
         int zOffset = 0;
 
-        Matrix4f m4f = matrixStack.peek().getPositionMatrix();
-        drawBar(m4f, width, height, 1, 0x808080, zOffset++, true, armor);
-        drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
+        Matrix4f m4f = poseStack.last().pose();
+        if (HealthIndicatorModConfig.SHOW_BAR_BACKGROUND.get())
+            drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
+        if (HealthIndicatorModConfig.SHOW_BAR_SECONDARY.get())
+            drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
         drawBar(m4f, width, height, percent, color, zOffset, false, armor);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private static void drawBar(Matrix4f matrix4f, float width, float height, float percent,
@@ -51,7 +53,7 @@ public class HealthBarRenderer {
         int u = 0;
         int v = 6 * 6 * 2 + 6;
         if (back) v = 6 * 6 * 2;
-        int uw = MathHelper.ceil(128 * percent);
+        int uw = Mth.ceil(128 * percent);
         int vh = 6;
         int y = 12;
 
@@ -71,18 +73,18 @@ public class HealthBarRenderer {
 
         float zOffsetAmount = 0.1F;
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
         buffer.vertex(matrix4f, 0, y, zOffset * zOffsetAmount)
-                .texture(u * c, v * c).next();
+                .uv(u * c, v * c).endVertex();
         buffer.vertex(matrix4f, 0, height + y, zOffset * zOffsetAmount)
-                .texture(u * c, (v + vh) * c).next();
+                .uv(u * c, (v + vh) * c).endVertex();
         buffer.vertex(matrix4f, (float) size, height + y, zOffset * zOffsetAmount)
-                .texture((u + uw) * c, (v + vh) * c).next();
+                .uv((u + uw) * c, (v + vh) * c).endVertex();
         buffer.vertex(matrix4f, (float) size, y, zOffset * zOffsetAmount)
-                .texture(((u + uw) * c), v * c).next();
-        tessellator.draw();
+                .uv(((u + uw) * c), v * c).endVertex();
+        tesselator.end();
     }
 }

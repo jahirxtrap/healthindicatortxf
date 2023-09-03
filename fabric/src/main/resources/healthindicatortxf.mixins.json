@@ -3,8 +3,9 @@
 	"package": "com.jahirtrap.healthindicator.init.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"InGameHudMixin",
-		"PlayerEntityMixin"
+		"DamageParticleMixin",
+		"GuiMixin",
+		"PlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

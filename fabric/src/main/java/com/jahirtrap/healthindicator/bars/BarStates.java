@@ -1,8 +1,8 @@
 package com.jahirtrap.healthindicator.bars;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +36,12 @@ public class BarStates {
     private static boolean stateExpired(Map.Entry<Integer, BarState> entry) {
         if (entry.getValue() == null) return true;
 
-        MinecraftClient minecraft = MinecraftClient.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
         Entity entity = null;
-        if (minecraft.world != null) entity = minecraft.world.getEntityById(entry.getKey());
+        if (minecraft.level != null) entity = minecraft.level.getEntity(entry.getKey());
 
         if (!(entity instanceof LivingEntity)) return true;
-        if (!minecraft.world.isChunkLoaded(entity.getBlockPos())) return true;
+        if (!minecraft.level.hasChunkAt(entity.blockPosition())) return true;
 
         return !entity.isAlive();
     }
