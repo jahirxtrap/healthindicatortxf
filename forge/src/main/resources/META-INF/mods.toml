@@ -10,7 +10,7 @@ displayURL = "${mod_url}"
 logoFile = "logo.png"
 authors = "${mod_author}"
 description = "${mod_description}"
-credits = "${mod_credits}"
+credits = "${mod_credits_1}, ${mod_credits_2}"
 
 [[dependencies.${mod_id}]]
     modId = "forge"
