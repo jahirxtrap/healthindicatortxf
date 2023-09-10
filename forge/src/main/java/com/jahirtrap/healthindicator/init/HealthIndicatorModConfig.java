@@ -7,13 +7,15 @@ import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Positi
 
 public class HealthIndicatorModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_MOD;
+    public static final ForgeConfigSpec.BooleanValue SHOW_HUD;
+    public static final ForgeConfigSpec.BooleanValue SHOW_DAMAGE_PARTICLES;
     public static final ForgeConfigSpec.BooleanValue SHOW_BAR;
     public static final ForgeConfigSpec.BooleanValue SHOW_BAR_SECONDARY;
     public static final ForgeConfigSpec.BooleanValue SHOW_BAR_BACKGROUND;
-    public static final ForgeConfigSpec.BooleanValue SHOW_DAMAGE_PARTICLES;
     public static final ForgeConfigSpec.BooleanValue SHOW_NAME;
     public static final ForgeConfigSpec.BooleanValue SHOW_HEALTH;
     public static final ForgeConfigSpec.BooleanValue SHOW_ARMOR;
+    public static final ForgeConfigSpec.BooleanValue SHOW_MOD_NAME;
     public static final ForgeConfigSpec.BooleanValue SHOW_BOSSES;
     public static final ForgeConfigSpec.IntValue DISTANCE;
     public static final ForgeConfigSpec.DoubleValue X_VALUE;
@@ -29,19 +31,22 @@ public class HealthIndicatorModConfig {
     public static final ForgeConfigSpec.ConfigValue<String> HOSTILE_COLOR_SECONDARY;
     public static final ForgeConfigSpec.ConfigValue<String> NEUTRAL_COLOR;
     public static final ForgeConfigSpec.ConfigValue<String> NEUTRAL_COLOR_SECONDARY;
+    public static final ForgeConfigSpec.ConfigValue<String> MOD_NAME_COLOR;
     public static final ForgeConfigSpec.ConfigValue<String> DAMAGE_PARTICLE_COLOR;
     public static ForgeConfigSpec CLIENT_CONFIG;
 
     static {
         ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
         ENABLE_MOD = CLIENT_BUILDER.comment("Should mod be enabled?").define("enableMod", true);
-        SHOW_BAR = CLIENT_BUILDER.comment("Should show bar in HUD?").define("showBar", true);
+        SHOW_HUD = CLIENT_BUILDER.comment("Should show hud?").define("showHud", true);
+        SHOW_DAMAGE_PARTICLES = CLIENT_BUILDER.comment("Should show damage particles?").define("showDamageParticles", true);
+        SHOW_BAR = CLIENT_BUILDER.comment("Should show bar in hud?").define("showBar", true);
         SHOW_BAR_SECONDARY = CLIENT_BUILDER.comment("Should show secondary bar?").define("showSecondaryBar", true);
         SHOW_BAR_BACKGROUND = CLIENT_BUILDER.comment("Should show background bar?").define("showBackgroundBar", true);
-        SHOW_DAMAGE_PARTICLES = CLIENT_BUILDER.comment("Should show damage particles?").define("showDamageParticles", true);
-        SHOW_NAME = CLIENT_BUILDER.comment("Should show entity name?").define("showEntityName", true);
+        SHOW_NAME = CLIENT_BUILDER.comment("Should show entity name?").define("showName", true);
         SHOW_HEALTH = CLIENT_BUILDER.comment("Should show entity health?").define("showHealth", true);
         SHOW_ARMOR = CLIENT_BUILDER.comment("Should show entity armor?").define("showArmor", true);
+        SHOW_MOD_NAME = CLIENT_BUILDER.comment("Should show mod name?").define("showModName", false);
         SHOW_BOSSES = CLIENT_BUILDER.comment("Should show bosses?").define("showBosses", false);
         HEALTH_TEXT_FORMAT = CLIENT_BUILDER.defineEnum("healthTextFormat", BOTH);
         CLIENT_BUILDER.push("hud");
@@ -60,6 +65,7 @@ public class HealthIndicatorModConfig {
         HOSTILE_COLOR_SECONDARY = CLIENT_BUILDER.comment("Default Value: 800000").define("hostileColorSecondary", "800000");
         NEUTRAL_COLOR = CLIENT_BUILDER.comment("Default Value: 0000ff").define("neutralColor", "0000ff");
         NEUTRAL_COLOR_SECONDARY = CLIENT_BUILDER.comment("Default Value: 000080").define("neutralColorSecondary", "000080");
+        MOD_NAME_COLOR = CLIENT_BUILDER.comment("Default Value: 5555ff").define("modNameColor", "5555ff");
         DAMAGE_PARTICLE_COLOR = CLIENT_BUILDER.comment("Default Value: fcfcfc").define("damageParticleColor", "fcfcfc");
         CLIENT_BUILDER.pop();
         CLIENT_CONFIG = CLIENT_BUILDER.build();

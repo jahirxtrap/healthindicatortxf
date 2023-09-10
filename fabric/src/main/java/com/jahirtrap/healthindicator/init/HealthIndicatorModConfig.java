@@ -8,20 +8,24 @@ import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Positi
 public class HealthIndicatorModConfig extends MidnightConfig {
     @Entry(name = "Enable Mod")
     public static boolean enableMod = true;
+    @Entry(name = "Show Hud")
+    public static boolean showHud = true;
+    @Entry(name = "Show Damage Particles")
+    public static boolean showDamageParticles = true;
     @Entry(name = "Show Bar")
     public static boolean showBar = true;
     @Entry(name = "Show Secondary Bar")
     public static boolean showSecondaryBar = true;
     @Entry(name = "Show Background Bar")
     public static boolean showBackgroundBar = true;
-    @Entry(name = "Show Damage Particles")
-    public static boolean showDamageParticles = true;
-    @Entry(name = "Show Entity Name")
-    public static boolean showEntityName = true;
+    @Entry(name = "Show Name")
+    public static boolean showName = true;
     @Entry(name = "Show Health")
     public static boolean showHealth = true;
     @Entry(name = "Show Armor")
     public static boolean showArmor = true;
+    @Entry(name = "Show Mod Name")
+    public static boolean showModName = false;
     @Entry(name = "Show Bosses")
     public static boolean showBosses = false;
     @Entry(name = "Health Text Format")
@@ -56,6 +60,8 @@ public class HealthIndicatorModConfig extends MidnightConfig {
     public static String neutralColor = "#0000ff";
     @Entry(name = "Neutral Color Secondary", width = 7, min = 7, isColor = true)
     public static String neutralColorSecondary = "#000080";
+    @Entry(name = "Mod Name Color", width = 7, min = 7, isColor = true)
+    public static String modNameColor = "#5555ff";
     @Entry(name = "Damage Particle Color", width = 7, min = 7, isColor = true)
     public static String damageParticleColor = "#fcfcfc";
 

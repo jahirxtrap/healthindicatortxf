@@ -1,10 +1,13 @@
 package com.jahirtrap.healthindicator.util;
 
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraftforge.fml.ModList;
 
 public class CommonUtils {
     public static EntityType getEntityType(Entity entity) {
@@ -12,6 +15,12 @@ public class CommonUtils {
         else if (entity instanceof Monster || entity instanceof Slime || entity instanceof Ghast || entity instanceof Hoglin || entity instanceof Phantom || entity instanceof Shulker)
             return EntityType.HOSTILE;
         else return EntityType.PASSIVE;
+    }
+
+    public static String getModName(LivingEntity entity) {
+        String modId = Registry.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
+        String displayName = ModList.get().getModContainerById(modId).get().getModInfo().getDisplayName();
+        return displayName;
     }
 
     public static Integer getColor(int defaultValue, String hexColor) {

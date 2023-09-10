@@ -57,7 +57,7 @@ public class HealthBarRenderer {
         int vh = 6;
         int y = 12;
 
-        if (!HealthIndicatorModConfig.showEntityName && !HealthIndicatorModConfig.showHealth && (!armor || !HealthIndicatorModConfig.showArmor))
+        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && (!armor || !HealthIndicatorModConfig.showArmor))
             y = 0;
 
         double size = percent * width;
