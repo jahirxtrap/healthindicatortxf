@@ -41,7 +41,7 @@ public abstract class DamageParticleMixin {
                 livingEntity.getBoundingBox().maxY + 0.24;
         double posZ = livingEntity.getZ();
 
-        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.DAMAGE_PARTICLE_COLOR.get());
+        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.damageParticleColor);
 
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);
@@ -55,7 +55,7 @@ public abstract class DamageParticleMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onLivingUpdateEvent(CallbackInfo ci) {
-        if (!HealthIndicatorModConfig.SHOW_DAMAGE_PARTICLES.get()) return;
+        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
 
