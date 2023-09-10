@@ -87,12 +87,11 @@ public class Hud extends Screen {
     private void draw(PoseStack poseStack, float x, float y, float scale) {
         if (entity == null) return;
 
-        Position position = HealthIndicatorModConfig.POSITION.get();
-
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
-        if (HealthIndicatorModConfig.ENABLE_MOD.get()) barDisplay.draw(position, poseStack, entity);
+        if (HealthIndicatorModConfig.ENABLE_MOD.get() && HealthIndicatorModConfig.SHOW_HUD.get())
+            barDisplay.draw(poseStack, entity);
         poseStack.popPose();
     }
 }
