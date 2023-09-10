@@ -87,7 +87,7 @@ def replaceProperties = [
         forge_version: forge_version, forge_version_range: forge_version_range,
         loader_version_range: forge_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
-        mod_author: mod_author, mod_credits: mod_credits, mod_description: mod_description,
+        mod_author: mod_author, mod_credits_1: mod_credits_1, mod_credits_2: mod_credits_2, mod_description: mod_description,
         mod_url: mod_url, side: forge_side
 ]
 

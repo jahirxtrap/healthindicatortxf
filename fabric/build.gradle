@@ -13,8 +13,8 @@ base {
 
 repositories {
     maven {
-        name = "Fuzs Mod Resources"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        name "modrinth"
+        url "https://api.modrinth.com/maven"
     }
 }
 
@@ -26,7 +26,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
-    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    modImplementation "maven.modrinth:midnightlib:${midnightlib_version}-fabric"
 }
 
 loom {
@@ -67,9 +67,9 @@ def replaceProperties = [
         minecraft_version_range: fabric_minecraft_version_range,
         loader_version_range: fabric_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
-        mod_author: mod_author, mod_credits: mod_credits, mod_description: mod_description,
+        mod_author: mod_author, mod_credits_1: mod_credits_1, mod_credits_2: mod_credits_2, mod_description: mod_description,
         mod_url: mod_url, side: fabric_side,
-        forgeconfigapiport_version_range: forgeconfigapiport_version_range
+        midnightlib_version: midnightlib_version
 ]
 
 processResources {

@@ -36,7 +36,7 @@ public class BarDisplay {
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
 
-        if (HealthIndicatorModConfig.SHOW_BAR.get())
+        if (HealthIndicatorModConfig.showBar)
             HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
 
         String name = getEntityName(entity);
@@ -45,7 +45,7 @@ public class BarDisplay {
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
 
-        switch (HealthIndicatorModConfig.HEALTH_TEXT_FORMAT.get()) {
+        switch (HealthIndicatorModConfig.healthTextFormat) {
             case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
             case MAX_HEALTH -> healthText = String.valueOf(healthMax);
         }
@@ -54,9 +54,9 @@ public class BarDisplay {
 
         int offAux = 0;
         boolean aux = true;
-        boolean showName = HealthIndicatorModConfig.SHOW_NAME.get();
-        boolean showHealth = HealthIndicatorModConfig.SHOW_HEALTH.get();
-        boolean showArmor = HealthIndicatorModConfig.SHOW_ARMOR.get();
+        boolean showName = HealthIndicatorModConfig.showEntityName;
+        boolean showHealth = HealthIndicatorModConfig.showHealth;
+        boolean showArmor = HealthIndicatorModConfig.showArmor;
         if (showName) {
             offAux += mc.font.width(name);
             if (showHealth) {
