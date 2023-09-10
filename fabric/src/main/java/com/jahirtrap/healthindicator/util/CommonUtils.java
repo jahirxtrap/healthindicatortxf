@@ -1,10 +1,16 @@
 package com.jahirtrap.healthindicator.util;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+
+import java.util.Optional;
 
 public class CommonUtils {
     public static EntityType getEntityType(Entity entity) {
@@ -12,6 +18,13 @@ public class CommonUtils {
         else if (entity instanceof Monster || entity instanceof Slime || entity instanceof Ghast || entity instanceof Hoglin || entity instanceof Phantom || entity instanceof Shulker)
             return EntityType.HOSTILE;
         else return EntityType.PASSIVE;
+    }
+
+    public static String getModName(LivingEntity entity) {
+        String modId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
+        Optional<ModContainer> modContainerOptional = FabricLoader.getInstance().getModContainer(modId);
+        String displayName = modContainerOptional.get().getMetadata().getName();
+        return displayName;
     }
 
     public static Integer getColor(int defaultValue, String hexColor) {

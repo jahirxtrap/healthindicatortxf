@@ -2,7 +2,6 @@ package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.bars.HealthBarRenderer;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -11,6 +10,9 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+
+import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
+import static com.jahirtrap.healthindicator.util.CommonUtils.getModName;
 
 public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
@@ -24,10 +26,9 @@ public class BarDisplay {
         return entity.getDisplayName().getString();
     }
 
-    public void draw(GuiGraphics guiGraphics, Position position, PoseStack poseStack, LivingEntity entity) {
-        int barWidth = 128;
-        int barHeight = 6;
-        int xOffset = 1;
+    public void draw(GuiGraphics guiGraphics, PoseStack poseStack, LivingEntity entity) {
+        int barWidth = 128, barHeight = 6;
+        int xOffset = 1, xOffsetM = 1;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -38,12 +39,14 @@ public class BarDisplay {
 
         if (HealthIndicatorModConfig.showBar)
             HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
+        else barHeight = 0;
 
         String name = getEntityName(entity);
         int healthMax = Mth.ceil(entity.getMaxHealth());
         int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
+        String modNameText = getModName(entity);
 
         switch (HealthIndicatorModConfig.healthTextFormat) {
             case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
@@ -54,10 +57,11 @@ public class BarDisplay {
 
         int offAux = 0;
         boolean aux = true;
-        boolean showName = HealthIndicatorModConfig.showEntityName;
+        boolean showName = HealthIndicatorModConfig.showName;
         boolean showHealth = HealthIndicatorModConfig.showHealth;
         boolean showArmor = HealthIndicatorModConfig.showArmor;
-        if (showName) {
+        boolean showModName = HealthIndicatorModConfig.showModName;
+        if (showName && !name.isBlank()) {
             offAux += mc.font.width(name);
             if (showHealth) {
                 offAux += 5;
@@ -73,15 +77,23 @@ public class BarDisplay {
 
         int center = (barWidth / 2) - ((offAux) / 2);
         int right = barWidth - (offAux) - xOffset;
+        int centerM = (barWidth / 2) - ((mc.font.width(modNameText)) / 2);
+        int rightM = barWidth - (mc.font.width(modNameText)) - xOffsetM;
 
-        switch (position) {
-            case BOTTOM_CENTER, TOP_CENTER -> xOffset = center;
-            case BOTTOM_RIGHT, TOP_RIGHT -> xOffset = right;
+        switch (HealthIndicatorModConfig.position) {
+            case BOTTOM_CENTER, TOP_CENTER -> {
+                xOffset = center;
+                xOffsetM = centerM;
+            }
+            case BOTTOM_RIGHT, TOP_RIGHT -> {
+                xOffset = right;
+                xOffsetM = rightM;
+            }
         }
 
         if (showName && showHealth && showArmor) guiGraphics.drawString(mc.font, "", xOffset, 2, 0xffffff);
 
-        if (showName) {
+        if (showName && !name.isBlank()) {
             guiGraphics.drawString(mc.font, name, xOffset, 2, 0xffffff);
             xOffset += mc.font.width(name) + 5;
         }
@@ -95,6 +107,9 @@ public class BarDisplay {
             renderArmorIcon(guiGraphics, xOffset);
             xOffset += 10;
             guiGraphics.drawString(mc.font, armorText, xOffset, 2, 0xffffff);
+        }
+        if (showModName && !modNameText.isBlank()) {
+            guiGraphics.drawString(mc.font, modNameText, xOffsetM, 15 + ((barHeight == 0) ? barHeight - 2 : barHeight), getColor(0x5555ff, HealthIndicatorModConfig.modNameColor));
         }
     }
 

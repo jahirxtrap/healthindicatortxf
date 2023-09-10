@@ -53,7 +53,7 @@ public class Hud extends Screen {
         int value = 18;
         if (!HealthIndicatorModConfig.showBar)
             value -= 6;
-        if (!HealthIndicatorModConfig.showEntityName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor)
+        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor)
             value -= 12;
         float barHeight = (float) (value * scale);
         float y = (float) HealthIndicatorModConfig.yValue;
@@ -88,12 +88,11 @@ public class Hud extends Screen {
     private void draw(GuiGraphics guiGraphics, PoseStack poseStack, float x, float y, float scale) {
         if (entity == null) return;
 
-        Position position = HealthIndicatorModConfig.position;
-
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
-        if (HealthIndicatorModConfig.enableMod) barDisplay.draw(guiGraphics, position, poseStack, entity);
+        if (HealthIndicatorModConfig.enableMod && HealthIndicatorModConfig.showHud)
+            barDisplay.draw(guiGraphics, poseStack, entity);
         poseStack.popPose();
     }
 }
