@@ -17,6 +17,9 @@ public class CommonUtils {
     public static Integer getColor(int defaultValue, String hexColor) {
         int color = defaultValue;
         try {
+            if (hexColor.startsWith("#")) {
+                hexColor = hexColor.substring(1);
+            }
             color = Integer.parseInt(hexColor, 16);
         } catch (Exception ignore) {
         }

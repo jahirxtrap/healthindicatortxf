@@ -8,7 +8,8 @@
 		"${mod_author}"
 	],
 	"contributors": [
-		"${mod_credits}"
+		"${mod_credits_1}",
+		"${mod_credits_2}"
 	],
 	"contact": {
 		"homepage": "${mod_url}"
@@ -29,11 +30,9 @@
 		"minecraft": "${minecraft_version_range}",
 		"java": ">=17",
 		"fabric": "*",
-		"forgeconfigapiport": "${forgeconfigapiport_version_range}",
-		"com_electronwill_night-config_core": "*",
-		"com_electronwill_night-config_toml": "*"
+		"midnightlib": "${midnightlib_version}"
 	},
 	"jars": [{
-      		"file": "META-INF/jars/ForgeConfigAPIPort-v3.2.4-1.18.2-Fabric.jar"
+      		"file": "META-INF/jars/midnightlib-0.4.4.jar"
     	}]
 }

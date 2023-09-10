@@ -26,7 +26,7 @@ public class DamageParticleEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingUpdateEvent(final LivingUpdateEvent event) {
-        if (!HealthIndicatorModConfig.SHOW_DAMAGE_PARTICLES.get()) return;
+        if (!HealthIndicatorModConfig.SHOW_DAMAGE_PARTICLES.get() || !HealthIndicatorModConfig.ENABLE_MOD.get()) return;
         LivingEntity livingEntity = event.getEntityLiving();
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);

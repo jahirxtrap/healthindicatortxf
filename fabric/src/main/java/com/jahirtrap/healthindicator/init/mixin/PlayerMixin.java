@@ -23,7 +23,7 @@ public abstract class PlayerMixin extends LivingEntity {
     private void tick(CallbackInfo info) {
         if (!this.level.isClientSide) return;
 
-        HealthIndicatorMod.HUD.setEntity(HealthIndicatorMod.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.DISTANCE.get()));
+        HealthIndicatorMod.HUD.setEntity(HealthIndicatorMod.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
         BarStates.tick();
         HealthIndicatorMod.HUD.tick();
     }
