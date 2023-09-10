@@ -2,7 +2,6 @@ package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.bars.HealthBarRenderer;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -12,9 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
+import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
+import static com.jahirtrap.healthindicator.util.CommonUtils.getModName;
+
 public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
     private final Minecraft mc;
+
 
     public BarDisplay(Minecraft mc) {
         this.mc = mc;
@@ -24,10 +27,9 @@ public class BarDisplay {
         return entity.getDisplayName().getString();
     }
 
-    public void draw(Position position, PoseStack poseStack, LivingEntity entity) {
-        int barWidth = 128;
-        int barHeight = 6;
-        int xOffset = 1;
+    public void draw(PoseStack poseStack, LivingEntity entity) {
+        int barWidth = 128, barHeight = 6;
+        int xOffset = 1, xOffsetM = 1;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -38,12 +40,14 @@ public class BarDisplay {
 
         if (HealthIndicatorModConfig.SHOW_BAR.get())
             HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
+        else barHeight = 0;
 
         String name = getEntityName(entity);
         int healthMax = Mth.ceil(entity.getMaxHealth());
         int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
+        String modNameText = getModName(entity);
 
         switch (HealthIndicatorModConfig.HEALTH_TEXT_FORMAT.get()) {
             case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
@@ -57,7 +61,8 @@ public class BarDisplay {
         boolean showName = HealthIndicatorModConfig.SHOW_NAME.get();
         boolean showHealth = HealthIndicatorModConfig.SHOW_HEALTH.get();
         boolean showArmor = HealthIndicatorModConfig.SHOW_ARMOR.get();
-        if (showName) {
+        boolean showModName = HealthIndicatorModConfig.SHOW_MOD_NAME.get();
+        if (showName && !name.isBlank()) {
             offAux += mc.font.width(name);
             if (showHealth) {
                 offAux += 5;
@@ -73,15 +78,23 @@ public class BarDisplay {
 
         int center = (barWidth / 2) - ((offAux) / 2);
         int right = barWidth - (offAux) - xOffset;
+        int centerM = (barWidth / 2) - ((mc.font.width(modNameText)) / 2);
+        int rightM = barWidth - (mc.font.width(modNameText)) - xOffsetM;
 
-        switch (position) {
-            case BOTTOM_CENTER, TOP_CENTER -> xOffset = center;
-            case BOTTOM_RIGHT, TOP_RIGHT -> xOffset = right;
+        switch (HealthIndicatorModConfig.POSITION.get()) {
+            case BOTTOM_CENTER, TOP_CENTER -> {
+                xOffset = center;
+                xOffsetM = centerM;
+            }
+            case BOTTOM_RIGHT, TOP_RIGHT -> {
+                xOffset = right;
+                xOffsetM = rightM;
+            }
         }
 
         if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
 
-        if (showName) {
+        if (showName && !name.isBlank()) {
             mc.font.drawShadow(poseStack, name, xOffset, 2, 0xffffff);
             xOffset += mc.font.width(name) + 5;
         }
@@ -95,6 +108,9 @@ public class BarDisplay {
             renderArmorIcon(poseStack, xOffset);
             xOffset += 10;
             mc.font.drawShadow(poseStack, armorText, xOffset, 2, 0xffffff);
+        }
+        if (showModName && !modNameText.isBlank()) {
+            mc.font.drawShadow(poseStack, modNameText, xOffsetM, 15 + ((barHeight == 0) ? barHeight - 2 : barHeight), getColor(0x5555ff, HealthIndicatorModConfig.MOD_NAME_COLOR.get()));
         }
     }
 
