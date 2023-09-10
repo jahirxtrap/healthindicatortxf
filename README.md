@@ -15,6 +15,6 @@ Health indicator on player screen
 
 <strong>Fabric/Quilt dependencies:</strong>
 
-- <a href="https://www.curseforge.com/minecraft/mc-mods/configured-fabric" target="_blank">Configured mod</a> or <a href="https://www.curseforge.com/minecraft/mc-mods/config-menus-forge" target="_blank">Forge Config Screens mod</a> <strong>(Optional)</strong>
+- <a href="https://modrinth.com/mod/modmenu" target="_blank">Mod Menu mod</a> <strong>(Optional)</strong>
 
 <img src="https://cdn.modrinth.com/data/N56hoqkq/images/f61d2dadc16d223d3b35ba8d13b6a3ba3c7eb035.png">
