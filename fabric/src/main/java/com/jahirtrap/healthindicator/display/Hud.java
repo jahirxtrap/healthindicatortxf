@@ -22,12 +22,12 @@ public class Hud extends Screen {
     public Hud() {
         super(Component.literal("Health Indicator TXF HUD"));
         this.minecraft = Minecraft.getInstance();
-        barDisplay = new BarDisplay(Minecraft.getInstance());
+        barDisplay = new BarDisplay(minecraft);
     }
 
     public void draw(GuiGraphics guiGraphics) {
         float scale = (float) HealthIndicatorModConfig.scale;
-        if (this.minecraft != null && this.minecraft.options.renderDebug) return;
+        if (this.minecraft != null && this.minecraft.getDebugOverlay().showDebugScreen()) return;
         float x = determineX();
         float y = determineY();
         draw(guiGraphics, guiGraphics.pose(), x, y, scale);

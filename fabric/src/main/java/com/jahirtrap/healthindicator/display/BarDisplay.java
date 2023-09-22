@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +14,9 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getModName;
 
 public class BarDisplay {
-    private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
+    private static final ResourceLocation ARMOR_FULL_SPRITE = new ResourceLocation("hud/armor_full");
+    private static final ResourceLocation HEART_CONTAINER_SPRITE = new ResourceLocation("hud/heart/container");
+    private static final ResourceLocation HEART_FULL_SPRITE = new ResourceLocation("hud/heart/full");
     private final Minecraft mc;
 
     public BarDisplay(Minecraft mc) {
@@ -30,10 +31,6 @@ public class BarDisplay {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1;
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        RenderSystem.enableBlend();
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
 
@@ -52,8 +49,6 @@ public class BarDisplay {
             case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
             case MAX_HEALTH -> healthText = String.valueOf(healthMax);
         }
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         int offAux = 0;
         boolean aux = true;
@@ -91,6 +86,8 @@ public class BarDisplay {
             }
         }
 
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
         if (showName && showHealth && showArmor) guiGraphics.drawString(mc.font, "", xOffset, 2, 0xffffff);
 
         if (showName && !name.isBlank()) {
@@ -114,13 +111,11 @@ public class BarDisplay {
     }
 
     private void renderArmorIcon(GuiGraphics guiGraphics, int x) {
-        RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        guiGraphics.blit(ICON_TEXTURES, x, 1, 34, 9, 9, 9);
+        guiGraphics.blitSprite(ARMOR_FULL_SPRITE, x, 1, 9, 9);
     }
 
     private void renderHeartIcon(GuiGraphics guiGraphics, int x) {
-        RenderSystem.setShaderTexture(0, ICON_TEXTURES);
-        guiGraphics.blit(ICON_TEXTURES, x, 1, 16, 0, 9, 9);
-        guiGraphics.blit(ICON_TEXTURES, x, 1, 52, 0, 9, 9);
+        guiGraphics.blitSprite(HEART_CONTAINER_SPRITE, x, 1, 9, 9);
+        guiGraphics.blitSprite(HEART_FULL_SPRITE, x, 1, 9, 9);
     }
 }
