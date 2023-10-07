@@ -26,7 +26,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
-    modImplementation "maven.modrinth:midnightlib:${midnightlib_version}"
+    modImplementation include(fileTree(dir: 'libs', include: ['*.jar']))
 }
 
 loom {
@@ -67,9 +67,9 @@ def replaceProperties = [
         minecraft_version_range: fabric_minecraft_version_range,
         loader_version_range: fabric_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
-        mod_author: mod_author, mod_credits_1: mod_credits_1, mod_credits_2: mod_credits_2, mod_description: mod_description,
+        mod_author: mod_author, mod_description: mod_description,
         mod_url: mod_url, side: fabric_side,
-        midnightlib_version: midnightlib_version
+        configlibtxf_version: configlibtxf_version
 ]
 
 processResources {
@@ -80,6 +80,13 @@ processResources {
         expand replaceProperties
     }
     from project(":common").sourceSets.main.resources
+}
+
+jar {
+    from('libs') {
+        include '*.jar'
+        into('META-INF/jars')
+    }
 }
 
 jar.finalizedBy('remapJar')

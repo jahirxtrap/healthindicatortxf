@@ -16,6 +16,7 @@ public class HealthIndicatorModConfig {
     public static final ForgeConfigSpec.BooleanValue SHOW_HEALTH;
     public static final ForgeConfigSpec.BooleanValue SHOW_ARMOR;
     public static final ForgeConfigSpec.BooleanValue SHOW_MOD_NAME;
+    public static final ForgeConfigSpec.BooleanValue SHOW_INVISIBLE_ENTITIES;
     public static final ForgeConfigSpec.BooleanValue SHOW_BOSSES;
     public static final ForgeConfigSpec.IntValue DISTANCE;
     public static final ForgeConfigSpec.DoubleValue X_VALUE;
@@ -47,6 +48,7 @@ public class HealthIndicatorModConfig {
         SHOW_HEALTH = CLIENT_BUILDER.comment("Should show entity health?").define("showHealth", true);
         SHOW_ARMOR = CLIENT_BUILDER.comment("Should show entity armor?").define("showArmor", true);
         SHOW_MOD_NAME = CLIENT_BUILDER.comment("Should show mod name?").define("showModName", false);
+        SHOW_INVISIBLE_ENTITIES = CLIENT_BUILDER.comment("Should show invisible entities?").define("showInvisibleEntities", true);
         SHOW_BOSSES = CLIENT_BUILDER.comment("Should show bosses?").define("showBosses", false);
         HEALTH_TEXT_FORMAT = CLIENT_BUILDER.defineEnum("healthTextFormat", BOTH);
         CLIENT_BUILDER.push("hud");

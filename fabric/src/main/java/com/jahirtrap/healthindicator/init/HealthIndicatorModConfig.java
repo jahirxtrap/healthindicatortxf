@@ -1,11 +1,11 @@
 package com.jahirtrap.healthindicator.init;
 
-import eu.midnightdust.lib.config.MidnightConfig;
+import com.jahirtrap.configlib.TXFConfig;
 
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.HealthTextFormat.BOTH;
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.TOP_LEFT;
 
-public class HealthIndicatorModConfig extends MidnightConfig {
+public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
     public static boolean enableMod = true;
     @Entry(name = "Show Hud")
@@ -26,11 +26,13 @@ public class HealthIndicatorModConfig extends MidnightConfig {
     public static boolean showArmor = true;
     @Entry(name = "Show Mod Name")
     public static boolean showModName = false;
+    @Entry(name = "Show Invisible Entities")
+    public static boolean showInvisibleEntities = true;
     @Entry(name = "Show Bosses")
     public static boolean showBosses = false;
     @Entry(name = "Health Text Format")
     public static HealthTextFormat healthTextFormat = BOTH;
-    @Comment
+    @Comment(centered = true)
     public static Comment hud;
     @Entry(name = "Distance", min = 0, max = Integer.MAX_VALUE)
     public static int distance = 60;
@@ -44,7 +46,7 @@ public class HealthIndicatorModConfig extends MidnightConfig {
     public static int hideDelay = 40;
     @Entry(name = "Position")
     public static Position position = TOP_LEFT;
-    @Comment
+    @Comment(centered = true)
     public static Comment colors;
     @Entry(name = "Background Color", width = 7, min = 7, isColor = true)
     public static String backgroundColor = "#808080";
