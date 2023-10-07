@@ -22,7 +22,7 @@ public class Hud extends Screen {
     public Hud() {
         super(Component.literal("Health Indicator TXF HUD"));
         this.minecraft = Minecraft.getInstance();
-        barDisplay = new BarDisplay(Minecraft.getInstance());
+        barDisplay = new BarDisplay(minecraft);
     }
 
     public void draw(GuiGraphics guiGraphics) {
@@ -80,7 +80,9 @@ public class Hud extends Screen {
 
         if (entity == null && age > HealthIndicatorModConfig.hideDelay) setEntityWork(null);
 
-        if (entity != null && !HealthIndicatorModConfig.showBosses && entity.getType().is(BOSS_TAG))
+        if (entity != null && !HealthIndicatorModConfig.showInvisibleEntities && entity.isInvisible() && !entity.isCurrentlyGlowing() && !entity.isOnFire())
+            setEntityWork(null);
+        else if (entity != null && !HealthIndicatorModConfig.showBosses && entity.getType().is(BOSS_TAG))
             setEntityWork(null);
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }

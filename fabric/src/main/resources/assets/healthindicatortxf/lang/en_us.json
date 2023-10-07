@@ -1,14 +1,14 @@
 {
-  "healthindicatortxf.midnightconfig.title": "Health Indicator TXF",
-  "healthindicatortxf.midnightconfig.hud": "Hud",
-  "healthindicatortxf.midnightconfig.colors": "Colors",
-  "healthindicatortxf.midnightconfig.enum.Position.TOP_LEFT": "Top Left",
-  "healthindicatortxf.midnightconfig.enum.Position.TOP_CENTER": "Top Center",
-  "healthindicatortxf.midnightconfig.enum.Position.TOP_RIGHT": "Top Right",
-  "healthindicatortxf.midnightconfig.enum.Position.BOTTOM_LEFT": "Bottom Left",
-  "healthindicatortxf.midnightconfig.enum.Position.BOTTOM_CENTER": "Bottom Center",
-  "healthindicatortxf.midnightconfig.enum.Position.BOTTOM_RIGHT": "Bottom Right",
-  "healthindicatortxf.midnightconfig.enum.HealthTextFormat.CURRENT_HEALTH": "Current Health",
-  "healthindicatortxf.midnightconfig.enum.HealthTextFormat.MAX_HEALTH": "Max Health",
-  "healthindicatortxf.midnightconfig.enum.HealthTextFormat.BOTH": "Both"
+  "healthindicatortxf.config.title": "Health Indicator TXF",
+  "healthindicatortxf.config.hud": "Hud",
+  "healthindicatortxf.config.colors": "Colors",
+  "healthindicatortxf.config.enum.Position.TOP_LEFT": "Top Left",
+  "healthindicatortxf.config.enum.Position.TOP_CENTER": "Top Center",
+  "healthindicatortxf.config.enum.Position.TOP_RIGHT": "Top Right",
+  "healthindicatortxf.config.enum.Position.BOTTOM_LEFT": "Bottom Left",
+  "healthindicatortxf.config.enum.Position.BOTTOM_CENTER": "Bottom Center",
+  "healthindicatortxf.config.enum.Position.BOTTOM_RIGHT": "Bottom Right",
+  "healthindicatortxf.config.enum.HealthTextFormat.CURRENT_HEALTH": "Current Health",
+  "healthindicatortxf.config.enum.HealthTextFormat.MAX_HEALTH": "Max Health",
+  "healthindicatortxf.config.enum.HealthTextFormat.BOTH": "Both"
 }
