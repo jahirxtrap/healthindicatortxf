@@ -8,8 +8,8 @@
 		"${mod_author}"
 	],
 	"contributors": [
-		"${mod_credits_1}",
-		"${mod_credits_2}"
+		"ToroCraft",
+		"Lynzl"
 	],
 	"contact": {
 		"homepage": "${mod_url}"
@@ -29,10 +29,9 @@
 		"fabricloader": "${loader_version_range}",
 		"minecraft": "${minecraft_version_range}",
 		"java": ">=17",
-		"fabric": "*",
-		"midnightlib": "${midnightlib_version}"
+		"fabric": "*"
 	},
 	"jars": [{
-      		"file": "META-INF/jars/midnightlib-fabric-1.3.0.jar"
+      		"file": "META-INF/jars/configlibtxf-${configlibtxf_version}.jar"
     	}]
 }
