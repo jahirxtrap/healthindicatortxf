@@ -1,11 +1,11 @@
 package com.jahirtrap.healthindicator.init;
 
-import eu.midnightdust.lib.config.MidnightConfig;
+import com.jahirtrap.configlib.TXFConfig;
 
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.HealthTextFormat.BOTH;
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.TOP_LEFT;
 
-public class HealthIndicatorModConfig extends MidnightConfig {
+public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
     public static boolean enableMod = true;
     @Entry(name = "Show Hud")
@@ -26,6 +26,8 @@ public class HealthIndicatorModConfig extends MidnightConfig {
     public static boolean showArmor = true;
     @Entry(name = "Show Mod Name")
     public static boolean showModName = false;
+    @Entry(name = "Show Invisible Entities")
+    public static boolean showInvisibleEntities = true;
     @Entry(name = "Show Bosses")
     public static boolean showBosses = false;
     @Entry(name = "Health Text Format")

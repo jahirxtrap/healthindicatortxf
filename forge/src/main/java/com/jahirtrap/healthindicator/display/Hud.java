@@ -81,7 +81,9 @@ public class Hud extends Screen {
 
         if (entity == null && age > HealthIndicatorModConfig.HIDE_DELAY.get()) setEntityWork(null);
 
-        if (entity != null && !HealthIndicatorModConfig.SHOW_BOSSES.get() && entity.getType().is(BOSS_TAG))
+        if (entity != null && !HealthIndicatorModConfig.SHOW_INVISIBLE_ENTITIES.get() && entity.isInvisible() && !entity.isCurrentlyGlowing() && !entity.isOnFire())
+            setEntityWork(null);
+        else if (entity != null && !HealthIndicatorModConfig.SHOW_BOSSES.get() && entity.getType().is(BOSS_TAG))
             setEntityWork(null);
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
