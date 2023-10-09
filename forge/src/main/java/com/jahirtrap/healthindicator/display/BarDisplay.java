@@ -18,7 +18,6 @@ public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
     private final Minecraft mc;
 
-
     public BarDisplay(Minecraft mc) {
         this.mc = mc;
     }
@@ -38,7 +37,7 @@ public class BarDisplay {
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
 
-        if (HealthIndicatorModConfig.SHOW_BAR.get())
+        if (HealthIndicatorModConfig.showBar)
             HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
         else barHeight = 0;
 
@@ -49,7 +48,7 @@ public class BarDisplay {
         String armorText = String.valueOf(armorValue);
         String modNameText = getModName(entity);
 
-        switch (HealthIndicatorModConfig.HEALTH_TEXT_FORMAT.get()) {
+        switch (HealthIndicatorModConfig.healthTextFormat) {
             case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
             case MAX_HEALTH -> healthText = String.valueOf(healthMax);
         }
@@ -58,10 +57,10 @@ public class BarDisplay {
 
         int offAux = 0;
         boolean aux = true;
-        boolean showName = HealthIndicatorModConfig.SHOW_NAME.get();
-        boolean showHealth = HealthIndicatorModConfig.SHOW_HEALTH.get();
-        boolean showArmor = HealthIndicatorModConfig.SHOW_ARMOR.get();
-        boolean showModName = HealthIndicatorModConfig.SHOW_MOD_NAME.get();
+        boolean showName = HealthIndicatorModConfig.showName;
+        boolean showHealth = HealthIndicatorModConfig.showHealth;
+        boolean showArmor = HealthIndicatorModConfig.showArmor;
+        boolean showModName = HealthIndicatorModConfig.showModName;
         if (showName && !name.isBlank()) {
             offAux += mc.font.width(name);
             if (showHealth) {
@@ -81,7 +80,7 @@ public class BarDisplay {
         int centerM = (barWidth / 2) - ((mc.font.width(modNameText)) / 2);
         int rightM = barWidth - (mc.font.width(modNameText)) - xOffsetM;
 
-        switch (HealthIndicatorModConfig.POSITION.get()) {
+        switch (HealthIndicatorModConfig.position) {
             case BOTTOM_CENTER, TOP_CENTER -> {
                 xOffset = center;
                 xOffsetM = centerM;
@@ -110,7 +109,7 @@ public class BarDisplay {
             mc.font.drawShadow(poseStack, armorText, xOffset, 2, 0xffffff);
         }
         if (showModName && !modNameText.isBlank()) {
-            mc.font.drawShadow(poseStack, modNameText, xOffsetM, 15 + ((barHeight == 0) ? barHeight - 2 : barHeight), getColor(0x5555ff, HealthIndicatorModConfig.MOD_NAME_COLOR.get()));
+            mc.font.drawShadow(poseStack, modNameText, xOffsetM, 15 + ((barHeight == 0) ? barHeight - 2 : barHeight), getColor(0x5555ff, HealthIndicatorModConfig.modNameColor));
         }
     }
 
