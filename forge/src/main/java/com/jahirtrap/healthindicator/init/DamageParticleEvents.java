@@ -26,7 +26,7 @@ public class DamageParticleEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingUpdateEvent(final LivingTickEvent event) {
-        if (!HealthIndicatorModConfig.SHOW_DAMAGE_PARTICLES.get() || !HealthIndicatorModConfig.ENABLE_MOD.get()) return;
+        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         LivingEntity livingEntity = event.getEntity();
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
@@ -73,7 +73,7 @@ public class DamageParticleEvents {
                 livingEntity.getBoundingBox().maxY + 0.24;
         double posZ = livingEntity.getZ();
 
-        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.DAMAGE_PARTICLE_COLOR.get());
+        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.damageParticleColor);
 
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);
