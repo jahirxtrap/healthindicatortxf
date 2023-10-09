@@ -32,6 +32,6 @@
 		"fabric": "*"
 	},
 	"jars": [{
-      		"file": "META-INF/jars/configlibtxf-${configlibtxf_version}.jar"
+      		"file": "META-INF/jars/configlibtxf-${configlibtxf_version}-fabric.jar"
     	}]
 }

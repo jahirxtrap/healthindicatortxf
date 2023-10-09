@@ -1,77 +1,71 @@
 package com.jahirtrap.healthindicator.init;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
 
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.HealthTextFormat.BOTH;
 import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.TOP_LEFT;
 
-public class HealthIndicatorModConfig {
-    public static final ForgeConfigSpec.BooleanValue ENABLE_MOD;
-    public static final ForgeConfigSpec.BooleanValue SHOW_HUD;
-    public static final ForgeConfigSpec.BooleanValue SHOW_DAMAGE_PARTICLES;
-    public static final ForgeConfigSpec.BooleanValue SHOW_BAR;
-    public static final ForgeConfigSpec.BooleanValue SHOW_BAR_SECONDARY;
-    public static final ForgeConfigSpec.BooleanValue SHOW_BAR_BACKGROUND;
-    public static final ForgeConfigSpec.BooleanValue SHOW_NAME;
-    public static final ForgeConfigSpec.BooleanValue SHOW_HEALTH;
-    public static final ForgeConfigSpec.BooleanValue SHOW_ARMOR;
-    public static final ForgeConfigSpec.BooleanValue SHOW_MOD_NAME;
-    public static final ForgeConfigSpec.BooleanValue SHOW_INVISIBLE_ENTITIES;
-    public static final ForgeConfigSpec.BooleanValue SHOW_BOSSES;
-    public static final ForgeConfigSpec.IntValue DISTANCE;
-    public static final ForgeConfigSpec.DoubleValue X_VALUE;
-    public static final ForgeConfigSpec.DoubleValue Y_VALUE;
-    public static final ForgeConfigSpec.DoubleValue SCALE;
-    public static final ForgeConfigSpec.IntValue HIDE_DELAY;
-    public static final ForgeConfigSpec.EnumValue<HealthTextFormat> HEALTH_TEXT_FORMAT;
-    public static final ForgeConfigSpec.EnumValue<Position> POSITION;
-    public static final ForgeConfigSpec.ConfigValue<String> BACKGROUND_COLOR;
-    public static final ForgeConfigSpec.ConfigValue<String> PASSIVE_COLOR;
-    public static final ForgeConfigSpec.ConfigValue<String> PASSIVE_COLOR_SECONDARY;
-    public static final ForgeConfigSpec.ConfigValue<String> HOSTILE_COLOR;
-    public static final ForgeConfigSpec.ConfigValue<String> HOSTILE_COLOR_SECONDARY;
-    public static final ForgeConfigSpec.ConfigValue<String> NEUTRAL_COLOR;
-    public static final ForgeConfigSpec.ConfigValue<String> NEUTRAL_COLOR_SECONDARY;
-    public static final ForgeConfigSpec.ConfigValue<String> MOD_NAME_COLOR;
-    public static final ForgeConfigSpec.ConfigValue<String> DAMAGE_PARTICLE_COLOR;
-    public static ForgeConfigSpec CLIENT_CONFIG;
-
-    static {
-        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-        ENABLE_MOD = CLIENT_BUILDER.comment("Should mod be enabled?").define("enableMod", true);
-        SHOW_HUD = CLIENT_BUILDER.comment("Should show hud?").define("showHud", true);
-        SHOW_DAMAGE_PARTICLES = CLIENT_BUILDER.comment("Should show damage particles?").define("showDamageParticles", true);
-        SHOW_BAR = CLIENT_BUILDER.comment("Should show bar in hud?").define("showBar", true);
-        SHOW_BAR_SECONDARY = CLIENT_BUILDER.comment("Should show secondary bar?").define("showSecondaryBar", true);
-        SHOW_BAR_BACKGROUND = CLIENT_BUILDER.comment("Should show background bar?").define("showBackgroundBar", true);
-        SHOW_NAME = CLIENT_BUILDER.comment("Should show entity name?").define("showName", true);
-        SHOW_HEALTH = CLIENT_BUILDER.comment("Should show entity health?").define("showHealth", true);
-        SHOW_ARMOR = CLIENT_BUILDER.comment("Should show entity armor?").define("showArmor", true);
-        SHOW_MOD_NAME = CLIENT_BUILDER.comment("Should show mod name?").define("showModName", false);
-        SHOW_INVISIBLE_ENTITIES = CLIENT_BUILDER.comment("Should show invisible entities?").define("showInvisibleEntities", true);
-        SHOW_BOSSES = CLIENT_BUILDER.comment("Should show bosses?").define("showBosses", false);
-        HEALTH_TEXT_FORMAT = CLIENT_BUILDER.defineEnum("healthTextFormat", BOTH);
-        CLIENT_BUILDER.push("hud");
-        DISTANCE = CLIENT_BUILDER.defineInRange("distance", 60, 0, Integer.MAX_VALUE);
-        X_VALUE = CLIENT_BUILDER.defineInRange("xValue", 4.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Y_VALUE = CLIENT_BUILDER.defineInRange("yValue", 4.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        SCALE = CLIENT_BUILDER.defineInRange("scale", 1.0, 0.0, Double.POSITIVE_INFINITY);
-        HIDE_DELAY = CLIENT_BUILDER.defineInRange("hideDelay", 40, 0, Integer.MAX_VALUE);
-        POSITION = CLIENT_BUILDER.defineEnum("position", TOP_LEFT);
-        CLIENT_BUILDER.pop();
-        CLIENT_BUILDER.push("colors");
-        BACKGROUND_COLOR = CLIENT_BUILDER.comment("Default Value: 808080").define("backgroundColor", "808080");
-        PASSIVE_COLOR = CLIENT_BUILDER.comment("Default Value: 00ff00").define("passiveColor", "00ff00");
-        PASSIVE_COLOR_SECONDARY = CLIENT_BUILDER.comment("Default Value: 008000").define("passiveColorSecondary", "008000");
-        HOSTILE_COLOR = CLIENT_BUILDER.comment("Default Value: ff0000").define("hostileColor", "ff0000");
-        HOSTILE_COLOR_SECONDARY = CLIENT_BUILDER.comment("Default Value: 800000").define("hostileColorSecondary", "800000");
-        NEUTRAL_COLOR = CLIENT_BUILDER.comment("Default Value: 0000ff").define("neutralColor", "0000ff");
-        NEUTRAL_COLOR_SECONDARY = CLIENT_BUILDER.comment("Default Value: 000080").define("neutralColorSecondary", "000080");
-        MOD_NAME_COLOR = CLIENT_BUILDER.comment("Default Value: 5555ff").define("modNameColor", "5555ff");
-        DAMAGE_PARTICLE_COLOR = CLIENT_BUILDER.comment("Default Value: fcfcfc").define("damageParticleColor", "fcfcfc");
-        CLIENT_BUILDER.pop();
-        CLIENT_CONFIG = CLIENT_BUILDER.build();
-    }
+public class HealthIndicatorModConfig extends TXFConfig {
+    @Entry(name = "Enable Mod")
+    public static boolean enableMod = true;
+    @Entry(name = "Show Hud")
+    public static boolean showHud = true;
+    @Entry(name = "Show Damage Particles")
+    public static boolean showDamageParticles = true;
+    @Entry(name = "Show Bar")
+    public static boolean showBar = true;
+    @Entry(name = "Show Secondary Bar")
+    public static boolean showSecondaryBar = true;
+    @Entry(name = "Show Background Bar")
+    public static boolean showBackgroundBar = true;
+    @Entry(name = "Show Name")
+    public static boolean showName = true;
+    @Entry(name = "Show Health")
+    public static boolean showHealth = true;
+    @Entry(name = "Show Armor")
+    public static boolean showArmor = true;
+    @Entry(name = "Show Mod Name")
+    public static boolean showModName = false;
+    @Entry(name = "Show Invisible Entities")
+    public static boolean showInvisibleEntities = true;
+    @Entry(name = "Show Bosses")
+    public static boolean showBosses = false;
+    @Entry(name = "Health Text Format")
+    public static HealthTextFormat healthTextFormat = BOTH;
+    @Comment(centered = true)
+    public static Comment hud;
+    @Entry(name = "Distance", min = 0, max = Integer.MAX_VALUE)
+    public static int distance = 60;
+    @Entry(name = "X Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
+    public static double xValue = 4.0;
+    @Entry(name = "Y Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
+    public static double yValue = 4.0;
+    @Entry(name = "Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
+    public static double scale = 1.0;
+    @Entry(name = "Hide Delay", min = 0, max = Integer.MAX_VALUE)
+    public static int hideDelay = 40;
+    @Entry(name = "Position")
+    public static Position position = TOP_LEFT;
+    @Comment(centered = true)
+    public static Comment colors;
+    @Entry(name = "Background Color", width = 7, min = 7, isColor = true)
+    public static String backgroundColor = "#808080";
+    @Entry(name = "Passive Color", width = 7, min = 7, isColor = true)
+    public static String passiveColor = "#00ff00";
+    @Entry(name = "Passive Color Secondary", width = 7, min = 7, isColor = true)
+    public static String passiveColorSecondary = "#008000";
+    @Entry(name = "Hostile Color", width = 7, min = 7, isColor = true)
+    public static String hostileColor = "#ff0000";
+    @Entry(name = "Hostile Color Secondary", width = 7, min = 7, isColor = true)
+    public static String hostileColorSecondary = "#800000";
+    @Entry(name = "Neutral Color", width = 7, min = 7, isColor = true)
+    public static String neutralColor = "#0000ff";
+    @Entry(name = "Neutral Color Secondary", width = 7, min = 7, isColor = true)
+    public static String neutralColorSecondary = "#000080";
+    @Entry(name = "Mod Name Color", width = 7, min = 7, isColor = true)
+    public static String modNameColor = "#5555ff";
+    @Entry(name = "Damage Particle Color", width = 7, min = 7, isColor = true)
+    public static String damageParticleColor = "#fcfcfc";
 
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
 
