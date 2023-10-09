@@ -22,16 +22,16 @@ public class HealthBarRenderer {
         EntityType entityType = CommonUtils.getEntityType(entity);
         int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080;
         if (entityType == EntityType.PASSIVE) {
-            color = getColor(0x00ff00, HealthIndicatorModConfig.PASSIVE_COLOR.get());
-            color2 = getColor(0x008000, HealthIndicatorModConfig.PASSIVE_COLOR_SECONDARY.get());
+            color = getColor(0x00ff00, HealthIndicatorModConfig.passiveColor);
+            color2 = getColor(0x008000, HealthIndicatorModConfig.passiveColorSecondary);
         } else if (entityType == EntityType.HOSTILE) {
-            color = getColor(0xff0000, HealthIndicatorModConfig.HOSTILE_COLOR.get());
-            color2 = getColor(0x800000, HealthIndicatorModConfig.HOSTILE_COLOR_SECONDARY.get());
+            color = getColor(0xff0000, HealthIndicatorModConfig.hostileColor);
+            color2 = getColor(0x800000, HealthIndicatorModConfig.hostileColorSecondary);
         } else if (entityType == EntityType.NEUTRAL) {
-            color = getColor(0x0000ff, HealthIndicatorModConfig.NEUTRAL_COLOR.get());
-            color2 = getColor(0x000080, HealthIndicatorModConfig.NEUTRAL_COLOR_SECONDARY.get());
+            color = getColor(0x0000ff, HealthIndicatorModConfig.neutralColor);
+            color2 = getColor(0x000080, HealthIndicatorModConfig.neutralColorSecondary);
         }
-        color3 = getColor(0x808080, HealthIndicatorModConfig.BACKGROUND_COLOR.get());
+        color3 = getColor(0x808080, HealthIndicatorModConfig.backgroundColor);
 
         BarState state = BarStates.getState(entity);
 
@@ -40,9 +40,9 @@ public class HealthBarRenderer {
         int zOffset = 0;
 
         Matrix4f m4f = poseStack.last().pose();
-        if (HealthIndicatorModConfig.SHOW_BAR_BACKGROUND.get())
+        if (HealthIndicatorModConfig.showBackgroundBar)
             drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
-        if (HealthIndicatorModConfig.SHOW_BAR_SECONDARY.get())
+        if (HealthIndicatorModConfig.showSecondaryBar)
             drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
         drawBar(m4f, width, height, percent, color, zOffset, false, armor);
     }
@@ -57,7 +57,7 @@ public class HealthBarRenderer {
         int vh = 6;
         int y = 12;
 
-        if (!HealthIndicatorModConfig.SHOW_NAME.get() && !HealthIndicatorModConfig.SHOW_HEALTH.get() && (!armor || !HealthIndicatorModConfig.SHOW_ARMOR.get()))
+        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && (!armor || !HealthIndicatorModConfig.showArmor))
             y = 0;
 
         double size = percent * width;
