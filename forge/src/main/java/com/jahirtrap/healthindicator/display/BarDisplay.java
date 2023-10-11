@@ -11,8 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
-import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getModName;
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
@@ -32,6 +31,10 @@ public class BarDisplay {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1;
 
+        switch (HealthIndicatorModConfig.barStyle) {
+            case VANILLA -> barHeight = 5;
+        }
+
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
@@ -44,15 +47,19 @@ public class BarDisplay {
         else barHeight = 0;
 
         String name = getEntityName(entity);
-        int healthMax = Mth.ceil(entity.getMaxHealth());
-        int healthCur = Math.min(Mth.ceil(entity.getHealth()), healthMax);
+        String healthMax = String.valueOf(Mth.ceil(entity.getMaxHealth()));
+        String healthCur = String.valueOf(Math.min(Mth.ceil(entity.getHealth()), Integer.parseInt(healthMax)));
+        if (HealthIndicatorModConfig.showHealthDecimals) {
+            healthMax = formatText(entity.getMaxHealth());
+            healthCur = formatText(Math.min(entity.getHealth(), Float.parseFloat(healthMax)));
+        }
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
         String modNameText = getModName(entity);
 
         switch (HealthIndicatorModConfig.healthTextFormat) {
-            case CURRENT_HEALTH -> healthText = String.valueOf(healthCur);
-            case MAX_HEALTH -> healthText = String.valueOf(healthMax);
+            case CURRENT_HEALTH -> healthText = healthCur;
+            case MAX_HEALTH -> healthText = healthMax;
         }
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
