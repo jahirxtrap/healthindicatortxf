@@ -10,5 +10,11 @@
   "healthindicatortxf.config.enum.Position.BOTTOM_RIGHT": "Bottom Right",
   "healthindicatortxf.config.enum.HealthTextFormat.CURRENT_HEALTH": "Current Health",
   "healthindicatortxf.config.enum.HealthTextFormat.MAX_HEALTH": "Max Health",
-  "healthindicatortxf.config.enum.HealthTextFormat.BOTH": "Both"
+  "healthindicatortxf.config.enum.HealthTextFormat.BOTH": "Both",
+  "healthindicatortxf.config.enum.BarStyle.VANILLA": "Vanilla",
+  "healthindicatortxf.config.enum.BarStyle.DEFAULT": "Default",
+  "healthindicatortxf.config.enum.BarStyle.ROUNDED": "Rounded",
+  "healthindicatortxf.config.enum.BarStyle.GRADIENT": "Gradient",
+  "healthindicatortxf.config.enum.BarStyle.MINIMALIST": "Minimalist",
+  "healthindicatortxf.config.enum.BarStyle.MODERN": "Modern"
 }
