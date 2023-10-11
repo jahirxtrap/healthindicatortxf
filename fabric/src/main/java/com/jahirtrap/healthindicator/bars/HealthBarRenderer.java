@@ -49,18 +49,27 @@ public class HealthBarRenderer {
 
     private static void drawBar(Matrix4f matrix4f, float width, float height, float percent,
                                 int color, int zOffset, boolean back, boolean armor) {
+        float v = 10;
+
+        switch (HealthIndicatorModConfig.barStyle) {
+            case VANILLA -> v -= height;
+            case DEFAULT -> v += height;
+            case ROUNDED -> v += height * 3;
+            case GRADIENT -> v += height * 5;
+            case MINIMALIST -> v += height * 7;
+            case MODERN -> v += height * 9;
+        }
+
         float c = 0.0078125F; // 1/128
-        int u = 0;
-        int v = 6 * 6 * 2 + 6;
-        if (back) v = 6 * 6 * 2;
+        float u = 0;
+        if (back) v -= height;
         int uw = Mth.ceil(128 * percent);
-        int vh = 6;
         int y = 12;
 
         if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && (!armor || !HealthIndicatorModConfig.showArmor))
             y = 0;
 
-        double size = percent * width;
+        float size = percent * width;
 
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
@@ -79,11 +88,11 @@ public class HealthBarRenderer {
 
         buffer.vertex(matrix4f, 0, y, zOffset * zOffsetAmount)
                 .uv(u * c, v * c).endVertex();
-        buffer.vertex(matrix4f, 0, height + y, zOffset * zOffsetAmount)
-                .uv(u * c, (v + vh) * c).endVertex();
-        buffer.vertex(matrix4f, (float) size, height + y, zOffset * zOffsetAmount)
-                .uv((u + uw) * c, (v + vh) * c).endVertex();
-        buffer.vertex(matrix4f, (float) size, y, zOffset * zOffsetAmount)
+        buffer.vertex(matrix4f, 0, y + height, zOffset * zOffsetAmount)
+                .uv(u * c, (v + height) * c).endVertex();
+        buffer.vertex(matrix4f, size, y + height, zOffset * zOffsetAmount)
+                .uv((u + uw) * c, (v + height) * c).endVertex();
+        buffer.vertex(matrix4f, size, y, zOffset * zOffsetAmount)
                 .uv(((u + uw) * c), v * c).endVertex();
         tesselator.end();
     }
