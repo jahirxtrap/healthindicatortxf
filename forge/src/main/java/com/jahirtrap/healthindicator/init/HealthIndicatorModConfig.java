@@ -2,9 +2,6 @@ package com.jahirtrap.healthindicator.init;
 
 import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
 
-import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.HealthTextFormat.BOTH;
-import static com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position.TOP_LEFT;
-
 public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
     public static boolean enableMod = true;
@@ -30,8 +27,12 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static boolean showInvisibleEntities = true;
     @Entry(name = "Show Bosses")
     public static boolean showBosses = false;
+    @Entry(name = "Show Health Decimals")
+    public static boolean showHealthDecimals = false;
     @Entry(name = "Health Text Format")
-    public static HealthTextFormat healthTextFormat = BOTH;
+    public static HealthTextFormat healthTextFormat = HealthTextFormat.BOTH;
+    @Entry(name = "Bar Style")
+    public static BarStyle barStyle = BarStyle.DEFAULT;
     @Comment(centered = true)
     public static Comment hud;
     @Entry(name = "Distance", min = 0, max = Integer.MAX_VALUE)
@@ -45,7 +46,7 @@ public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Hide Delay", min = 0, max = Integer.MAX_VALUE)
     public static int hideDelay = 40;
     @Entry(name = "Position")
-    public static Position position = TOP_LEFT;
+    public static Position position = Position.TOP_LEFT;
     @Comment(centered = true)
     public static Comment colors;
     @Entry(name = "Background Color", width = 7, min = 7, isColor = true)
@@ -70,4 +71,6 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
 
     public enum HealthTextFormat {CURRENT_HEALTH, MAX_HEALTH, BOTH}
+
+    public enum BarStyle {VANILLA, DEFAULT, ROUNDED, GRADIENT, MINIMALIST, MODERN}
 }

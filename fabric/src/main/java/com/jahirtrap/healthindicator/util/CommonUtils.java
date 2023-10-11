@@ -39,6 +39,10 @@ public class CommonUtils {
         return color;
     }
 
+    public static String formatText(float amount) {
+        return String.format("%.1f", amount);
+    }
+
     //Damage Particle Utils
     public static float getRedFromColor(int color) {
         return ((color >> 16) & 0xff) / 255F;
