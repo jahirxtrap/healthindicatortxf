@@ -7,7 +7,7 @@ Health indicator on player screen
 
 - HUD displays entity name, armor, health in numeric and bar format
 - Damage particles when hitting an entity
-- Colors and other features can be configured in mod config
+- Bar style, colors and other features can be configured in mod config
 
 <strong>Fabric/Quilt dependencies:</strong>
 
