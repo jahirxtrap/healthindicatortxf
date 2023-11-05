@@ -17,6 +17,7 @@ public class BarDisplay {
     private static final ResourceLocation ICON_TEXTURES = new ResourceLocation("textures/gui/icons.png");
     private final Minecraft mc;
     private final GuiComponent gui;
+    private int infoWidth;
 
     public BarDisplay(Minecraft mc, GuiComponent gui) {
         this.mc = mc;
@@ -58,26 +59,14 @@ public class BarDisplay {
             case MAX_HEALTH -> healthText = healthMax;
         }
 
-        int offAux = 0;
-        boolean aux = true;
         boolean showName = HealthIndicatorModConfig.showName;
         boolean showHealth = HealthIndicatorModConfig.showHealth;
         boolean showArmor = HealthIndicatorModConfig.showArmor;
         boolean showModName = HealthIndicatorModConfig.showModName;
         boolean showBar = HealthIndicatorModConfig.showBar;
-        if (showName && !name.isBlank()) {
-            offAux += mc.font.width(name);
-            if (showHealth) {
-                offAux += 5;
-                aux = false;
-            }
-            if (armor && showArmor) offAux += 5;
-        }
-        if (showHealth) {
-            offAux += mc.font.width(healthText) + 10;
-            if (armor && showArmor && aux) offAux += 5;
-        }
-        if (armor && showArmor) offAux += mc.font.width(armorText) + 10;
+
+        setInfoWidth (name, armor, healthText, armorText);
+        int offAux = getInfoWidth();
 
         int center = (barWidth / 2) - ((offAux) / 2);
         int right = barWidth - (offAux) - xOffset;
@@ -117,7 +106,7 @@ public class BarDisplay {
         }
         if (showModName && !modNameText.isBlank()) {
             yOffset = 15 + barHeight;
-            if (!showName && !showHealth && !showArmor) yOffset -= 15;
+            if (offAux == 0) yOffset -= 12;
             if (!showBar) yOffset -= barHeight + 2;
             mc.font.drawShadow(poseStack, modNameText, xOffsetM, yOffset, getColor(0x5555ff, HealthIndicatorModConfig.modNameColor));
         }
@@ -132,5 +121,28 @@ public class BarDisplay {
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
         gui.blit(poseStack, x, 1, 16, 0, 9, 9);
         gui.blit(poseStack, x, 1, 52, 0, 9, 9);
+    }
+
+    public void setInfoWidth (String name, boolean armor, String healthText, String armorText) {
+        int infoWidth = 0;
+        boolean aux = true;
+        if (HealthIndicatorModConfig.showName && !name.isBlank()) {
+            infoWidth += mc.font.width(name);
+            if (HealthIndicatorModConfig.showHealth) {
+                infoWidth += 5;
+                aux = false;
+            }
+            if (armor && HealthIndicatorModConfig.showArmor) infoWidth += 5;
+        }
+        if (HealthIndicatorModConfig.showHealth) {
+            infoWidth += mc.font.width(healthText) + 10;
+            if (armor && HealthIndicatorModConfig.showArmor && aux) infoWidth += 5;
+        }
+        if (armor && HealthIndicatorModConfig.showArmor) infoWidth += mc.font.width(armorText) + 10;
+        this.infoWidth = infoWidth;
+    }
+
+    public int getInfoWidth() {
+        return this.infoWidth;
     }
 }

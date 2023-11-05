@@ -48,7 +48,7 @@ public class CommonUtils {
         return 128;
     }
 
-    public static int getHudHeight() {
+    public static int getHudHeight(int infoWidth) {
         int value = 30;
         switch (HealthIndicatorModConfig.barStyle) {
             case VANILLA -> value -= 1;
@@ -58,13 +58,10 @@ public class CommonUtils {
                 case VANILLA -> value -= 5;
                 default -> value -= 6;
             }
-            if (HealthIndicatorModConfig.showModName)
-                value -= 2;
+            if (HealthIndicatorModConfig.showModName) value -= 2;
         }
-        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor)
-            value -= 12;
-        if (!HealthIndicatorModConfig.showModName)
-            value -= 12;
+        if (infoWidth == 0) value -= 12;
+        if (!HealthIndicatorModConfig.showModName) value -= 12;
         return value;
     }
 
