@@ -39,30 +39,29 @@ public class Hud extends Screen {
 
     private float determineX() {
         float scale = (float) HealthIndicatorModConfig.scale;
-        int op = HealthIndicatorModConfig.hudBackgroundOpacity;
         float barWidth = getHudWidth() * scale;
         float x = (float) HealthIndicatorModConfig.xValue;
         Position position = HealthIndicatorModConfig.position;
         float wScreen = 0;
         if (minecraft != null) wScreen = minecraft.getWindow().getGuiScaledWidth();
 
+        float xV = x + 3 * scale;
         return switch (position) {
             case BOTTOM_CENTER, TOP_CENTER -> (wScreen / 2) + x - (barWidth / 2);
-            case BOTTOM_RIGHT, TOP_RIGHT -> wScreen - (x + (op > 0 ? 6 * scale : 0)) - barWidth;
-            default -> x + (op > 0 ? 3 * scale : 0);
+            case BOTTOM_RIGHT, TOP_RIGHT -> wScreen - xV - barWidth;
+            default -> xV;
         };
     }
 
     private float determineY() {
         float scale = (float) HealthIndicatorModConfig.scale;
-        int op = HealthIndicatorModConfig.hudBackgroundOpacity;
-        float barHeight = getHudHeight() * scale;
+        float barHeight = getHudHeight(barDisplay.getInfoWidth()) * scale;
         float y = (float) HealthIndicatorModConfig.yValue;
         Position position = HealthIndicatorModConfig.position;
         float hScreen = 0;
         if (minecraft != null) hScreen = minecraft.getWindow().getGuiScaledHeight();
 
-        float yV = y + (op > 0 ? 2 * scale : 0);
+        float yV = y + 2 * scale;
         return switch (position) {
             case BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT -> hScreen - yV - barHeight;
             default -> yV;
