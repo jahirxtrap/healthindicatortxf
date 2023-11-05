@@ -1,5 +1,6 @@
 package com.jahirtrap.healthindicator.util;
 
+import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,6 +38,30 @@ public class CommonUtils {
 
     public static String formatText(float amount) {
         return String.format("%.1f", amount);
+    }
+
+    public static int getHudWidth() {
+        return 128;
+    }
+
+    public static int getHudHeight() {
+        int value = 30;
+        switch (HealthIndicatorModConfig.barStyle) {
+            case VANILLA -> value -= 1;
+        }
+        if (!HealthIndicatorModConfig.showBar) {
+            switch (HealthIndicatorModConfig.barStyle) {
+                case VANILLA -> value -= 5;
+                default -> value -= 6;
+            }
+            if (HealthIndicatorModConfig.showModName)
+                value -= 2;
+        }
+        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor)
+            value -= 12;
+        if (!HealthIndicatorModConfig.showModName)
+            value -= 12;
+        return value;
     }
 
     //Damage Particle Utils
