@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
@@ -39,11 +40,13 @@ public class BarDisplay {
         boolean armor = armorValue > 0;
 
         String name = getEntityName(entity);
-        String healthMax = String.valueOf(Mth.ceil(entity.getMaxHealth()));
-        String healthCur = String.valueOf(Math.min(Mth.ceil(entity.getHealth()), Integer.parseInt(healthMax)));
+        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        String healthMax = String.valueOf(Mth.ceil(maxHealth));
+        String healthCur = String.valueOf(Math.min(Mth.ceil(health), Integer.parseInt(healthMax)));
         if (HealthIndicatorModConfig.showHealthDecimals) {
-            healthMax = formatText(entity.getMaxHealth());
-            healthCur = formatText(Math.min(entity.getHealth(), Float.parseFloat(healthMax)));
+            healthMax = formatText(maxHealth);
+            healthCur = formatText(Math.min(health, Float.parseFloat(healthMax)));
         }
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
@@ -60,7 +63,7 @@ public class BarDisplay {
         boolean showModName = HealthIndicatorModConfig.showModName;
         boolean showBar = HealthIndicatorModConfig.showBar;
 
-        setInfoWidth (name, armor, healthText, armorText);
+        setInfoWidth(name, armor, healthText, armorText);
         int offAux = getInfoWidth();
 
         int center = (barWidth / 2) - ((offAux) / 2);
@@ -89,7 +92,7 @@ public class BarDisplay {
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
-            renderHeartIcon(guiGraphics, xOffset);
+            renderHeartIcon(guiGraphics, xOffset, entity);
             xOffset += 10;
             guiGraphics.drawString(mc.font, healthText, xOffset, yOffset, 0xffffff);
             xOffset += mc.font.width(healthText) + 5;
@@ -111,12 +114,40 @@ public class BarDisplay {
         guiGraphics.blitSprite(ARMOR_FULL_SPRITE, x, 1, 9, 9);
     }
 
-    private void renderHeartIcon(GuiGraphics guiGraphics, int x) {
+    private void renderHeartIcon(GuiGraphics guiGraphics, int x, LivingEntity entity) {
+        ResourceLocation icon = HEART_FULL_SPRITE;
         guiGraphics.blitSprite(HEART_CONTAINER_SPRITE, x, 1, 9, 9);
-        guiGraphics.blitSprite(HEART_FULL_SPRITE, x, 1, 9, 9);
+
+        if (HealthIndicatorModConfig.dynamicHeartTexture) icon = getHeartSprite(entity);
+        guiGraphics.blitSprite(icon, x, 1, 9, 9);
     }
 
-    public void setInfoWidth (String name, boolean armor, String healthText, String armorText) {
+    private ResourceLocation getHeartSprite (LivingEntity entity) {
+        final ResourceLocation HEART_FROZEN_FULL_SPRITE = new ResourceLocation("hud/heart/frozen_full");
+        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = new ResourceLocation("hud/heart/absorbing_full");
+        final ResourceLocation HEART_X_FULL_SPRITE = new ResourceLocation("hud/heart/hardcore_full");
+        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = new ResourceLocation("hud/heart/frozen_hardcore_full");
+        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = new ResourceLocation("hud/heart/absorbing_hardcore_full");
+
+        ResourceLocation icon = HEART_FULL_SPRITE;
+        boolean hardcore = false;
+        // if (WITHER) icon = WITHERED_SPRITE; if (POISON) icon = POISONED_SPRITE;
+        if (entity instanceof Player && mc.level != null && mc.level.getLevelData().isHardcore()) {
+            hardcore = true;
+            icon = HEART_X_FULL_SPRITE;
+        }
+        if (entity.getTicksFrozen() >= entity.getTicksRequiredToFreeze()) {
+            if (!hardcore) icon = HEART_FROZEN_FULL_SPRITE;
+            else icon = HEART_X_FROZEN_FULL_SPRITE;
+        }
+        else if (entity.getAbsorptionAmount() > 0) {
+            if (!hardcore) icon = HEART_ABSORBING_FULL_SPRITE;
+            else icon = HEART_X_ABSORBING_FULL_SPRITE;
+        }
+        return icon;
+    }
+
+    public void setInfoWidth(String name, boolean armor, String healthText, String armorText) {
         int infoWidth = 0;
         boolean aux = true;
         if (HealthIndicatorModConfig.showName && !name.isBlank()) {

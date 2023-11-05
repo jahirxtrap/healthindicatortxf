@@ -1,6 +1,7 @@
 package com.jahirtrap.healthindicator.util;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,7 +15,8 @@ public class EntityData {
 
         this.lastUpdate = gameTimeNow;
 
-        this.health = livingEntity.getHealth();
+        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
+        else this.health = livingEntity.getHealth();
         this.healthStamp = gameTimeNow;
     }
 
@@ -25,7 +27,8 @@ public class EntityData {
 
         this.lastHealth = this.health;
         this.lastHealthStamp = this.healthStamp;
-        this.health = livingEntity.getHealth();
+        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
+        else this.health = livingEntity.getHealth();
         this.lastHealthStamp = gameTimeNow;
 
         if (this.health != this.lastHealth) {
