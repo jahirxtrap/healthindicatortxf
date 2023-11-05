@@ -13,14 +13,15 @@ import net.minecraft.world.entity.LivingEntity;
 import org.joml.Matrix4f;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
+import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
 
 public class HealthBarRenderer {
     private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(
             HealthIndicatorMod.MODID + ":textures/gui/bars.png");
 
-    public static void render(PoseStack poseStack, LivingEntity entity, float width, float height, boolean armor) {
+    public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = CommonUtils.getEntityType(entity);
-        int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080;
+        int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080, color4 = 0x000000, alpha4 = 0;
         if (entityType == EntityType.PASSIVE) {
             color = getColor(0x00ff00, HealthIndicatorModConfig.passiveColor);
             color2 = getColor(0x008000, HealthIndicatorModConfig.passiveColorSecondary);
@@ -31,7 +32,9 @@ public class HealthBarRenderer {
             color = getColor(0x0000ff, HealthIndicatorModConfig.neutralColor);
             color2 = getColor(0x000080, HealthIndicatorModConfig.neutralColorSecondary);
         }
-        color3 = getColor(0x808080, HealthIndicatorModConfig.backgroundColor);
+        color3 = getColor(0x808080, HealthIndicatorModConfig.backgroundBarColor);
+        color4 = getColor(0x000000, HealthIndicatorModConfig.hudBackgroundColor);
+        alpha4 = HealthIndicatorModConfig.hudBackgroundOpacity;
 
         BarState state = BarStates.getState(entity);
 
@@ -40,6 +43,13 @@ public class HealthBarRenderer {
         int zOffset = 0;
 
         Matrix4f m4f = poseStack.last().pose();
+
+        if (!bar) width = 0;
+        if (alpha4 > 0) {
+            if (width >= wVal1 && width >= wVal2) oVal1 = 0;
+            drawBackground(m4f, color4, alpha4, zOffset++, Math.max(Math.max(width, wVal1), wVal2), oVal1);
+        }
+        if (!bar) return;
         if (HealthIndicatorModConfig.showBackgroundBar)
             drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
         if (HealthIndicatorModConfig.showSecondaryBar)
@@ -47,8 +57,7 @@ public class HealthBarRenderer {
         drawBar(m4f, width, height, percent, color, zOffset, false, armor);
     }
 
-    private static void drawBar(Matrix4f matrix4f, float width, float height, float percent,
-                                int color, int zOffset, boolean back, boolean armor) {
+    private static void drawBar(Matrix4f matrix4f, int width, int height, float percent, int color, int zOffset, boolean back, boolean armor) {
         float v = 10;
 
         switch (HealthIndicatorModConfig.barStyle) {
@@ -71,9 +80,7 @@ public class HealthBarRenderer {
 
         float size = percent * width;
 
-        float r = (color >> 16 & 255) / 255.0F;
-        float g = (color >> 8 & 255) / 255.0F;
-        float b = (color & 255) / 255.0F;
+        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
 
         RenderSystem.setShaderColor(r, g, b, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -93,7 +100,33 @@ public class HealthBarRenderer {
         buffer.vertex(matrix4f, size, y + height, zOffset * zOffsetAmount)
                 .uv((u + uw) * c, (v + height) * c).endVertex();
         buffer.vertex(matrix4f, size, y, zOffset * zOffsetAmount)
-                .uv(((u + uw) * c), v * c).endVertex();
+                .uv((u + uw) * c, v * c).endVertex();
+        tesselator.end();
+    }
+
+    private static void drawBackground(Matrix4f matrix4f, int color, int alpha, int zOffset, int maxWidth, int minOffset) {
+        int padding = 3;
+        int maxHeight = getHudHeight() + 1 + padding;
+        int uw = maxWidth + minOffset + padding;
+        int x = minOffset - padding;
+        int y = 1 - padding;
+
+        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
+
+        RenderSystem.setShaderColor(r, g, b, (float) alpha / 100);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.enableBlend();
+
+        float zOffsetAmount = 0.1F;
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+
+        buffer.vertex(matrix4f, x, y, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, x, y + maxHeight, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, uw, y + maxHeight, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, uw, y, zOffset * zOffsetAmount).endVertex();
         tesselator.end();
     }
 }
