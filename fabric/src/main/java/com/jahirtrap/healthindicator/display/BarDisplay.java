@@ -27,7 +27,7 @@ public class BarDisplay {
 
     public void draw(PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
-        int xOffset = 1, xOffsetM = 1;
+        int xOffset = 1, xOffsetM = 1, yOffset = 2;
 
         switch (HealthIndicatorModConfig.barStyle) {
             case VANILLA -> barHeight = 5;
@@ -39,10 +39,6 @@ public class BarDisplay {
         RenderSystem.enableBlend();
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
-
-        if (HealthIndicatorModConfig.showBar)
-            HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor);
-        else barHeight = 0;
 
         String name = getEntityName(entity);
         String healthMax = String.valueOf(Mth.ceil(entity.getMaxHealth()));
@@ -60,14 +56,13 @@ public class BarDisplay {
             case MAX_HEALTH -> healthText = healthMax;
         }
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
         int offAux = 0;
         boolean aux = true;
         boolean showName = HealthIndicatorModConfig.showName;
         boolean showHealth = HealthIndicatorModConfig.showHealth;
         boolean showArmor = HealthIndicatorModConfig.showArmor;
         boolean showModName = HealthIndicatorModConfig.showModName;
+        boolean showBar = HealthIndicatorModConfig.showBar;
         if (showName && !name.isBlank()) {
             offAux += mc.font.width(name);
             if (showHealth) {
@@ -98,25 +93,31 @@ public class BarDisplay {
             }
         }
 
+        HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
         if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
 
         if (showName && !name.isBlank()) {
-            mc.font.drawShadow(poseStack, name, xOffset, 2, 0xffffff);
+            mc.font.drawShadow(poseStack, name, xOffset, yOffset, 0xffffff);
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
             renderHeartIcon(poseStack, xOffset);
             xOffset += 10;
-            mc.font.drawShadow(poseStack, healthText, xOffset, 2, 0xffffff);
+            mc.font.drawShadow(poseStack, healthText, xOffset, yOffset, 0xffffff);
             xOffset += mc.font.width(healthText) + 5;
         }
         if (armor && showArmor) {
             renderArmorIcon(poseStack, xOffset);
             xOffset += 10;
-            mc.font.drawShadow(poseStack, armorText, xOffset, 2, 0xffffff);
+            mc.font.drawShadow(poseStack, armorText, xOffset, yOffset, 0xffffff);
         }
         if (showModName && !modNameText.isBlank()) {
-            mc.font.drawShadow(poseStack, modNameText, xOffsetM, 15 + ((barHeight == 0) ? barHeight - 2 : barHeight), getColor(0x5555ff, HealthIndicatorModConfig.modNameColor));
+            yOffset = 15 + barHeight;
+            if (!showName && !showHealth && !showArmor) yOffset -= 15;
+            if (!showBar) yOffset -= barHeight + 2;
+            mc.font.drawShadow(poseStack, modNameText, xOffsetM, yOffset, getColor(0x5555ff, HealthIndicatorModConfig.modNameColor));
         }
     }
 

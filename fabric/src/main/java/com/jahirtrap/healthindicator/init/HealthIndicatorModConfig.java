@@ -49,8 +49,12 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static Position position = Position.TOP_LEFT;
     @Comment(centered = true)
     public static Comment colors;
-    @Entry(name = "Background Color", width = 7, min = 7, isColor = true)
-    public static String backgroundColor = "#808080";
+    @Entry(name = "Hud Background Opacity", min = 0, max = 100, isSlider = true)
+    public static int hudBackgroundOpacity = 0;
+    @Entry(name = "Hud Background Color", width = 7, min = 7, isColor = true)
+    public static String hudBackgroundColor = "#000000";
+    @Entry(name = "Background Bar Color", width = 7, min = 7, isColor = true)
+    public static String backgroundBarColor = "#808080";
     @Entry(name = "Passive Color", width = 7, min = 7, isColor = true)
     public static String passiveColor = "#00ff00";
     @Entry(name = "Passive Color Secondary", width = 7, min = 7, isColor = true)

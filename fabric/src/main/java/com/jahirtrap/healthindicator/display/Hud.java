@@ -12,6 +12,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
+import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
+import static com.jahirtrap.healthindicator.util.CommonUtils.getHudWidth;
+
 public class Hud extends Screen {
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
     private final BarDisplay barDisplay;
@@ -33,8 +36,9 @@ public class Hud extends Screen {
     }
 
     private float determineX() {
-        double scale = HealthIndicatorModConfig.scale;
-        float barWidth = (float) (128 * scale);
+        float scale = (float) HealthIndicatorModConfig.scale;
+        int op = HealthIndicatorModConfig.hudBackgroundOpacity;
+        float barWidth = getHudWidth() * scale;
         float x = (float) HealthIndicatorModConfig.xValue;
         Position position = HealthIndicatorModConfig.position;
         float wScreen = 0;
@@ -42,27 +46,24 @@ public class Hud extends Screen {
 
         return switch (position) {
             case BOTTOM_CENTER, TOP_CENTER -> (wScreen / 2) + x - (barWidth / 2);
-            case BOTTOM_RIGHT, TOP_RIGHT -> wScreen - x - barWidth;
-            default -> x;
+            case BOTTOM_RIGHT, TOP_RIGHT -> wScreen - (x + (op > 0 ? 6 * scale : 0)) - barWidth;
+            default -> x + (op > 0 ? 3 * scale : 0);
         };
     }
 
     private float determineY() {
-        double scale = HealthIndicatorModConfig.scale;
-        int value = 18;
-        if (!HealthIndicatorModConfig.showBar)
-            value -= 6;
-        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor)
-            value -= 12;
-        float barHeight = (float) (value * scale);
+        float scale = (float) HealthIndicatorModConfig.scale;
+        int op = HealthIndicatorModConfig.hudBackgroundOpacity;
+        float barHeight = getHudHeight() * scale;
         float y = (float) HealthIndicatorModConfig.yValue;
         Position position = HealthIndicatorModConfig.position;
         float hScreen = 0;
         if (minecraft != null) hScreen = minecraft.getWindow().getGuiScaledHeight();
 
+        float yV = y + (op > 0 ? 2 * scale : 0);
         return switch (position) {
-            case BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT -> hScreen - y - barHeight;
-            default -> y;
+            case BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT -> hScreen - yV - barHeight;
+            default -> yV;
         };
     }
 
@@ -88,6 +89,8 @@ public class Hud extends Screen {
 
     private void draw(PoseStack poseStack, float x, float y, float scale) {
         if (entity == null) return;
+        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor && !HealthIndicatorModConfig.showBar && !HealthIndicatorModConfig.showModName)
+            return;
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
