@@ -47,7 +47,7 @@ public class HealthBarRenderer {
         if (!bar) width = 0;
         if (alpha4 > 0) {
             if (width >= wVal1 && width >= wVal2) oVal1 = 0;
-            drawBackground(m4f, color4, alpha4, zOffset++, Math.max(Math.max(width, wVal1), wVal2), oVal1);
+            drawBackground(m4f, color4, alpha4, zOffset++, wVal1, Math.max(Math.max(width, wVal1), wVal2), oVal1);
         }
         if (!bar) return;
         if (HealthIndicatorModConfig.showBackgroundBar)
@@ -104,12 +104,17 @@ public class HealthBarRenderer {
         tesselator.end();
     }
 
-    private static void drawBackground(Matrix4f matrix4f, int color, int alpha, int zOffset, int maxWidth, int minOffset) {
+    private static void drawBackground(Matrix4f matrix4f, int color, int alpha, int zOffset, int wVal1, int maxWidth, int minOffset) {
         int padding = 3;
-        int maxHeight = getHudHeight() + 1 + padding;
-        int uw = maxWidth + minOffset + padding;
+        int xw = maxWidth + minOffset + padding;
+        int yh = getHudHeight(wVal1) + 1 + padding;
         int x = minOffset - padding;
         int y = 1 - padding;
+
+        switch (HealthIndicatorModConfig.position) {
+            case BOTTOM_LEFT, TOP_LEFT -> x -= 1;
+            case BOTTOM_RIGHT, TOP_RIGHT -> xw += 1;
+        }
 
         float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
 
@@ -124,9 +129,9 @@ public class HealthBarRenderer {
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
         buffer.vertex(matrix4f, x, y, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, x, y + maxHeight, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, uw, y + maxHeight, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, uw, y, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, x, y + yh, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, xw, y + yh, zOffset * zOffsetAmount).endVertex();
+        buffer.vertex(matrix4f, xw, y, zOffset * zOffsetAmount).endVertex();
         tesselator.end();
     }
 }
