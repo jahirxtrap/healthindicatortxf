@@ -1,7 +1,11 @@
 package com.jahirtrap.healthindicator.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
+@Environment(EnvType.CLIENT)
 public class EntityData {
     public float health, lastHealth, damage, lastDamage;
     public long healthStamp, lastHealthStamp, damageStamp, lastDamageStamp, lastUpdate;
@@ -11,7 +15,8 @@ public class EntityData {
 
         this.lastUpdate = gameTimeNow;
 
-        this.health = livingEntity.getHealth();
+        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
+        else this.health = livingEntity.getHealth();
         this.healthStamp = gameTimeNow;
     }
 
@@ -22,7 +27,8 @@ public class EntityData {
 
         this.lastHealth = this.health;
         this.lastHealthStamp = this.healthStamp;
-        this.health = livingEntity.getHealth();
+        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
+        else this.health = livingEntity.getHealth();
         this.lastHealthStamp = gameTimeNow;
 
         if (this.health != this.lastHealth) {

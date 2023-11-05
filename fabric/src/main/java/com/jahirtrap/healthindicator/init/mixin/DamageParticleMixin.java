@@ -4,6 +4,8 @@ import com.jahirtrap.healthindicator.display.DamageParticleRenderer.DamagePartic
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.EntityData;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +23,37 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 public abstract class DamageParticleMixin {
     private static final WeakHashMap<LivingEntity, EntityData> ENTITY_TRACKER = new WeakHashMap<>();
 
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onLivingUpdateEvent(CallbackInfo ci) {
+        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
+        Entity entity = (Entity) (Object) this;
+        if (!(entity instanceof LivingEntity livingEntity)) return;
+
+        EntityData entityData = ENTITY_TRACKER.get(livingEntity);
+
+        if (entityData == null) {
+            entityData = new EntityData(livingEntity);
+            ENTITY_TRACKER.put(livingEntity, entityData);
+        } else {
+            entityData.update(livingEntity);
+        }
+
+        if (entityData.damage != 0) {
+            onEntityDamaged(livingEntity, entityData);
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "setLevel", at = @At("HEAD"))
+    private void onEntityJoin(CallbackInfo ci) {
+        Entity entity = (Entity) (Object) this;
+        Entity player = Minecraft.getInstance().player;
+        if (player == null) return;
+        if (entity.equals(player)) ENTITY_TRACKER.clear();
+    }
+
+    @Environment(EnvType.CLIENT)
     private static void onEntityDamaged(LivingEntity livingEntity, EntityData entityData) {
         if (entityData.damage < 0) return;
 
@@ -51,33 +84,5 @@ public abstract class DamageParticleMixin {
         damageParticle.setLifetime(20);
 
         Minecraft.getInstance().particleEngine.add(damageParticle);
-    }
-
-    @Inject(method = "tick", at = @At("HEAD"))
-    private void onLivingUpdateEvent(CallbackInfo ci) {
-        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
-        Entity entity = (Entity) (Object) this;
-        if (!(entity instanceof LivingEntity livingEntity)) return;
-
-        EntityData entityData = ENTITY_TRACKER.get(livingEntity);
-
-        if (entityData == null) {
-            entityData = new EntityData(livingEntity);
-            ENTITY_TRACKER.put(livingEntity, entityData);
-        } else {
-            entityData.update(livingEntity);
-        }
-
-        if (entityData.damage != 0) {
-            onEntityDamaged(livingEntity, entityData);
-        }
-    }
-
-    @Inject(method = "setLevel", at = @At("HEAD"))
-    private void onEntityJoin(CallbackInfo ci) {
-        Entity entity = (Entity) (Object) this;
-        Entity player = Minecraft.getInstance().player;
-        if (player == null) return;
-        if (entity.equals(player)) ENTITY_TRACKER.clear();
     }
 }
