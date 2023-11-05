@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
@@ -44,11 +45,13 @@ public class BarDisplay {
         boolean armor = armorValue > 0;
 
         String name = getEntityName(entity);
-        String healthMax = String.valueOf(Mth.ceil(entity.getMaxHealth()));
-        String healthCur = String.valueOf(Math.min(Mth.ceil(entity.getHealth()), Integer.parseInt(healthMax)));
+        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        String healthMax = String.valueOf(Mth.ceil(maxHealth));
+        String healthCur = String.valueOf(Math.min(Mth.ceil(health), Integer.parseInt(healthMax)));
         if (HealthIndicatorModConfig.showHealthDecimals) {
-            healthMax = formatText(entity.getMaxHealth());
-            healthCur = formatText(Math.min(entity.getHealth(), Float.parseFloat(healthMax)));
+            healthMax = formatText(maxHealth);
+            healthCur = formatText(Math.min(health, Float.parseFloat(healthMax)));
         }
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
@@ -65,7 +68,7 @@ public class BarDisplay {
         boolean showModName = HealthIndicatorModConfig.showModName;
         boolean showBar = HealthIndicatorModConfig.showBar;
 
-        setInfoWidth (name, armor, healthText, armorText);
+        setInfoWidth(name, armor, healthText, armorText);
         int offAux = getInfoWidth();
 
         int center = (barWidth / 2) - ((offAux) / 2);
@@ -94,7 +97,7 @@ public class BarDisplay {
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
-            renderHeartIcon(poseStack, xOffset);
+            renderHeartIcon(poseStack, xOffset, entity);
             xOffset += 10;
             mc.font.drawShadow(poseStack, healthText, xOffset, yOffset, 0xffffff);
             xOffset += mc.font.width(healthText) + 5;
@@ -117,13 +120,21 @@ public class BarDisplay {
         gui.blit(poseStack, x, 1, 34, 9, 9, 9);
     }
 
-    private void renderHeartIcon(PoseStack poseStack, int x) {
+    private void renderHeartIcon(PoseStack poseStack, int x, LivingEntity entity) {
+        int u = 52, v = 0;
         RenderSystem.setShaderTexture(0, ICON_TEXTURES);
         gui.blit(poseStack, x, 1, 16, 0, 9, 9);
-        gui.blit(poseStack, x, 1, 52, 0, 9, 9);
+
+        if (HealthIndicatorModConfig.dynamicHeartTexture) {
+            // if (WITHER) u = 124; if (POISON) u = 88;
+            if (entity instanceof Player && mc.level != null && mc.level.getLevelData().isHardcore()) v = 45;
+            if (entity.getTicksFrozen() >= entity.getTicksRequiredToFreeze()) u = 178;
+            else if (entity.getAbsorptionAmount() > 0) u = 160;
+        }
+        gui.blit(poseStack, x, 1, u, v, 9, 9);
     }
 
-    public void setInfoWidth (String name, boolean armor, String healthText, String armorText) {
+    public void setInfoWidth(String name, boolean armor, String healthText, String armorText) {
         int infoWidth = 0;
         boolean aux = true;
         if (HealthIndicatorModConfig.showName && !name.isBlank()) {

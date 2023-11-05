@@ -31,6 +31,8 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static boolean showHealthDecimals = false;
     @Entry(name = "Health Text Format")
     public static HealthTextFormat healthTextFormat = HealthTextFormat.BOTH;
+    @Entry(name = "Dynamic Heart Texture")
+    public static boolean dynamicHeartTexture = true;
     @Entry(name = "Bar Style")
     public static BarStyle barStyle = BarStyle.DEFAULT;
     @Comment(centered = true)
@@ -38,9 +40,9 @@ public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Distance", min = 0, max = Integer.MAX_VALUE)
     public static int distance = 60;
     @Entry(name = "X Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
-    public static double xValue = 4.0;
+    public static double xValue = 0.0;
     @Entry(name = "Y Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
-    public static double yValue = 4.0;
+    public static double yValue = 0.0;
     @Entry(name = "Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
     public static double scale = 1.0;
     @Entry(name = "Hide Delay", min = 0, max = Integer.MAX_VALUE)
