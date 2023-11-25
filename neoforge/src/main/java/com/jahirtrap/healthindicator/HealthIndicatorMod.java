@@ -3,9 +3,9 @@ package com.jahirtrap.healthindicator;
 import com.jahirtrap.healthindicator.init.HealthIndicatorClient;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
 
 @Mod(HealthIndicatorMod.MODID)
 public class HealthIndicatorMod {

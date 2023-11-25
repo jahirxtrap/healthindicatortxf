@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'fabric-loom'
+    id 'fabric-loom' version '1.2-SNAPSHOT'
 }
 
 version = "${version}-fabric"
@@ -94,10 +94,13 @@ jar.finalizedBy('remapJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
+            artifactId base.archivesName.get()
             from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
