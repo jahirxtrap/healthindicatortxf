@@ -11,6 +11,7 @@ import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 
+import java.util.List;
 import java.util.Optional;
 
 public class CommonUtils {
@@ -26,6 +27,23 @@ public class CommonUtils {
         Optional<ModContainer> modContainerOptional = FabricLoader.getInstance().getModContainer(modId);
         String displayName = modContainerOptional.get().getMetadata().getName();
         return displayName;
+    }
+
+    public static String getEntityId(LivingEntity entity) {
+        String entityId = Registry.ENTITY_TYPE.getKey(entity.getType()).toString();
+        return entityId;
+    }
+
+    public static boolean checkBlacklist(String blacklist, LivingEntity livingEntity) {
+        if (!blacklist.isBlank()) {
+            List<String> list = List.of(blacklist.replaceAll("\\s+", "").split(","));
+            for (String entityId : list) {
+                if (getEntityId(livingEntity).equals(entityId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static Integer getColor(int defaultValue, String hexColor) {
