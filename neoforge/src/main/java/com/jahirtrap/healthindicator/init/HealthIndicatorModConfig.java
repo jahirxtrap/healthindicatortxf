@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.init;
 
-import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
+import com.jahirtrap.configlib.TXFConfig;
 
 public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
@@ -23,10 +23,6 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static boolean showArmor = true;
     @Entry(name = "Show Mod Name")
     public static boolean showModName = false;
-    @Entry(name = "Show Invisible Entities")
-    public static boolean showInvisibleEntities = true;
-    @Entry(name = "Show Bosses")
-    public static boolean showBosses = false;
     @Entry(name = "Show Health Decimals")
     public static boolean showHealthDecimals = false;
     @Entry(name = "Health Text Format")
@@ -73,6 +69,18 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static String modNameColor = "#5555ff";
     @Entry(name = "Damage Particle Color", width = 7, min = 7, isColor = true)
     public static String damageParticleColor = "#fcfcfc";
+    @Comment(centered = true)
+    public static Comment entities;
+    @Entry(name = "Show Invisible Entities")
+    public static boolean showInvisibleEntities = true;
+    @Entry(name = "Show Bosses")
+    public static boolean showBosses = false;
+    @Entry(name = "Blacklist")
+    public static String blacklist = "";
+    @Entry(name = "Bar Blacklist")
+    public static String barBlacklist = "";
+    @Entry(name = "Damage Particle Blacklist")
+    public static String damageParticleBlacklist = "cobblemon:pokemon";
 
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
 

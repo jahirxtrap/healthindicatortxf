@@ -10,6 +10,8 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.neoforged.fml.ModList;
 
+import java.util.List;
+
 public class CommonUtils {
     public static EntityType getEntityType(Entity entity) {
         if (entity instanceof NeutralMob || entity instanceof Llama) return EntityType.NEUTRAL;
@@ -22,6 +24,23 @@ public class CommonUtils {
         String modId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
         String displayName = ModList.get().getModContainerById(modId).get().getModInfo().getDisplayName();
         return displayName;
+    }
+
+    public static String getEntityId(LivingEntity entity) {
+        String entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
+        return entityId;
+    }
+
+    public static boolean checkBlacklist(String blacklist, LivingEntity livingEntity) {
+        if (!blacklist.isBlank()) {
+            List<String> list = List.of(blacklist.replaceAll("\\s+", "").split(","));
+            for (String entityId : list) {
+                if (getEntityId(livingEntity).equals(entityId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static Integer getColor(int defaultValue, String hexColor) {

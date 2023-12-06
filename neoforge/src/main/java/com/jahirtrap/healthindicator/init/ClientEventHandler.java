@@ -1,6 +1,5 @@
 package com.jahirtrap.healthindicator.init;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
 import com.jahirtrap.healthindicator.bars.BarStates;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModLoadingContext;
