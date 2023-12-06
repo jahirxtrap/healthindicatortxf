@@ -2,6 +2,7 @@
   "healthindicatortxf.config.title": "Health Indicator TXF",
   "healthindicatortxf.config.hud": "Hud",
   "healthindicatortxf.config.colors": "Colors",
+  "healthindicatortxf.config.entities": "Entities",
   "healthindicatortxf.config.enum.Position.TOP_LEFT": "Top Left",
   "healthindicatortxf.config.enum.Position.TOP_CENTER": "Top Center",
   "healthindicatortxf.config.enum.Position.TOP_RIGHT": "Top Right",

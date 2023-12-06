@@ -12,8 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
-import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getHudWidth;
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class Hud extends Screen {
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
@@ -90,6 +89,8 @@ public class Hud extends Screen {
         if (entity == null) return;
         if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor && !HealthIndicatorModConfig.showBar && !HealthIndicatorModConfig.showModName)
             return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, entity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.barBlacklist, entity)) return;
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
