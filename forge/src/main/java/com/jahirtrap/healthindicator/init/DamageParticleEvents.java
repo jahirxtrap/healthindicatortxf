@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.WeakHashMap;
 
+import static com.jahirtrap.healthindicator.util.CommonUtils.checkBlacklist;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 
 @Mod.EventBusSubscriber
@@ -28,6 +29,8 @@ public class DamageParticleEvents {
     public static void onLivingUpdateEvent(final LivingUpdateEvent event) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         LivingEntity livingEntity = event.getEntityLiving();
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 
