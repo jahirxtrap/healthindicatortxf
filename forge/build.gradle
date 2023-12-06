@@ -67,8 +67,10 @@ minecraft {
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${forge_version}"
     compileOnly project(":common")
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -81,14 +83,15 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['META-INF/mods.toml', 'META-INF/jarjar/metadata.json', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: forge_minecraft_version_range,
         forge_version: forge_version, forge_version_range: forge_version_range,
         loader_version_range: forge_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
         mod_author: mod_author, mod_description: mod_description,
-        mod_url: mod_url, side: forge_side
+        mod_url: mod_url, side: forge_side,
+        configlibtxf_version: configlibtxf_version
 ]
 
 processResources {
@@ -99,6 +102,13 @@ processResources {
         expand replaceProperties
     }
     from project(":common").sourceSets.main.resources
+}
+
+jar {
+    from('libs') {
+        include '*.jar'
+        into('META-INF/jarjar')
+    }
 }
 
 jar.finalizedBy('reobfJar')

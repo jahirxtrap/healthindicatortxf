@@ -122,7 +122,7 @@ public class BarDisplay {
         guiGraphics.blitSprite(icon, x, 1, 9, 9);
     }
 
-    private ResourceLocation getHeartSprite (LivingEntity entity) {
+    private ResourceLocation getHeartSprite(LivingEntity entity) {
         final ResourceLocation HEART_FROZEN_FULL_SPRITE = new ResourceLocation("hud/heart/frozen_full");
         final ResourceLocation HEART_ABSORBING_FULL_SPRITE = new ResourceLocation("hud/heart/absorbing_full");
         final ResourceLocation HEART_X_FULL_SPRITE = new ResourceLocation("hud/heart/hardcore_full");
@@ -139,8 +139,7 @@ public class BarDisplay {
         if (entity.getTicksFrozen() >= entity.getTicksRequiredToFreeze()) {
             if (!hardcore) icon = HEART_FROZEN_FULL_SPRITE;
             else icon = HEART_X_FROZEN_FULL_SPRITE;
-        }
-        else if (entity.getAbsorptionAmount() > 0) {
+        } else if (entity.getAbsorptionAmount() > 0) {
             if (!hardcore) icon = HEART_ABSORBING_FULL_SPRITE;
             else icon = HEART_X_ABSORBING_FULL_SPRITE;
         }

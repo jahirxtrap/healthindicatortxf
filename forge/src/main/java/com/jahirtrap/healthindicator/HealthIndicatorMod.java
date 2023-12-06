@@ -1,8 +1,8 @@
 package com.jahirtrap.healthindicator;
 
+import com.jahirtrap.configlib.TXFConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorClient;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
-import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

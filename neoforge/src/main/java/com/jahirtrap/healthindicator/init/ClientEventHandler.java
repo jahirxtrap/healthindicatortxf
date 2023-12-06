@@ -1,11 +1,14 @@
 package com.jahirtrap.healthindicator.init;
 
+import com.jahirtrap.healthindicator.HealthIndicatorMod;
 import com.jahirtrap.healthindicator.bars.BarStates;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
 import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientEventHandler {
     public static void init() {
@@ -22,6 +25,6 @@ public class ClientEventHandler {
     }
 
     private static void registerOverlays(final RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.POTION_ICONS.id(), "healthindicatortxf_hud", HealthIndicatorClient.HUD::draw);
+        event.registerAbove(VanillaGuiOverlay.POTION_ICONS.id(), new ResourceLocation(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
     }
 }
