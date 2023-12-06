@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.init;
 
-import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
+import com.jahirtrap.configlib.TXFConfig;
 
 public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
