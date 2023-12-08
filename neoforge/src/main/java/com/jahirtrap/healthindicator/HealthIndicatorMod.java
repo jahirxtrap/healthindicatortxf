@@ -1,8 +1,8 @@
 package com.jahirtrap.healthindicator;
 
-import com.jahirtrap.configlib.TXFConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorClient;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
+import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.ConfigScreenHandler;
