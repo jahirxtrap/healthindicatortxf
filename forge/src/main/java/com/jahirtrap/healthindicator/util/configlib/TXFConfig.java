@@ -1,5 +1,6 @@
 package com.jahirtrap.healthindicator.util.configlib;
 
+import com.google.common.collect.Lists;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.components.tabs.*;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +48,7 @@ public abstract class TXFConfig {
 
     private static final List<EntryInfo> entries = new ArrayList<>();
 
-    protected static class EntryInfo {
+    public static class EntryInfo {
         Field field;
         Object widget;
         int width;
@@ -102,7 +104,7 @@ public abstract class TXFConfig {
         info.id = modid;
 
         if (e != null) {
-            if (!e.name().equals("")) info.name = Component.translatable(e.name());
+            if (!e.name().isEmpty()) info.name = Component.translatable(e.name());
             if (type == int.class) textField(info, Integer::parseInt, INTEGER_ONLY, (int) e.min(), (int) e.max(), true);
             else if (type == float.class) textField(info, Float::parseFloat, DECIMAL_ONLY, (float) e.min(), (float) e.max(), false);
             else if (type == double.class) textField(info, Double::parseDouble, DECIMAL_ONLY, e.min(), e.max(), false);
@@ -126,7 +128,8 @@ public abstract class TXFConfig {
         entries.add(info);
     }
     public static Tooltip getTooltip(EntryInfo info) {
-        return Tooltip.create(info.error != null ? info.error : I18n.exists(info.id + ".config."+info.field.getName()+".tooltip") ? Component.translatable(info.id + ".config."+info.field.getName()+".tooltip") : Component.empty());
+        String key = info.id + ".config."+info.field.getName()+".tooltip";
+        return Tooltip.create(info.error != null ? info.error : I18n.exists(key) ? Component.translatable(key) : Component.empty());
     }
 
     private static void textField(EntryInfo info, Function<String,Number> f, Pattern pattern, double min, double max, boolean cast) {
@@ -182,7 +185,7 @@ public abstract class TXFConfig {
             if (!Files.exists(path)) Files.createFile(path);
             Files.write(path, gson.toJson(getClass(modid)).getBytes());
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
     @OnlyIn(Dist.CLIENT)
@@ -357,8 +360,7 @@ public abstract class TXFConfig {
                             })).bounds(width - 185, 0, 20, 20).build();
                             try {
                                 colorButton.setMessage(Component.literal("⬛").setStyle(Style.EMPTY.withColor(Color.decode(info.tempValue).getRGB())));
-                            } catch (Exception ignored) {
-                            }
+                            } catch (Exception ignored) {}
                             info.colorButton = colorButton;
                             colorButton.active = false;
                             this.list.addButton(List.of(widget, resetButton, colorButton), name, info);
@@ -373,20 +375,18 @@ public abstract class TXFConfig {
         }
         @Override
         public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-            super.render(context,mouseX,mouseY,delta);
+            if (minecraft != null && minecraft.level != null) super.renderTransparentBackground(context);
             this.list.render(context, mouseX, mouseY, delta);
+            super.render(context,mouseX,mouseY,delta);
 
             if (tabs.size() < 2) context.drawCenteredString(font, title, width / 2, 15, 0xFFFFFF);
         }
+        @Override public void renderBackground(GuiGraphics c, int x, int y, float d) {}
     }
     @OnlyIn(Dist.CLIENT)
     public static class MidnightConfigListWidget extends ContainerObjectSelectionList<ButtonEntry> {
-        Font textRenderer;
-
-        public MidnightConfigListWidget(Minecraft minecraftClient, int i, int j, int k, int m) {
-            super(minecraftClient, i, j, k, m);
-            this.centerListVertically = false;
-            textRenderer = minecraftClient.font;
+        public MidnightConfigListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
+            super(client, width, height, y, itemHeight);
         }
         @Override
         public int getScrollbarPosition() { return this.width -7; }
@@ -394,18 +394,25 @@ public abstract class TXFConfig {
         public void addButton(List<AbstractWidget> buttons, Component text, EntryInfo info) {
             this.addEntry(new ButtonEntry(buttons, text, info));
         }
-        public void clear() {
-            this.clearEntries();
-        }
+        public void clear() { this.clearEntries(); }
         @Override
         public int getRowWidth() { return 10000; }
+        @Override
+        protected void renderDecorations(GuiGraphics c, int mouseX, int mouseY) {
+            c.setColor(0.25F, 0.25F, 0.25F, 1.0F);
+            c.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
+            c.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getBottom(), 0.0F, 0.0F, this.width, this.height, 32, 32);
+            c.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            if (minecraft == null || minecraft.level == null) return;
+            c.fillGradient(RenderType.guiOverlay(), this.getX(), this.getY(), this.getRight(), this.getY() + 4, -16777216, 0, 0);
+            c.fillGradient(RenderType.guiOverlay(), this.getX(), this.getBottom() - 4, this.getRight(), this.getBottom(), 0, -16777216, 0);
+        }
     }
     public static class ButtonEntry extends ContainerObjectSelectionList.Entry<ButtonEntry> {
         private static final Font textRenderer = Minecraft.getInstance().font;
         public final List<AbstractWidget> buttons;
         private final Component text;
         public final EntryInfo info;
-        private final List<AbstractWidget> children = new ArrayList<>();
         public static final Map<AbstractWidget, Component> buttonsWithText = new HashMap<>();
 
         private ButtonEntry(List<AbstractWidget> buttons, Component text, EntryInfo info) {
@@ -413,7 +420,6 @@ public abstract class TXFConfig {
             this.buttons = buttons;
             this.text = text;
             this.info = info;
-            children.addAll(buttons);
         }
         public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             buttons.forEach(b -> { b.setY(y); b.render(context, mouseX, mouseY, tickDelta); });
@@ -428,8 +434,8 @@ public abstract class TXFConfig {
                 }
             }
         }
-        public List<? extends GuiEventListener> children() {return children;}
-        public List<? extends NarratableEntry> narratables() {return children;}
+        public List<? extends GuiEventListener> children() {return Lists.newArrayList(buttons);}
+        public List<? extends NarratableEntry> narratables() {return Lists.newArrayList(buttons);}
     }
     public static class MidnightSliderWidget extends AbstractSliderButton {
         private final EntryInfo info; private final Entry e;
