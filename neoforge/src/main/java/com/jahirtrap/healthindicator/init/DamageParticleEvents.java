@@ -11,7 +11,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
@@ -20,7 +20,7 @@ import java.util.WeakHashMap;
 import static com.jahirtrap.healthindicator.util.CommonUtils.checkBlacklist;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class DamageParticleEvents {
     public static final WeakHashMap<LivingEntity, EntityData> ENTITY_TRACKER = new WeakHashMap<>();
 
@@ -29,8 +29,7 @@ public class DamageParticleEvents {
     public static void onLivingUpdateEvent(final LivingEvent.LivingTickEvent event) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         LivingEntity livingEntity = event.getEntity();
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 

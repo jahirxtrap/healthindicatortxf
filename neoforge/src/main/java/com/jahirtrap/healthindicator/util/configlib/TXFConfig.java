@@ -14,7 +14,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.components.tabs.*;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
@@ -252,8 +251,8 @@ public abstract class TXFConfig {
                 for (ButtonEntry entry : this.list.children()) {
                     if (entry.buttons != null && entry.buttons.size() > 1 && entry.buttons.get(1) instanceof Button button) {
                         button.active = !Objects.equals(entry.info.value.toString(), entry.info.defaultValue.toString());
-                        // if (button.active) button.setTooltip(Tooltip.create(Component.translatable("controls.reset").withStyle(ChatFormatting.RED)));
-                        // else button.setTooltip(Tooltip.create(Component.empty()));
+                        if (button.active) button.setTooltip(Tooltip.create(Component.translatable("controls.reset").withStyle(ChatFormatting.RED)));
+                        else button.setTooltip(Tooltip.create(Component.empty()));
                     }
                 }
             }
@@ -280,12 +279,12 @@ public abstract class TXFConfig {
             super.init();
             tabNavigation.setWidth(this.width);
             tabNavigation.arrangeElements();
-            if (tabs.size() > 1) this.addRenderableWidget(tabNavigation);
+            if (!tabs.isEmpty()) this.addRenderableWidget(tabNavigation);
 
             this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, button -> {
                 loadValues();
                 Objects.requireNonNull(minecraft).setScreen(parent);
-            }).bounds(this.width / 2 - 154, this.height - 28, 150, 20).build());
+            }).bounds(this.width / 2 - 154, this.height - 26, 150, 20).build());
             done = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button) -> {
                 for (EntryInfo info : entries)
                     if (info.id.equals(modid)) {
@@ -295,10 +294,9 @@ public abstract class TXFConfig {
                     }
                 write(modid);
                 Objects.requireNonNull(minecraft).setScreen(parent);
-            }).bounds(this.width / 2 + 4, this.height - 28, 150, 20).build());
+            }).bounds(this.width / 2 + 4, this.height - 26, 150, 20).build());
 
-            this.list = new MidnightConfigListWidget(this.minecraft, this.width, this.height - 64, 32, 25);
-            if (this.minecraft != null && this.minecraft.level != null) this.list.setRenderBackground(false);
+            this.list = new MidnightConfigListWidget(this.minecraft, this.width, this.height - 66, 33, 25);
             this.addWidget(this.list);
 
             fillList();
@@ -375,13 +373,10 @@ public abstract class TXFConfig {
         }
         @Override
         public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-            if (minecraft != null && minecraft.level != null) super.renderTransparentBackground(context);
-            this.list.render(context, mouseX, mouseY, delta);
             super.render(context,mouseX,mouseY,delta);
-
-            if (tabs.size() < 2) context.drawCenteredString(font, title, width / 2, 15, 0xFFFFFF);
+            renderMenuBackgroundTexture(context, MENU_BACKGROUND, 0, 24, 0, 0, this.width, 7);
+            this.list.render(context, mouseX, mouseY, delta);
         }
-        @Override public void renderBackground(GuiGraphics c, int x, int y, float d) {}
     }
     @OnlyIn(Dist.CLIENT)
     public static class MidnightConfigListWidget extends ContainerObjectSelectionList<ButtonEntry> {
@@ -389,7 +384,7 @@ public abstract class TXFConfig {
             super(client, width, height, y, itemHeight);
         }
         @Override
-        public int getScrollbarPosition() { return this.width -7; }
+        public int getScrollbarPosition() { return this.width - 7; }
 
         public void addButton(List<AbstractWidget> buttons, Component text, EntryInfo info) {
             this.addEntry(new ButtonEntry(buttons, text, info));
@@ -397,16 +392,6 @@ public abstract class TXFConfig {
         public void clear() { this.clearEntries(); }
         @Override
         public int getRowWidth() { return 10000; }
-        @Override
-        protected void renderDecorations(GuiGraphics c, int mouseX, int mouseY) {
-            c.setColor(0.25F, 0.25F, 0.25F, 1.0F);
-            c.blit(Screen.BACKGROUND_LOCATION, this.getX(), 0, 0.0F, 0.0F, this.width, this.getY(), 32, 32);
-            c.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getBottom(), 0.0F, 0.0F, this.width, this.height, 32, 32);
-            c.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            if (minecraft == null || minecraft.level == null) return;
-            c.fillGradient(RenderType.guiOverlay(), this.getX(), this.getY(), this.getRight(), this.getY() + 4, -16777216, 0, 0);
-            c.fillGradient(RenderType.guiOverlay(), this.getX(), this.getBottom() - 4, this.getRight(), this.getBottom(), 0, -16777216, 0);
-        }
     }
     public static class ButtonEntry extends ContainerObjectSelectionList.Entry<ButtonEntry> {
         private static final Font textRenderer = Minecraft.getInstance().font;
@@ -424,13 +409,9 @@ public abstract class TXFConfig {
         public void render(GuiGraphics context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             buttons.forEach(b -> { b.setY(y); b.render(context, mouseX, mouseY, tickDelta); });
             if (text != null && (!text.getString().contains("spacer") || !buttons.isEmpty())) {
-                if (info.centered) context.drawString(textRenderer, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - (textRenderer.width(text) / 2), y + 5, 0xFFFFFF);
-                else {
-                    int wrappedY = y;
-                    for(Iterator<FormattedCharSequence> iterator = textRenderer.split(text, (buttons.size() > 1 ? buttons.get(1).getX()-24 : Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24)).iterator(); iterator.hasNext(); wrappedY += 9) {
-                        FormattedCharSequence orderedText = iterator.next();
-                        context.drawString(textRenderer, orderedText, 12, wrappedY + 5, 0xFFFFFF);
-                    }
+                int wrappedY = y;
+                for (Iterator<FormattedCharSequence> iterator = textRenderer.split(text, (buttons.size() > 1 ? buttons.get(1).getX() - 24 : Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24)).iterator(); iterator.hasNext(); wrappedY += 9) {
+                    context.drawString(textRenderer, iterator.next(), (info.centered) ? (Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - (textRenderer.width(text) / 2)) : 12, wrappedY + 5, 0xFFFFFF);
                 }
             }
         }

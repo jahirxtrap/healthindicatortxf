@@ -2,17 +2,17 @@ package com.jahirtrap.healthindicator.init;
 
 import com.jahirtrap.healthindicator.bars.BarStates;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
 
 public class ClientEventHandler {
-    public static void init() {
+    public static void init(IEventBus bus) {
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::playerTick);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandler::registerOverlays);
+        bus.addListener(ClientEventHandler::registerOverlays);
     }
 
     private static void playerTick(PlayerTickEvent event) {
@@ -23,7 +23,7 @@ public class ClientEventHandler {
         HealthIndicatorClient.HUD.tick();
     }
 
-    private static void registerOverlays(final RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.POTION_ICONS.id(), new ResourceLocation(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
+    private static void registerOverlays(final RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.EFFECTS, new ResourceLocation(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
     }
 }

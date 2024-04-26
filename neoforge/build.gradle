@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.82'
+    id 'net.neoforged.gradle.userdev' version '7.0.107'
     id 'java-library'
 }
 
@@ -56,7 +56,7 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'META-INF/jarjar/metadata.json', 'pack.mcmeta']
+def resourceTargets = ['META-INF/neoforge.mods.toml', 'META-INF/jarjar/metadata.json', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: neoforge_minecraft_version_range,
         neoforge_version: neoforge_version, neoforge_version_range: neoforge_version_range,
