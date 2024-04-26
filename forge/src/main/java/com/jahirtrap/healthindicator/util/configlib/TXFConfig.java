@@ -17,6 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -234,12 +235,12 @@ public abstract class TXFConfig {
             super.init();
             if (!reload) loadValues();
 
-            this.addRenderableWidget(new Button(this.width / 2 - 154, this.height - 28, 150, 20, CommonComponents.GUI_CANCEL, button -> {
+            this.addRenderableWidget(new Button(this.width / 2 - 155, this.height - 27, 150, 20, CommonComponents.GUI_CANCEL, button -> {
                 loadValues();
                 Objects.requireNonNull(minecraft).setScreen(parent);
             }));
 
-            Button done = this.addRenderableWidget(new Button(this.width / 2 + 4, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (button) -> {
+            Button done = this.addRenderableWidget(new Button(this.width / 2 + 5, this.height - 27, 150, 20, CommonComponents.GUI_DONE, (button) -> {
                 for (EntryInfo info : entries)
                     if (info.id.equals(modid)) {
                         try {
@@ -355,7 +356,7 @@ public abstract class TXFConfig {
             textRenderer = minecraftClient.font;
         }
         @Override
-        public int getScrollbarPosition() { return this.width -7; }
+        public int getScrollbarPosition() { return this.width - 7; }
 
         public void addButton(List<AbstractWidget> buttons, Component text, EntryInfo info) {
             this.addEntry(new ButtonEntry(buttons, text, info));
@@ -390,8 +391,10 @@ public abstract class TXFConfig {
         public void render(PoseStack context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             buttons.forEach(b -> { b.y = y; b.render(context, mouseX, mouseY, tickDelta); });
             if (text != null && (!text.getString().contains("spacer") || !buttons.isEmpty())) {
-                if (info.centered) textRenderer.drawShadow(context, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2f - (textRenderer.width(text) / 2f), y + 5, 0xFFFFFF);
-                else GuiComponent.drawString(context, textRenderer, text, 12, y + 5, 0xFFFFFF);
+                int wrappedY = y;
+                for (Iterator<FormattedCharSequence> iterator = textRenderer.split(text, (buttons.size() > 1 ? buttons.get(1).x - 24 : Minecraft.getInstance().getWindow().getGuiScaledWidth() - 24)).iterator(); iterator.hasNext(); wrappedY += 9) {
+                    GuiComponent.drawString(context, textRenderer, iterator.next(), (info.centered) ? (Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - (textRenderer.width(text) / 2)) : 12, wrappedY + 5, 0xFFFFFF);
+                }
             }
         }
         public List<? extends GuiEventListener> children() {return children;}

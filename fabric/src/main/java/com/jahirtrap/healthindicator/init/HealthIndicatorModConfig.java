@@ -1,6 +1,9 @@
 package com.jahirtrap.healthindicator.init;
 
+import com.google.common.collect.Lists;
 import com.jahirtrap.configlib.TXFConfig;
+
+import java.util.List;
 
 public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Enable Mod")
@@ -76,11 +79,11 @@ public class HealthIndicatorModConfig extends TXFConfig {
     @Entry(name = "Show Bosses")
     public static boolean showBosses = false;
     @Entry(name = "Blacklist")
-    public static String blacklist = "";
+    public static List<String> blacklist = Lists.newArrayList();
     @Entry(name = "Bar Blacklist")
-    public static String barBlacklist = "";
+    public static List<String> barBlacklist = Lists.newArrayList();
     @Entry(name = "Damage Particle Blacklist")
-    public static String damageParticleBlacklist = "cobblemon:pokemon";
+    public static List<String> damageParticleBlacklist = Lists.newArrayList();
 
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
 

@@ -34,10 +34,9 @@ public class CommonUtils {
         return entityId;
     }
 
-    public static boolean checkBlacklist(String blacklist, LivingEntity livingEntity) {
-        if (!blacklist.isBlank()) {
-            List<String> list = List.of(blacklist.replaceAll("\\s+", "").split(","));
-            for (String entityId : list) {
+    public static boolean checkBlacklist(List<String> blacklist, LivingEntity livingEntity) {
+        if (!blacklist.isEmpty()) {
+            for (String entityId : blacklist) {
                 if (getEntityId(livingEntity).equals(entityId)) {
                     return true;
                 }

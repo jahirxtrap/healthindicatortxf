@@ -32,8 +32,7 @@ public abstract class DamageParticleMixin {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 
