@@ -11,19 +11,18 @@ import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
 
 public class ClientEventHandler {
     public static void init(IEventBus bus) {
-        NeoForge.EVENT_BUS.addListener(ClientEventHandler::playerTick);
-        bus.addListener(ClientEventHandler::registerOverlays);
+        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onPlayerTick);
+        bus.addListener(ClientEventHandler::registerLayers);
     }
 
-    private static void playerTick(PlayerTickEvent event) {
+    private static void onPlayerTick(PlayerTickEvent event) {
         if (!event.player.level().isClientSide) return;
-        HealthIndicatorClient.HUD.setEntity(
-                HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
+        HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
         BarStates.tick();
         HealthIndicatorClient.HUD.tick();
     }
 
-    private static void registerOverlays(final RegisterGuiLayersEvent event) {
+    private static void registerLayers(final RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.EFFECTS, new ResourceLocation(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
     }
 }
