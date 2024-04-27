@@ -28,7 +28,7 @@ public abstract class DamageParticleMixin {
 
     @Environment(EnvType.CLIENT)
     @Inject(method = "tick", at = @At("HEAD"))
-    private void onLivingUpdateEvent(CallbackInfo ci) {
+    private void onLivingUpdate(CallbackInfo ci) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
