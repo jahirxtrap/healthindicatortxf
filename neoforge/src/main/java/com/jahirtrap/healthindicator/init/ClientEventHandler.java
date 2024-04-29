@@ -7,7 +7,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 public class ClientEventHandler {
     public static void init(IEventBus bus) {
@@ -15,8 +15,8 @@ public class ClientEventHandler {
         bus.addListener(ClientEventHandler::registerLayers);
     }
 
-    private static void onPlayerTick(PlayerTickEvent event) {
-        if (!event.player.level().isClientSide) return;
+    private static void onPlayerTick(PlayerTickEvent.Pre event) {
+        if (!event.getEntity().level().isClientSide) return;
         HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
         BarStates.tick();
         HealthIndicatorClient.HUD.tick();

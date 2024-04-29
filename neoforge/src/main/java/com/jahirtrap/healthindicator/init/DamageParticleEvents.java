@@ -13,7 +13,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingTickEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.WeakHashMap;
 
@@ -26,9 +26,9 @@ public class DamageParticleEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onLivingTick(final LivingTickEvent event) {
+    public static void onEntityTick(final EntityTickEvent.Pre event) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
-        LivingEntity livingEntity = event.getEntity();
+        if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
         if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);

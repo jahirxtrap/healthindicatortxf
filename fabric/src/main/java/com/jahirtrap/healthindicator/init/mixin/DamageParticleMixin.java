@@ -26,12 +26,11 @@ public abstract class DamageParticleMixin {
 
     @Environment(EnvType.CLIENT)
     @Inject(method = "tick", at = @At("HEAD"))
-    private void onLivingTick(CallbackInfo ci) {
+    private void onEntityTick(CallbackInfo ci) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity))
-            return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 

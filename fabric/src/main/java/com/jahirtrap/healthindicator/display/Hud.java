@@ -90,8 +90,7 @@ public class Hud extends Screen {
         if (entity == null) return;
         if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor && !HealthIndicatorModConfig.showBar && !HealthIndicatorModConfig.showModName)
             return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, entity) || checkBlacklist(HealthIndicatorModConfig.barBlacklist, entity))
-            return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, entity) || checkBlacklist(HealthIndicatorModConfig.barBlacklist, entity)) return;
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
