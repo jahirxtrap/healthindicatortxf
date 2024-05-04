@@ -2,13 +2,19 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '6.0.24'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 
 version = "${version}-forge"
 
 base {
     archivesName = mod_id
+}
+
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+    config("${mod_id}.mixins.json")
 }
 
 minecraft {
@@ -110,8 +116,6 @@ jar {
         into('META-INF/jarjar')
     }
 }
-
-jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
