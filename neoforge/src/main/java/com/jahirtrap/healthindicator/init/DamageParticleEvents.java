@@ -29,7 +29,8 @@ public class DamageParticleEvents {
     public static void onEntityTick(final EntityTickEvent.Pre event) {
         if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
         if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity))
+            return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 

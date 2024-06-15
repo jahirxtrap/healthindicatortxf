@@ -3,6 +3,7 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig.Position;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class Hud extends Screen {
-    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
+    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", "bosses"));
     private final BarDisplay barDisplay;
     private LivingEntity entity;
     private int age;
@@ -27,7 +28,7 @@ public class Hud extends Screen {
         barDisplay = new BarDisplay(minecraft);
     }
 
-    public void draw(GuiGraphics guiGraphics, float v) {
+    public void draw(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         float scale = (float) HealthIndicatorModConfig.scale;
         if (this.minecraft != null && this.minecraft.getDebugOverlay().showDebugScreen()) return;
         float x = determineX();
@@ -90,7 +91,8 @@ public class Hud extends Screen {
         if (entity == null) return;
         if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && !HealthIndicatorModConfig.showArmor && !HealthIndicatorModConfig.showBar && !HealthIndicatorModConfig.showModName)
             return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, entity) || checkBlacklist(HealthIndicatorModConfig.barBlacklist, entity)) return;
+        if (checkBlacklist(HealthIndicatorModConfig.blacklist, entity) || checkBlacklist(HealthIndicatorModConfig.barBlacklist, entity))
+            return;
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0);

@@ -9,7 +9,7 @@ public class ClientEventHandler {
         MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::onPlayerTick);
     }
 
-    private static void onPlayerTick(PlayerTickEvent event) {
+    private static void onPlayerTick(PlayerTickEvent.Pre event) {
         if (!event.player.level().isClientSide) return;
         HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
         BarStates.tick();

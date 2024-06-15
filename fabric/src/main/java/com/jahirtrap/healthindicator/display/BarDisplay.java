@@ -14,9 +14,9 @@ import net.minecraft.world.entity.player.Player;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class BarDisplay {
-    private static final ResourceLocation ARMOR_FULL_SPRITE = new ResourceLocation("hud/armor_full");
-    private static final ResourceLocation HEART_CONTAINER_SPRITE = new ResourceLocation("hud/heart/container");
-    private static final ResourceLocation HEART_FULL_SPRITE = new ResourceLocation("hud/heart/full");
+    private static final ResourceLocation ARMOR_FULL_SPRITE = ResourceLocation.parse("hud/armor_full");
+    private static final ResourceLocation HEART_CONTAINER_SPRITE = ResourceLocation.parse("hud/heart/container");
+    private static final ResourceLocation HEART_FULL_SPRITE = ResourceLocation.parse("hud/heart/full");
     private final Minecraft mc;
     private int infoWidth;
 
@@ -123,11 +123,11 @@ public class BarDisplay {
     }
 
     private ResourceLocation getHeartSprite(LivingEntity entity) {
-        final ResourceLocation HEART_FROZEN_FULL_SPRITE = new ResourceLocation("hud/heart/frozen_full");
-        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = new ResourceLocation("hud/heart/absorbing_full");
-        final ResourceLocation HEART_X_FULL_SPRITE = new ResourceLocation("hud/heart/hardcore_full");
-        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = new ResourceLocation("hud/heart/frozen_hardcore_full");
-        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = new ResourceLocation("hud/heart/absorbing_hardcore_full");
+        final ResourceLocation HEART_FROZEN_FULL_SPRITE = ResourceLocation.parse("hud/heart/frozen_full");
+        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = ResourceLocation.parse("hud/heart/absorbing_full");
+        final ResourceLocation HEART_X_FULL_SPRITE = ResourceLocation.parse("hud/heart/hardcore_full");
+        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = ResourceLocation.parse("hud/heart/frozen_hardcore_full");
+        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = ResourceLocation.parse("hud/heart/absorbing_hardcore_full");
 
         ResourceLocation icon = HEART_FULL_SPRITE;
         boolean hardcore = false;

@@ -23,6 +23,6 @@ public class ClientEventHandler {
     }
 
     private static void registerLayers(final RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.EFFECTS, new ResourceLocation(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
+        event.registerAbove(VanillaGuiLayers.EFFECTS, ResourceLocation.fromNamespaceAndPath(ModLoadingContext.get().getActiveNamespace(), "healthindicatortxf_hud"), HealthIndicatorClient.HUD::draw);
     }
 }

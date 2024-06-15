@@ -312,7 +312,7 @@ public abstract class TXFConfig {
                         info.index = 0;
                         list.clear();
                         fillList();
-                    }), true).sprite(new ResourceLocation("configlibtxf","icon/reset"), 12, 12).size(40, 20).build();
+                    }), true).sprite(ResourceLocation.fromNamespaceAndPath("configlibtxf","icon/reset"), 12, 12).size(40, 20).build();
                     resetButton.setPosition(width - 205, 0);
 
                     if (info.widget instanceof Map.Entry) {

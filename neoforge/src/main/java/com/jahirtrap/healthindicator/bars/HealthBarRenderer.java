@@ -16,7 +16,7 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
 
 public class HealthBarRenderer {
-    private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(
+    private static final ResourceLocation GUI_BARS_TEXTURES = ResourceLocation.parse(
             MODID + ":textures/gui/bars.png");
 
     public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
@@ -89,19 +89,17 @@ public class HealthBarRenderer {
 
         float zOffsetAmount = 0.1F;
 
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder buffer = tesselator.getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
-        buffer.vertex(matrix4f, 0, y, zOffset * zOffsetAmount)
-                .uv(u * c, v * c).endVertex();
-        buffer.vertex(matrix4f, 0, y + height, zOffset * zOffsetAmount)
-                .uv(u * c, (v + height) * c).endVertex();
-        buffer.vertex(matrix4f, size, y + height, zOffset * zOffsetAmount)
-                .uv((u + uw) * c, (v + height) * c).endVertex();
-        buffer.vertex(matrix4f, size, y, zOffset * zOffsetAmount)
-                .uv((u + uw) * c, v * c).endVertex();
-        tesselator.end();
+        buffer.addVertex(matrix4f, 0, y, zOffset * zOffsetAmount)
+                .setUv(u * c, v * c);
+        buffer.addVertex(matrix4f, 0, y + height, zOffset * zOffsetAmount)
+                .setUv(u * c, (v + height) * c);
+        buffer.addVertex(matrix4f, size, y + height, zOffset * zOffsetAmount)
+                .setUv((u + uw) * c, (v + height) * c);
+        buffer.addVertex(matrix4f, size, y, zOffset * zOffsetAmount)
+                .setUv((u + uw) * c, v * c);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
 
     private static void drawBackground(Matrix4f matrix4f, int color, int alpha, int zOffset, int wVal1, int maxWidth, int minOffset) {
@@ -124,14 +122,12 @@ public class HealthBarRenderer {
 
         float zOffsetAmount = 0.1F;
 
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder buffer = tesselator.getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
-        buffer.vertex(matrix4f, x, y, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, x, y + yh, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, xw, y + yh, zOffset * zOffsetAmount).endVertex();
-        buffer.vertex(matrix4f, xw, y, zOffset * zOffsetAmount).endVertex();
-        tesselator.end();
+        buffer.addVertex(matrix4f, x, y, zOffset * zOffsetAmount);
+        buffer.addVertex(matrix4f, x, y + yh, zOffset * zOffsetAmount);
+        buffer.addVertex(matrix4f, xw, y + yh, zOffset * zOffsetAmount);
+        buffer.addVertex(matrix4f, xw, y, zOffset * zOffsetAmount);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
 }
