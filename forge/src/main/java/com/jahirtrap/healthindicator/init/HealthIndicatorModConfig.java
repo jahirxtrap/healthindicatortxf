@@ -12,7 +12,7 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static boolean enableMod = true;
     @Entry(category = GENERAL, name = "Show Hud")
     public static boolean showHud = true;
-    @Entry(category = GENERAL, name = "Show Damage Particles")
+    @Hidden @Entry(category = GENERAL, name = "Show Damage Particles")
     public static boolean showDamageParticles = true;
     @Entry(category = GENERAL, name = "Show Bar")
     public static boolean showBar = true;
@@ -28,9 +28,9 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static boolean showArmor = true;
     @Entry(category = GENERAL, name = "Show Mod Name")
     public static boolean showModName = false;
-    @Entry(category = GENERAL, name = "Show Health Decimals")
+    @Hidden @Entry(category = GENERAL, name = "Show Health Decimals")
     public static boolean showHealthDecimals = false;
-    @Entry(category = GENERAL, name = "Health Text Format")
+    @Hidden @Entry(category = GENERAL, name = "Health Text Format")
     public static HealthTextFormat healthTextFormat = HealthTextFormat.BOTH;
     @Entry(category = GENERAL, name = "Dynamic Heart Texture")
     public static boolean dynamicHeartTexture = true;
@@ -70,7 +70,7 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static String neutralColorSecondary = "#000080";
     @Entry(category = COLORS, name = "Mod Name Color", width = 7, min = 7, isColor = true)
     public static String modNameColor = "#5555ff";
-    @Entry(category = COLORS, name = "Damage Particle Color", width = 7, min = 7, isColor = true)
+    @Hidden @Entry(category = COLORS, name = "Damage Particle Color", width = 7, min = 7, isColor = true)
     public static String damageParticleColor = "#fcfcfc";
 
     @Entry(category = ENTITIES, name = "Show Invisible Entities")
@@ -81,7 +81,7 @@ public class HealthIndicatorModConfig extends TXFConfig {
     public static List<String> blacklist = Lists.newArrayList();
     @Entry(category = ENTITIES, name = "Bar Blacklist")
     public static List<String> barBlacklist = Lists.newArrayList();
-    @Entry(category = ENTITIES, name = "Damage Particle Blacklist")
+    @Hidden @Entry(category = ENTITIES, name = "Damage Particle Blacklist")
     public static List<String> damageParticleBlacklist = Lists.newArrayList();
 
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
