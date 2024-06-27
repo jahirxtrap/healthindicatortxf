@@ -1,6 +1,5 @@
 package com.jahirtrap.healthindicator.bars;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.CommonUtils.EntityType;
@@ -12,12 +11,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Matrix4f;
 
+import static com.jahirtrap.healthindicator.HealthIndicatorMod.MODID;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
 import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
 
 public class HealthBarRenderer {
     private static final ResourceLocation GUI_BARS_TEXTURES = new ResourceLocation(
-            HealthIndicatorMod.MODID + ":textures/gui/bars.png");
+            MODID + ":textures/gui/bars.png");
 
     public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = CommonUtils.getEntityType(entity);

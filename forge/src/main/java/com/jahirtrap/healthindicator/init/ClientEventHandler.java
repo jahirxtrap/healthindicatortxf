@@ -9,14 +9,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientEventHandler {
     public static void init() {
-        MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::playerTick);
+        MinecraftForge.EVENT_BUS.addListener(ClientEventHandler::onPlayerTick);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandler::registerOverlays);
     }
 
-    private static void playerTick(PlayerTickEvent event) {
+    private static void onPlayerTick(PlayerTickEvent event) {
         if (!event.player.level().isClientSide) return;
-        HealthIndicatorClient.HUD.setEntity(
-                HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
+        HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
         BarStates.tick();
         HealthIndicatorClient.HUD.tick();
     }
