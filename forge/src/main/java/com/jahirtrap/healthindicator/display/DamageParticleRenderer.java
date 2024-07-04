@@ -1,7 +1,6 @@
 package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.util.CommonUtils;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -11,6 +10,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nonnull;
 
@@ -77,23 +77,22 @@ public class DamageParticleRenderer extends Particle {
 
         if (this.alpha == 0) return;
 
-        PoseStack poseStack = new PoseStack();
-        poseStack.pushPose();
-        poseStack.translate(particleX, particleY, particleZ);
-        poseStack.mulPose(camera.rotation());
-        poseStack.scale(-0.024F, -0.024F, 0.024F);
+        Matrix4f matrix = new Matrix4f();
+        matrix = matrix.translate(particleX, particleY, particleZ);
+        matrix = matrix.rotate(camera.rotation());
+        matrix = matrix.rotate((float) Math.PI, 0, 1, 0);
+        matrix = matrix.scale(-0.024F, -0.024F, -0.024F);
 
         var buffer = mc.renderBuffers().bufferSource();
 
         if (this.particleScale != 0)
-            poseStack.scale((float) this.particleScale, (float) this.particleScale, 1);
+            matrix = matrix.scale((float) this.particleScale, (float) this.particleScale, 1);
 
-        poseStack.translate(0, 0, 1);
-        mc.font.drawInBatch(this.text, textX, textY, shadowColor, false, poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-        poseStack.translate(0, 0, -2);
-        mc.font.drawInBatch(this.text, textX, textY, textColor, false, poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-        poseStack.translate(0, 0, 1);
-        poseStack.popPose();
+        matrix = matrix.translate(0, 0, 1);
+        mc.font.drawInBatch(this.text, textX, textY, textColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
+        matrix = matrix.translate(0, 0, -2);
+        mc.font.drawInBatch(this.text, textX, textY, shadowColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
+        matrix.translate(0, 0, 1);
 
         buffer.endBatch();
     }
