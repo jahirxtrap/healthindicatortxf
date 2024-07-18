@@ -3,6 +3,7 @@ package com.jahirtrap.healthindicator;
 import com.jahirtrap.healthindicator.init.HealthIndicatorClient;
 import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
 import com.jahirtrap.healthindicator.util.configlib.TXFConfig;
+import com.jahirtrap.healthindicator.util.configlib.TXFConfigClient;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -15,7 +16,7 @@ public class HealthIndicatorMod {
     public HealthIndicatorMod() {
         TXFConfig.init(MODID, HealthIndicatorModConfig.class);
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-                new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> TXFConfig.getScreen(parent, MODID)));
+                new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> TXFConfigClient.getScreen(parent, MODID)));
 
         HealthIndicatorClient.init();
     }
