@@ -21,7 +21,7 @@ public class Hud extends Screen {
     private int age;
 
     public Hud() {
-        super(new TextComponent("Health Indicator TXF HUD"));
+        super(new TextComponent(""));
         this.minecraft = Minecraft.getInstance();
         barDisplay = new BarDisplay(minecraft, this);
     }
