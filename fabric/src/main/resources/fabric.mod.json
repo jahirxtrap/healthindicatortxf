@@ -12,7 +12,8 @@
 		"Lynzl"
 	],
 	"contact": {
-		"homepage": "${mod_url}"
+		"homepage": "${mod_url}",
+		"issues": "${mod_issues}"
 	},
 	"license": "${mod_license}",
 	"icon": "logo.png",
