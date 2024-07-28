@@ -22,7 +22,7 @@ public class Hud extends Screen {
     private int age;
 
     public Hud() {
-        super(Component.literal("Health Indicator TXF HUD"));
+        super(Component.literal(""));
         this.minecraft = Minecraft.getInstance();
         barDisplay = new BarDisplay(minecraft);
     }
