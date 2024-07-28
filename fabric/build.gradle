@@ -1,8 +1,9 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'maven-publish'
     id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.24'
 }
 
 version = "${version}-fabric"
@@ -26,12 +27,12 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":common")
 
-    modImplementation include(fileTree(dir: 'libs', include: ['*.jar']))
+    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 loom {
-    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
+    if (file("src/main/resources/${mod_id}.aw").exists()) {
+        accessWidenerPath.set(file("src/main/resources/${mod_id}.aw"))
     }
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
@@ -55,12 +56,6 @@ loom {
 tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
 }
-tasks.withType(Javadoc).configureEach {
-    source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-    from(project(":common").sourceSets.main.allSource)
-}
 
 def resourceTargets = ['fabric.mod.json']
 def replaceProperties = [
@@ -68,7 +63,7 @@ def replaceProperties = [
         loader_version_range: fabric_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
         mod_author: mod_author, mod_description: mod_description,
-        mod_url: mod_url, side: fabric_side,
+        mod_url: mod_url, mod_issues: mod_issues, side: fabric_side,
         configlibtxf_version: configlibtxf_version
 ]
 
@@ -79,6 +74,7 @@ processResources {
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
+    exclude '**/data/forge/**'
     from project(":common").sourceSets.main.resources
 }
 
@@ -91,16 +87,34 @@ jar {
 
 jar.finalizedBy('remapJar')
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
+tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_TOKEN")
+    def projectId = "883384"
+    def main = upload(projectId, remapJar)
+    main.displayName = "${mod_name} ${version}"
+    main.releaseType = "beta"
+    main.addGameVersion("1.20.3", "1.20.4")
+    main.addModLoader("Fabric", "Quilt")
+    main.changelog = rootProject.file("CHANGELOG.md")
+    main.changelogType = "markdown"
+    disableVersionDetection()
+    group = "publishing"
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "N56hoqkq"
+    uploadFile = remapJar
+    versionNumber = "${version}"
+    versionName = "${mod_name} ${version}"
+    versionType = "beta"
+    gameVersions = ["1.20.3", "1.20.4"]
+    loaders = ["fabric", "quilt"]
+    changelog = rootProject.file("CHANGELOG.md").text
+    group = "publishing"
+}
+
+tasks.register('publish') {
+    dependsOn 'curseforge', 'modrinth'
+    group = "publishing"
 }
