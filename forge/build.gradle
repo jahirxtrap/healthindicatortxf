@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'maven-publish'
     id 'net.minecraftforge.gradle' version '6.0.24'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.24'
 }
 
 version = "${version}-forge"
@@ -12,13 +12,9 @@ base {
     archivesName = mod_id
 }
 
-mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
-    config("${mod_id}.mixins.json")
-}
-
 minecraft {
     mappings channel: 'official', version: minecraft_version
+    reobf = false
 
     if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
         accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -82,12 +78,6 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
 }
-tasks.withType(Javadoc).configureEach {
-    source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-    from(project(":common").sourceSets.main.allSource)
-}
 
 def resourceTargets = ['META-INF/mods.toml', 'META-INF/jarjar/metadata.json', 'pack.mcmeta']
 def replaceProperties = [
@@ -96,8 +86,7 @@ def replaceProperties = [
         loader_version_range: forge_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
         mod_author: mod_author, mod_description: mod_description,
-        mod_url: mod_url, side: forge_side,
-        configlibtxf_version: configlibtxf_version
+        mod_url: mod_url, mod_issues: mod_issues, side: forge_side
 ]
 
 processResources {
@@ -107,6 +96,7 @@ processResources {
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
+    exclude '**/data/c/**', '**/data/fabric/**', '**/data/neoforge/**'
     from project(":common").sourceSets.main.resources
 }
 
@@ -117,17 +107,40 @@ jar {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-            fg.component(it)
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
+tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_TOKEN")
+    def projectId = "883384"
+    def main = upload(projectId, jar)
+    main.displayName = "${mod_name} ${version}"
+    main.releaseType = "release"
+    main.addGameVersion("1.21")
+    main.addModLoader("Forge")
+    main.changelog = rootProject.file("CHANGELOG.md")
+    main.changelogType = "markdown"
+    disableVersionDetection()
+    group = "publishing"
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "N56hoqkq"
+    uploadFile = jar
+    versionNumber = "${version}"
+    versionName = "${mod_name} ${version}"
+    versionType = "release"
+    gameVersions = ["1.21"]
+    loaders = ["forge"]
+    changelog = rootProject.file("CHANGELOG.md").text
+    group = "publishing"
+}
+
+tasks.register('publish') {
+    dependsOn 'curseforge', 'modrinth'
+    group = "publishing"
+}
+
+["curseforge", "modrinth"].each { task ->
+    tasks.named(task) {
+        mustRunAfter(":fabric:$task")
     }
 }
