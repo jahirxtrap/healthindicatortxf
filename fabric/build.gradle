@@ -2,8 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'fabric-loom' version '1.6-SNAPSHOT'
-    id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.1.24'
+    id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
 version = "${version}-fabric"
@@ -87,34 +86,23 @@ jar {
 
 jar.finalizedBy('remapJar')
 
-tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    apiToken = System.getenv("CURSEFORGE_TOKEN")
-    def projectId = "883384"
-    def main = upload(projectId, remapJar)
-    main.displayName = "${mod_name} ${version}"
-    main.releaseType = "beta"
-    main.addGameVersion("1.20.5", "1.20.6")
-    main.addModLoader("Fabric", "Quilt")
-    main.changelog = rootProject.file("CHANGELOG.md")
-    main.changelogType = "markdown"
-    disableVersionDetection()
-    group = "publishing"
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "N56hoqkq"
-    uploadFile = remapJar
-    versionNumber = "${version}"
-    versionName = "${mod_name} ${version}"
-    versionType = "beta"
-    gameVersions = ["1.20.5", "1.20.6"]
-    loaders = ["fabric", "quilt"]
+publishMods {
+    file = remapJar.archiveFile
+    displayName = "${mod_name} ${project.version}"
+    type = BETA
+    modLoaders.addAll("fabric", "quilt")
     changelog = rootProject.file("CHANGELOG.md").text
-    group = "publishing"
-}
+    def gameVersions = ["1.20.5", "1.20.6"]
 
-tasks.register('publish') {
-    dependsOn 'curseforge', 'modrinth'
-    group = "publishing"
+    curseforge {
+        accessToken = System.getenv("CURSEFORGE_TOKEN")
+        projectId = "883384"
+        minecraftVersions.addAll(gameVersions)
+    }
+
+    modrinth {
+        accessToken = System.getenv("MODRINTH_TOKEN")
+        projectId = "N56hoqkq"
+        minecraftVersions.addAll(gameVersions)
+    }
 }

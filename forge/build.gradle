@@ -2,8 +2,8 @@ plugins {
     id 'java'
     id 'idea'
     id 'net.minecraftforge.gradle' version '6.0.24'
-    id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.1.24'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
 version = "${version}-forge"
@@ -12,9 +12,13 @@ base {
     archivesName = mod_id
 }
 
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+    config("${mod_id}.mixins.json")
+}
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
-    reobf = false
 
     if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
         accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -107,39 +111,28 @@ jar {
     }
 }
 
-tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    apiToken = System.getenv("CURSEFORGE_TOKEN")
-    def projectId = "883384"
-    def main = upload(projectId, jar)
-    main.displayName = "${mod_name} ${version}"
-    main.releaseType = "release"
-    main.addGameVersion("1.20.6")
-    main.addModLoader("Forge")
-    main.changelog = rootProject.file("CHANGELOG.md")
-    main.changelogType = "markdown"
-    disableVersionDetection()
-    group = "publishing"
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "N56hoqkq"
-    uploadFile = jar
-    versionNumber = "${version}"
-    versionName = "${mod_name} ${version}"
-    versionType = "release"
-    gameVersions = ["1.20.6"]
-    loaders = ["forge"]
+publishMods {
+    file = jar.archiveFile
+    displayName = "${mod_name} ${project.version}"
+    type = STABLE
+    modLoaders.addAll("forge")
     changelog = rootProject.file("CHANGELOG.md").text
-    group = "publishing"
+    def gameVersions = ["1.20.6"]
+
+    curseforge {
+        accessToken = System.getenv("CURSEFORGE_TOKEN")
+        projectId = "883384"
+        minecraftVersions.addAll(gameVersions)
+    }
+
+    modrinth {
+        accessToken = System.getenv("MODRINTH_TOKEN")
+        projectId = "N56hoqkq"
+        minecraftVersions.addAll(gameVersions)
+    }
 }
 
-tasks.register('publish') {
-    dependsOn 'curseforge', 'modrinth'
-    group = "publishing"
-}
-
-["curseforge", "modrinth"].each { task ->
+["publishCurseforge", "publishModrinth", "publishMods"].each { task ->
     tasks.named(task) {
         mustRunAfter(":fabric:$task")
     }
