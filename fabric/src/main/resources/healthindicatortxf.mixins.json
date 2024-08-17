@@ -4,8 +4,10 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "DamageParticleMixin",
-    "GuiMixin",
     "PlayerMixin"
+  ],
+  "client": [
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1
