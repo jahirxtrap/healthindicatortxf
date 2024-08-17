@@ -2,7 +2,7 @@
   "required": true,
   "package": "com.jahirtrap.healthindicator.init.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
+  "client": [
     "GuiMixin"
   ],
   "injectors": {
