@@ -1,7 +1,7 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
 import com.jahirtrap.healthindicator.display.DamageParticleRenderer.DamageParticle;
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
+import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.EntityData;
 import net.fabricmc.api.EnvType;
@@ -29,10 +29,11 @@ public abstract class DamageParticleMixin {
     @Environment(EnvType.CLIENT)
     @Inject(method = "tick", at = @At("HEAD"))
     private void onLivingTick(CallbackInfo ci) {
-        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
+        if (!ModConfig.showDamageParticles || !ModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
+        if (checkBlacklist(ModConfig.blacklist, livingEntity) || checkBlacklist(ModConfig.damageParticleBlacklist, livingEntity))
+            return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 
@@ -78,7 +79,7 @@ public abstract class DamageParticleMixin {
                 livingEntity.getBoundingBox().maxY + 0.24;
         double posZ = livingEntity.getZ();
 
-        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.damageParticleColor);
+        int color = getColor(0xfcfcfc, ModConfig.damageParticleColor);
 
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);

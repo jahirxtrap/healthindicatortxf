@@ -2,7 +2,7 @@ package com.jahirtrap.healthindicator;
 
 import com.jahirtrap.configlib.TXFConfig;
 import com.jahirtrap.healthindicator.display.Hud;
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
+import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.util.RayTrace;
 import net.fabricmc.api.ModInitializer;
 
@@ -15,6 +15,6 @@ public class HealthIndicatorMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        TXFConfig.init(MODID, HealthIndicatorModConfig.class);
+        TXFConfig.init(MODID, ModConfig.class);
     }
 }
