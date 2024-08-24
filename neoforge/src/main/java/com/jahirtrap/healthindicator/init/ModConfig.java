@@ -5,7 +5,7 @@ import com.jahirtrap.configlib.TXFConfig;
 
 import java.util.List;
 
-public class HealthIndicatorModConfig extends TXFConfig {
+public class ModConfig extends TXFConfig {
     public static final String GENERAL = "general", HUD = "hud", COLORS = "colors", ENTITIES = "entities";
 
     @Entry(category = GENERAL, name = "Enable Mod")
