@@ -17,7 +17,7 @@ public class ClientEventHandler {
 
     private static void onPlayerTick(PlayerTickEvent.Pre event) {
         if (!event.getEntity().level().isClientSide) return;
-        HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, HealthIndicatorModConfig.distance));
+        HealthIndicatorClient.HUD.setEntity(HealthIndicatorClient.RAYTRACE.getEntityInCrosshair(0, ModConfig.distance));
         BarStates.tick();
         HealthIndicatorClient.HUD.tick();
     }
