@@ -27,9 +27,10 @@ public class DamageParticleEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingUpdate(final LivingUpdateEvent event) {
-        if (!HealthIndicatorModConfig.showDamageParticles || !HealthIndicatorModConfig.enableMod) return;
+        if (!ModConfig.showDamageParticles || !ModConfig.enableMod) return;
         LivingEntity livingEntity = event.getEntityLiving();
-        if (checkBlacklist(HealthIndicatorModConfig.blacklist, livingEntity) || checkBlacklist(HealthIndicatorModConfig.damageParticleBlacklist, livingEntity)) return;
+        if (checkBlacklist(ModConfig.blacklist, livingEntity) || checkBlacklist(ModConfig.damageParticleBlacklist, livingEntity))
+            return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
 
@@ -75,7 +76,7 @@ public class DamageParticleEvents {
                 livingEntity.getBoundingBox().maxY + 0.24;
         double posZ = livingEntity.getZ();
 
-        int color = getColor(0xfcfcfc, HealthIndicatorModConfig.damageParticleColor);
+        int color = getColor(0xfcfcfc, ModConfig.damageParticleColor);
 
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);

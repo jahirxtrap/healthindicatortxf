@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.util;
 
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
+import com.jahirtrap.healthindicator.init.ModConfig;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.Registry;
@@ -67,18 +67,18 @@ public class CommonUtils {
 
     public static int getHudHeight(int infoWidth) {
         int value = 30;
-        switch (HealthIndicatorModConfig.barStyle) {
+        switch (ModConfig.barStyle) {
             case VANILLA -> value -= 1;
         }
-        if (!HealthIndicatorModConfig.showBar) {
-            switch (HealthIndicatorModConfig.barStyle) {
+        if (!ModConfig.showBar) {
+            switch (ModConfig.barStyle) {
                 case VANILLA -> value -= 5;
                 default -> value -= 6;
             }
-            if (HealthIndicatorModConfig.showModName) value -= 2;
+            if (ModConfig.showModName) value -= 2;
         }
         if (infoWidth == 0) value -= 12;
-        if (!HealthIndicatorModConfig.showModName) value -= 12;
+        if (!ModConfig.showModName) value -= 12;
         return value;
     }
 

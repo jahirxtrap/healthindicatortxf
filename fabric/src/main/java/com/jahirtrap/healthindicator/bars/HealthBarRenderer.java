@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.bars;
 
-import com.jahirtrap.healthindicator.init.HealthIndicatorModConfig;
+import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.jahirtrap.healthindicator.util.CommonUtils.EntityType;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -23,18 +23,18 @@ public class HealthBarRenderer {
         EntityType entityType = CommonUtils.getEntityType(entity);
         int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080, color4 = 0x000000, alpha4 = 0;
         if (entityType == EntityType.PASSIVE) {
-            color = getColor(0x00ff00, HealthIndicatorModConfig.passiveColor);
-            color2 = getColor(0x008000, HealthIndicatorModConfig.passiveColorSecondary);
+            color = getColor(0x00ff00, ModConfig.passiveColor);
+            color2 = getColor(0x008000, ModConfig.passiveColorSecondary);
         } else if (entityType == EntityType.HOSTILE) {
-            color = getColor(0xff0000, HealthIndicatorModConfig.hostileColor);
-            color2 = getColor(0x800000, HealthIndicatorModConfig.hostileColorSecondary);
+            color = getColor(0xff0000, ModConfig.hostileColor);
+            color2 = getColor(0x800000, ModConfig.hostileColorSecondary);
         } else if (entityType == EntityType.NEUTRAL) {
-            color = getColor(0x0000ff, HealthIndicatorModConfig.neutralColor);
-            color2 = getColor(0x000080, HealthIndicatorModConfig.neutralColorSecondary);
+            color = getColor(0x0000ff, ModConfig.neutralColor);
+            color2 = getColor(0x000080, ModConfig.neutralColorSecondary);
         }
-        color3 = getColor(0x808080, HealthIndicatorModConfig.backgroundBarColor);
-        color4 = getColor(0x000000, HealthIndicatorModConfig.hudBackgroundColor);
-        alpha4 = HealthIndicatorModConfig.hudBackgroundOpacity;
+        color3 = getColor(0x808080, ModConfig.backgroundBarColor);
+        color4 = getColor(0x000000, ModConfig.hudBackgroundColor);
+        alpha4 = ModConfig.hudBackgroundOpacity;
 
         BarState state = BarStates.getState(entity);
 
@@ -50,9 +50,9 @@ public class HealthBarRenderer {
             drawBackground(m4f, color4, alpha4, zOffset++, wVal1, Math.max(Math.max(width, wVal1), wVal2), oVal1);
         }
         if (!bar) return;
-        if (HealthIndicatorModConfig.showBackgroundBar)
+        if (ModConfig.showBackgroundBar)
             drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
-        if (HealthIndicatorModConfig.showSecondaryBar)
+        if (ModConfig.showSecondaryBar)
             drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
         drawBar(m4f, width, height, percent, color, zOffset, false, armor);
     }
@@ -60,7 +60,7 @@ public class HealthBarRenderer {
     private static void drawBar(Matrix4f matrix4f, int width, int height, float percent, int color, int zOffset, boolean back, boolean armor) {
         float v = 10;
 
-        switch (HealthIndicatorModConfig.barStyle) {
+        switch (ModConfig.barStyle) {
             case VANILLA -> v -= height;
             case DEFAULT -> v += height;
             case ROUNDED -> v += height * 3;
@@ -75,7 +75,7 @@ public class HealthBarRenderer {
         int uw = Mth.ceil(128 * percent);
         int y = 12;
 
-        if (!HealthIndicatorModConfig.showName && !HealthIndicatorModConfig.showHealth && (!armor || !HealthIndicatorModConfig.showArmor))
+        if (!ModConfig.showName && !ModConfig.showHealth && (!armor || !ModConfig.showArmor))
             y = 0;
 
         float size = percent * width;
@@ -111,7 +111,7 @@ public class HealthBarRenderer {
         int x = minOffset - padding;
         int y = 1 - padding;
 
-        switch (HealthIndicatorModConfig.position) {
+        switch (ModConfig.position) {
             case BOTTOM_LEFT, TOP_LEFT -> x -= 1;
             case BOTTOM_RIGHT, TOP_RIGHT -> xw += 1;
         }
