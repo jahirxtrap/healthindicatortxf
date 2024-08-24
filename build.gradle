@@ -26,6 +26,9 @@ subprojects {
 
     repositories {
         mavenCentral()
+        flatDir {
+            dir 'libs'
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

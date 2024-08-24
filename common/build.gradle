@@ -5,10 +5,7 @@ plugins {
 }
 
 version = "${version}-common"
-
-base {
-    archivesName = mod_id
-}
+base.archivesName = mod_id
 
 minecraft {
     version(minecraft_version)
