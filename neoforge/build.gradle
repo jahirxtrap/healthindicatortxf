@@ -6,10 +6,8 @@ plugins {
 }
 
 version = "${version}-neoforge"
-
-base {
-    archivesName = mod_id
-}
+jarJar.enable()
+base.archivesName = mod_id
 
 if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
     minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -40,6 +38,7 @@ dependencies {
     compileOnly project(":common")
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    jarJar "com.jahirtrap:configlibtxf:[${configlibtxf_version}-neoforge,)"
 }
 
 Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
@@ -50,7 +49,7 @@ tasks.withType(Javadoc).matching(notNeoTask).configureEach {
     source(project(":common").sourceSets.main.allJava)
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'META-INF/jarjar/metadata.json', 'pack.mcmeta']
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: neoforge_minecraft_version_range,
         neoforge_version: neoforge_version, neoforge_version_range: neoforge_version_range,
@@ -71,15 +70,11 @@ processResources {
     from project(":common").sourceSets.main.resources
 }
 
-jar {
-    from('libs') {
-        include '*.jar'
-        into('META-INF/jarjar')
-    }
-}
+tasks.jarJar.setArchiveClassifier('')
+jar.finalizedBy('jarJar')
 
 publishMods {
-    file = jar.archiveFile
+    file = tasks.jarJar.archiveFile
     displayName = "${mod_name} ${project.version}"
     type = STABLE
     modLoaders.addAll("neoforge")
