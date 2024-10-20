@@ -1,4 +1,4 @@
-package com.jahirtrap.healthindicator.bars;
+package com.jahirtrap.healthindicator.data;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
