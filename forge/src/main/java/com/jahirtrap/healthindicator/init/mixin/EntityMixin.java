@@ -1,17 +1,17 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.display.DamageParticleRenderer.DamageParticle;
+import com.jahirtrap.healthindicator.data.EntityData;
+import com.jahirtrap.healthindicator.display.ParticleRenderer.DamageParticle;
 import com.jahirtrap.healthindicator.init.ModConfig;
-import com.jahirtrap.healthindicator.util.CommonUtils;
-import com.jahirtrap.healthindicator.util.EntityData;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,16 +19,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.WeakHashMap;
 
-import static com.jahirtrap.healthindicator.util.CommonUtils.checkBlacklist;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 @Mixin(Entity.class)
-public abstract class DamageParticleMixin {
+public abstract class EntityMixin {
+
+    @Unique
     private static final WeakHashMap<LivingEntity, EntityData> ENTITY_TRACKER = new WeakHashMap<>();
 
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Inject(method = "tick", at = @At("HEAD"))
-    private void onLivingTick(CallbackInfo ci) {
+    private void tick(CallbackInfo ci) {
         if (!ModConfig.showDamageParticles || !ModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
@@ -45,21 +46,22 @@ public abstract class DamageParticleMixin {
         }
 
         if (entityData.damage != 0) {
-            onEntityDamaged(livingEntity, entityData);
+            addDamageParticle(livingEntity, entityData);
         }
     }
 
-    @Environment(EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Inject(method = "getLevel", at = @At("HEAD"))
-    private void onEntityJoin(CallbackInfoReturnable<Level> cir) {
+    private void getLevel(CallbackInfoReturnable<Level> cir) {
         Entity entity = (Entity) (Object) this;
         Entity player = Minecraft.getInstance().player;
         if (player == null) return;
         if (entity.equals(player)) ENTITY_TRACKER.clear();
     }
 
-    @Environment(EnvType.CLIENT)
-    private static void onEntityDamaged(LivingEntity livingEntity, EntityData entityData) {
+    @Unique
+    @OnlyIn(Dist.CLIENT)
+    private static void addDamageParticle(LivingEntity livingEntity, EntityData entityData) {
         if (entityData.damage < 0) return;
 
         ClientLevel clientLevel = Minecraft.getInstance().level;
@@ -71,7 +73,7 @@ public abstract class DamageParticleMixin {
 
         if (livingEntity.equals(player)) return;
 
-        String damageString = CommonUtils.formatDamageText(entityData.damage);
+        String damageString = formatDamageText(entityData.damage);
 
         double posX = livingEntity.getX();
         double posY = (livingEntity.getRemainingFireTicks() > 0) ?
