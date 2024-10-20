@@ -1,11 +1,11 @@
-package com.jahirtrap.healthindicator.util;
+package com.jahirtrap.healthindicator.data;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class EntityData {
     public float health, lastHealth, damage, lastDamage;
     public long healthStamp, lastHealthStamp, damageStamp, lastDamageStamp, lastUpdate;

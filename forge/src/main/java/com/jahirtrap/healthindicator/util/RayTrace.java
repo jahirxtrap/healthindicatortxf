@@ -51,9 +51,7 @@ public class RayTrace implements BlockGetter {
 
         EntityHitResult result = ProjectileUtil.getEntityHitResult(viewer, position, max, searchBox, isVisible, reachDistance * reachDistance);
 
-        if (result == null || result.getEntity() == null) return null;
-        if (result.getEntity() instanceof LivingEntity target) {
-
+        if (result != null && result.getEntity() instanceof LivingEntity target) {
             HitResult blockHit = clip(setupRayTraceContext(Objects.requireNonNull(client.player), reachDistance));
 
             if (!blockHit.getType().equals(BlockHitResult.Type.MISS)) {
