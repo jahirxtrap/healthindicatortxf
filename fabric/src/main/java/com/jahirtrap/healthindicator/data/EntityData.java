@@ -1,4 +1,4 @@
-package com.jahirtrap.healthindicator.util;
+package com.jahirtrap.healthindicator.data;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -27,3 +27,6 @@ issueTrackerURL = "${mod_issues}"
     versionRange = "${minecraft_version_range}"
     ordering = "NONE"
     side = "${side}"
+
+[[mixins]]
+    config = "${mod_id}.mixins.json"
