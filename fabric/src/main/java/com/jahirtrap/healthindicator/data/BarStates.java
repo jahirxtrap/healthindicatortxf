@@ -1,4 +1,4 @@
-package com.jahirtrap.healthindicator.bars;
+package com.jahirtrap.healthindicator.data;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -12,20 +12,12 @@ public class BarStates {
     private static int tickCount = 0;
 
     public static BarState getState(LivingEntity entity) {
-        int id = entity.getId();
-        BarState state = STATES.get(id);
-        if (state == null) {
-            state = new BarState(entity);
-            STATES.put(id, state);
-        }
-        return state;
+        return STATES.computeIfAbsent(entity.getId(), k -> new BarState(entity));
     }
 
     public static void tick() {
         for (BarState state : STATES.values()) state.tick();
-
         if (tickCount % 200 == 0) cleanCache();
-
         tickCount++;
     }
 

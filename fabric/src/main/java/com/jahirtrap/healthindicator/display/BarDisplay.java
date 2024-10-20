@@ -1,6 +1,5 @@
 package com.jahirtrap.healthindicator.display;
 
-import com.jahirtrap.healthindicator.bars.HealthBarRenderer;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -32,10 +31,7 @@ public class BarDisplay {
     public void draw(PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1, yOffset = 2;
-
-        switch (ModConfig.barStyle) {
-            case VANILLA -> barHeight = 5;
-        }
+        if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) barHeight = 5;
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -87,7 +83,7 @@ public class BarDisplay {
             }
         }
 
-        HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
+        BarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);

@@ -22,21 +22,17 @@ public class CommonUtils {
 
     public static String getModName(LivingEntity entity) {
         String modId = Registry.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
-        String displayName = ModList.get().getModContainerById(modId).get().getModInfo().getDisplayName();
-        return displayName;
+        return ModList.get().getModContainerById(modId).get().getModInfo().getDisplayName();
     }
 
     public static String getEntityId(LivingEntity entity) {
-        String entityId = Registry.ENTITY_TYPE.getKey(entity.getType()).toString();
-        return entityId;
+        return Registry.ENTITY_TYPE.getKey(entity.getType()).toString();
     }
 
     public static boolean checkBlacklist(List<String> blacklist, LivingEntity livingEntity) {
         if (!blacklist.isEmpty()) {
             for (String entityId : blacklist) {
-                if (getEntityId(livingEntity).equals(entityId)) {
-                    return true;
-                }
+                if (getEntityId(livingEntity).equals(entityId)) return true;
             }
         }
         return false;
@@ -45,9 +41,7 @@ public class CommonUtils {
     public static Integer getColor(int defaultValue, String hexColor) {
         int color = defaultValue;
         try {
-            if (hexColor.startsWith("#")) {
-                hexColor = hexColor.substring(1);
-            }
+            if (hexColor.startsWith("#")) hexColor = hexColor.substring(1);
             color = Integer.parseInt(hexColor, 16);
         } catch (Exception ignore) {
         }
@@ -64,14 +58,10 @@ public class CommonUtils {
 
     public static int getHudHeight(int infoWidth) {
         int value = 30;
-        switch (ModConfig.barStyle) {
-            case VANILLA -> value -= 1;
-        }
+        if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) value -= 1;
         if (!ModConfig.showBar) {
-            switch (ModConfig.barStyle) {
-                case VANILLA -> value -= 5;
-                default -> value -= 6;
-            }
+            if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) value -= 5;
+            else value -= 6;
             if (ModConfig.showModName) value -= 2;
         }
         if (infoWidth == 0) value -= 12;
@@ -79,7 +69,6 @@ public class CommonUtils {
         return value;
     }
 
-    //Damage Particle Utils
     public static float getRedFromColor(int color) {
         return ((color >> 16) & 0xff) / 255F;
     }
@@ -104,11 +93,8 @@ public class CommonUtils {
     }
 
     public static String formatDamageText(float amount) {
-        if (amount % 1.0 == 0) {
-            return String.format("%.0f", amount);
-        } else {
-            return String.format("%.1f", amount);
-        }
+        if (amount % 1.0 == 0) return String.format("%.0f", amount);
+        else return String.format("%.1f", amount);
     }
 
     public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
