@@ -1,8 +1,8 @@
-package com.jahirtrap.healthindicator.bars;
+package com.jahirtrap.healthindicator.display;
 
+import com.jahirtrap.healthindicator.data.BarState;
+import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
-import com.jahirtrap.healthindicator.util.CommonUtils;
-import com.jahirtrap.healthindicator.util.CommonUtils.EntityType;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.GameRenderer;
@@ -12,15 +12,13 @@ import net.minecraft.world.entity.LivingEntity;
 import org.joml.Matrix4f;
 
 import static com.jahirtrap.healthindicator.HealthIndicatorMod.MODID;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getHudHeight;
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
-public class HealthBarRenderer {
-    private static final ResourceLocation GUI_BARS_TEXTURES = ResourceLocation.parse(
-            MODID + ":textures/gui/bars.png");
+public class BarRenderer {
+    private static final ResourceLocation GUI_BARS_TEXTURES = ResourceLocation.fromNamespaceAndPath(MODID, "textures/gui/bars.png");
 
     public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
-        EntityType entityType = CommonUtils.getEntityType(entity);
+        EntityType entityType = getEntityType(entity);
         int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080, color4 = 0x000000, alpha4 = 0;
         if (entityType == EntityType.PASSIVE) {
             color = getColor(0x00ff00, ModConfig.passiveColor);

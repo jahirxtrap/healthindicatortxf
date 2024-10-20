@@ -1,6 +1,5 @@
 package com.jahirtrap.healthindicator.display;
 
-import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -14,17 +13,15 @@ import org.joml.Matrix4f;
 
 import javax.annotation.Nonnull;
 
-public class DamageParticleRenderer extends Particle {
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
+public class ParticleRenderer extends Particle {
     private String text;
-
     private double particleScale;
-
     private Double animationMinSize, animationMaxSize;
-
     private Boolean animationFade;
 
-    public DamageParticleRenderer(ClientLevel clientLevel, double x, double y, double z) {
+    public ParticleRenderer(ClientLevel clientLevel, double x, double y, double z) {
         super(clientLevel, x, y, z);
 
         this.xd = 0;
@@ -41,9 +38,9 @@ public class DamageParticleRenderer extends Particle {
     }
 
     public void setColor(int color) {
-        this.rCol = CommonUtils.getRedFromColor(color);
-        this.gCol = CommonUtils.getGreenFromColor(color);
-        this.bCol = CommonUtils.getBlueFromColor(color);
+        this.rCol = getRedFromColor(color);
+        this.gCol = getGreenFromColor(color);
+        this.bCol = getBlueFromColor(color);
     }
 
     public void setAnimationSize(double min, double max) {
@@ -69,8 +66,8 @@ public class DamageParticleRenderer extends Particle {
         float textX = (float) (-mc.font.width(this.text) / 2);
         float textY = 0;
 
-        int textColor = CommonUtils.getColorFromRGBA(this.rCol, this.gCol, this.bCol, this.alpha);
-        int shadowColor = CommonUtils.getColorFromRGBA(this.rCol * 0.314F, this.gCol * 0.314F, this.bCol * 0.314F, this.alpha);
+        int textColor = getColorFromRGBA(this.rCol, this.gCol, this.bCol, this.alpha);
+        int shadowColor = getColorFromRGBA(this.rCol * 0.314F, this.gCol * 0.314F, this.bCol * 0.314F, this.alpha);
 
         this.animateSize(partialTicks);
         this.animateFade(partialTicks);
@@ -85,8 +82,7 @@ public class DamageParticleRenderer extends Particle {
 
         var buffer = mc.renderBuffers().bufferSource();
 
-        if (this.particleScale != 0)
-            matrix = matrix.scale((float) this.particleScale, (float) this.particleScale, 1);
+        if (this.particleScale != 0) matrix = matrix.scale((float) this.particleScale, (float) this.particleScale, 1);
 
         matrix = matrix.translate(0, 0, 1);
         mc.font.drawInBatch(this.text, textX, textY, textColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
@@ -121,7 +117,7 @@ public class DamageParticleRenderer extends Particle {
         this.alpha = (float) ((d1 - Math.abs(d2)) / (this.lifetime / 3D));
     }
 
-    public static class DamageParticle extends DamageParticleRenderer {
+    public static class DamageParticle extends ParticleRenderer {
         public DamageParticle(ClientLevel clientLevel, double x, double y, double z) {
             super(clientLevel, x, y, z);
             this.tick();

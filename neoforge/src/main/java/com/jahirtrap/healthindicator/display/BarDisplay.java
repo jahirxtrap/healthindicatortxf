@@ -1,6 +1,5 @@
 package com.jahirtrap.healthindicator.display;
 
-import com.jahirtrap.healthindicator.bars.HealthBarRenderer;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,9 +13,9 @@ import net.minecraft.world.entity.player.Player;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class BarDisplay {
-    private static final ResourceLocation ARMOR_FULL_SPRITE = ResourceLocation.parse("hud/armor_full");
-    private static final ResourceLocation HEART_CONTAINER_SPRITE = ResourceLocation.parse("hud/heart/container");
-    private static final ResourceLocation HEART_FULL_SPRITE = ResourceLocation.parse("hud/heart/full");
+    private static final ResourceLocation ARMOR_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/armor_full");
+    private static final ResourceLocation HEART_CONTAINER_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/container");
+    private static final ResourceLocation HEART_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/full");
     private final Minecraft mc;
     private int infoWidth;
 
@@ -31,10 +30,7 @@ public class BarDisplay {
     public void draw(GuiGraphics guiGraphics, PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1, yOffset = 2;
-
-        switch (ModConfig.barStyle) {
-            case VANILLA -> barHeight = 5;
-        }
+        if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) barHeight = 5;
 
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
@@ -82,7 +78,7 @@ public class BarDisplay {
             }
         }
 
-        HealthBarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
+        BarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (showName && showHealth && showArmor) guiGraphics.drawString(mc.font, "", xOffset, 2, 0xffffff);
@@ -123,11 +119,11 @@ public class BarDisplay {
     }
 
     private ResourceLocation getHeartSprite(LivingEntity entity) {
-        final ResourceLocation HEART_FROZEN_FULL_SPRITE = ResourceLocation.parse("hud/heart/frozen_full");
-        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = ResourceLocation.parse("hud/heart/absorbing_full");
-        final ResourceLocation HEART_X_FULL_SPRITE = ResourceLocation.parse("hud/heart/hardcore_full");
-        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = ResourceLocation.parse("hud/heart/frozen_hardcore_full");
-        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = ResourceLocation.parse("hud/heart/absorbing_hardcore_full");
+        final ResourceLocation HEART_FROZEN_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/frozen_full");
+        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/absorbing_full");
+        final ResourceLocation HEART_X_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/hardcore_full");
+        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/frozen_hardcore_full");
+        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_full");
 
         ResourceLocation icon = HEART_FULL_SPRITE;
         boolean hardcore = false;
