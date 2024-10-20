@@ -1,34 +1,36 @@
-package com.jahirtrap.healthindicator.init;
+package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.display.DamageParticleRenderer.DamageParticle;
-import com.jahirtrap.healthindicator.util.CommonUtils;
-import com.jahirtrap.healthindicator.util.EntityData;
+import com.jahirtrap.healthindicator.data.EntityData;
+import com.jahirtrap.healthindicator.display.ParticleRenderer.DamageParticle;
+import com.jahirtrap.healthindicator.init.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.WeakHashMap;
 
-import static com.jahirtrap.healthindicator.util.CommonUtils.checkBlacklist;
-import static com.jahirtrap.healthindicator.util.CommonUtils.getColor;
+import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
-@Mod.EventBusSubscriber
-public class DamageParticleEvents {
-    public static final WeakHashMap<LivingEntity, EntityData> ENTITY_TRACKER = new WeakHashMap<>();
+@Mixin(Entity.class)
+public abstract class EntityMixin {
+
+    @Unique
+    private static final WeakHashMap<LivingEntity, EntityData> ENTITY_TRACKER = new WeakHashMap<>();
 
     @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onLivingTick(final LivingTickEvent event) {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void tick(CallbackInfo ci) {
         if (!ModConfig.showDamageParticles || !ModConfig.enableMod) return;
-        LivingEntity livingEntity = event.getEntity();
+        Entity entity = (Entity) (Object) this;
+        if (!(entity instanceof LivingEntity livingEntity)) return;
         if (checkBlacklist(ModConfig.blacklist, livingEntity) || checkBlacklist(ModConfig.damageParticleBlacklist, livingEntity))
             return;
 
@@ -42,21 +44,22 @@ public class DamageParticleEvents {
         }
 
         if (entityData.damage != 0) {
-            onEntityDamaged(livingEntity, entityData);
+            addDamageParticle(livingEntity, entityData);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoin(final EntityJoinLevelEvent event) {
-        Entity entity = event.getEntity();
+    @Inject(method = "setLevel", at = @At("HEAD"))
+    private void setLevel(CallbackInfo ci) {
+        Entity entity = (Entity) (Object) this;
         Entity player = Minecraft.getInstance().player;
         if (player == null) return;
         if (entity.equals(player)) ENTITY_TRACKER.clear();
     }
 
+    @Unique
     @OnlyIn(Dist.CLIENT)
-    public static void onEntityDamaged(LivingEntity livingEntity, EntityData entityData) {
+    private static void addDamageParticle(LivingEntity livingEntity, EntityData entityData) {
         if (entityData.damage < 0) return;
 
         ClientLevel clientLevel = Minecraft.getInstance().level;
@@ -68,7 +71,7 @@ public class DamageParticleEvents {
 
         if (livingEntity.equals(player)) return;
 
-        String damageString = CommonUtils.formatDamageText(entityData.damage);
+        String damageString = formatDamageText(entityData.damage);
 
         double posX = livingEntity.getX();
         double posY = (livingEntity.getRemainingFireTicks() > 0) ?

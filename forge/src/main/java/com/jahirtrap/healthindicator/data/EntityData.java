@@ -1,4 +1,4 @@
-package com.jahirtrap.healthindicator.util;
+package com.jahirtrap.healthindicator.data;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

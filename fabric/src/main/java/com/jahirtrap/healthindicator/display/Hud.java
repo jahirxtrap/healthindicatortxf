@@ -3,26 +3,22 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.init.ModConfig.Position;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class Hud extends Screen {
-    private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("c", "bosses"));
     private final BarDisplay barDisplay;
     private LivingEntity entity;
     private int age;
 
     public Hud() {
-        super(Component.literal(""));
+        super(Component.empty());
         this.minecraft = Minecraft.getInstance();
         barDisplay = new BarDisplay(minecraft);
     }
@@ -81,7 +77,7 @@ public class Hud extends Screen {
 
         if (entity != null && !ModConfig.showInvisibleEntities && entity.isInvisible() && !entity.isCurrentlyGlowing() && !entity.isOnFire())
             setEntityWork(null);
-        else if (entity != null && !ModConfig.showBosses && entity.getType().is(BOSS_TAG))
+        else if (entity != null && !ModConfig.showBosses && entity.getType().is(ConventionalEntityTypeTags.BOSSES))
             setEntityWork(null);
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
