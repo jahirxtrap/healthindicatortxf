@@ -12,6 +12,8 @@ public class ModConfig extends TXFConfig {
     public static boolean enableMod = true;
     @Entry(category = GENERAL, name = "Show Hud")
     public static boolean showHud = true;
+    @Entry(category = GENERAL, name = "Show Healing Particles")
+    public static boolean showHealingParticles = false;
     @Entry(category = GENERAL, name = "Show Damage Particles")
     public static boolean showDamageParticles = true;
     @Entry(category = GENERAL, name = "Show Bar")
@@ -70,6 +72,8 @@ public class ModConfig extends TXFConfig {
     public static String neutralColorSecondary = "#000080";
     @Entry(category = COLORS, name = "Mod Name Color", width = 7, min = 7, isColor = true)
     public static String modNameColor = "#5555ff";
+    @Entry(category = COLORS, name = "Healing Particle Color", width = 7, min = 7, isColor = true)
+    public static String healingParticleColor = "#00fc00";
     @Entry(category = COLORS, name = "Damage Particle Color", width = 7, min = 7, isColor = true)
     public static String damageParticleColor = "#fcfcfc";
 
@@ -81,8 +85,8 @@ public class ModConfig extends TXFConfig {
     public static List<String> blacklist = Lists.newArrayList();
     @Entry(category = ENTITIES, name = "Bar Blacklist")
     public static List<String> barBlacklist = Lists.newArrayList();
-    @Entry(category = ENTITIES, name = "Damage Particle Blacklist")
-    public static List<String> damageParticleBlacklist = Lists.newArrayList();
+    @Entry(category = ENTITIES, name = "Number Particle Blacklist")
+    public static List<String> numberParticleBlacklist = Lists.newArrayList();
 
     public enum Position {TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT}
 
