@@ -30,10 +30,10 @@ public abstract class EntityMixin {
     @OnlyIn(Dist.CLIENT)
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        if (!ModConfig.showDamageParticles || !ModConfig.enableMod) return;
+        if ((!ModConfig.showHealingParticles && !ModConfig.showDamageParticles) || !ModConfig.enableMod) return;
         Entity entity = (Entity) (Object) this;
         if (!(entity instanceof LivingEntity livingEntity)) return;
-        if (checkBlacklist(ModConfig.blacklist, livingEntity) || checkBlacklist(ModConfig.damageParticleBlacklist, livingEntity))
+        if (checkBlacklist(ModConfig.blacklist, livingEntity) || checkBlacklist(ModConfig.numberParticleBlacklist, livingEntity))
             return;
 
         EntityData entityData = ENTITY_TRACKER.get(livingEntity);
@@ -46,7 +46,7 @@ public abstract class EntityMixin {
         }
 
         if (entityData.damage != 0) {
-            addDamageParticle(livingEntity, entityData);
+            addParticle(livingEntity, entityData);
         }
     }
 
@@ -61,9 +61,9 @@ public abstract class EntityMixin {
 
     @Unique
     @OnlyIn(Dist.CLIENT)
-    private static void addDamageParticle(LivingEntity livingEntity, EntityData entityData) {
-        if (entityData.damage < 0) return;
-
+    private static void addParticle(LivingEntity livingEntity, EntityData entityData) {
+        if (entityData.damage > 0 && !ModConfig.showDamageParticles) return;
+        else if (!ModConfig.showHealingParticles) return;
         ClientLevel clientLevel = Minecraft.getInstance().level;
         if (clientLevel == null) return;
         Entity entity = clientLevel.getEntity(livingEntity.getId());
@@ -74,14 +74,12 @@ public abstract class EntityMixin {
         if (livingEntity.equals(player)) return;
 
         String damageString = formatDamageText(entityData.damage);
+        int color = getColor(0xfcfcfc, ModConfig.damageParticleColor);
+        if (entityData.damage < 0) color = getColor(0x00fc00, ModConfig.healingParticleColor);
 
         double posX = livingEntity.getX();
-        double posY = (livingEntity.getRemainingFireTicks() > 0) ?
-                livingEntity.getBoundingBox().maxY + 1.24 :
-                livingEntity.getBoundingBox().maxY + 0.24;
+        double posY = (livingEntity.getRemainingFireTicks() > 0) ? livingEntity.getBoundingBox().maxY + 1.24 : livingEntity.getBoundingBox().maxY + 0.24;
         double posZ = livingEntity.getZ();
-
-        int color = getColor(0xfcfcfc, ModConfig.damageParticleColor);
 
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);
