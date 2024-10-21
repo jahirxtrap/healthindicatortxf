@@ -13,6 +13,8 @@ import net.minecraftforge.fml.ModList;
 import java.util.List;
 
 public class CommonUtils {
+    public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
+
     public static EntityType getEntityType(Entity entity) {
         if (entity instanceof NeutralMob || entity instanceof Llama) return EntityType.NEUTRAL;
         else if (entity instanceof Monster || entity instanceof Slime || entity instanceof Ghast || entity instanceof Hoglin || entity instanceof Phantom || entity instanceof Shulker)
@@ -49,7 +51,14 @@ public class CommonUtils {
     }
 
     public static String formatText(float amount) {
+        amount = (float) (Math.round(amount * 10) / 10.0);
         return String.format("%.1f", amount);
+    }
+
+    public static String formatDamageText(float amount) {
+        amount = (float) (Math.round(amount * 10) / 10.0);
+        if (amount % 1.0 == 0) return String.format("%.0f", amount).replace("-", "+");
+        else return String.format("%.1f", amount).replace("-", "+");
     }
 
     public static int getHudWidth() {
@@ -91,11 +100,4 @@ public class CommonUtils {
                 ((int) (green * 255) << 8) |
                 (int) (blue * 255);
     }
-
-    public static String formatDamageText(float amount) {
-        if (amount % 1.0 == 0) return String.format("%.0f", amount);
-        else return String.format("%.1f", amount);
-    }
-
-    public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
 }
