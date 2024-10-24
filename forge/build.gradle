@@ -18,10 +18,10 @@ mixin {
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
-    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformer = at
     }
-
     runs {
         client {
             workingDirectory project.file('run')
@@ -36,7 +36,6 @@ minecraft {
                 }
             }
         }
-
         server {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
@@ -50,7 +49,6 @@ minecraft {
                 }
             }
         }
-
         data {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
@@ -79,10 +77,6 @@ dependencies {
     jarJar "com.jahirtrap:configlibtxf:[${configlibtxf_version}-forge,)"
 }
 
-tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: forge_minecraft_version_range,
@@ -95,13 +89,11 @@ def replaceProperties = [
 
 processResources {
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
-    exclude '**/data/c/**', '**/data/fabric/**'
     from project(":common").sourceSets.main.resources
+    exclude '**/data/c/**', '**/data/fabric/**'
 }
 
 tasks.jarJar.setArchiveClassifier('')

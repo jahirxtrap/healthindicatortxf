@@ -11,8 +11,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class ParticleRenderer extends Particle {
@@ -95,8 +93,7 @@ public class ParticleRenderer extends Particle {
     }
 
     @Override
-    @Nonnull
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 
