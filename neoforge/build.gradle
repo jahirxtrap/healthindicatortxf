@@ -70,7 +70,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("neoforge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21", "1.21.1"]
+    def gameVersions = ["1.21.2", "1.21.3"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

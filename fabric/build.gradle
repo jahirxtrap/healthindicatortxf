@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'fabric-loom' version '1.8-SNAPSHOT'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
@@ -83,7 +83,7 @@ publishMods {
     type = BETA
     modLoaders.addAll("fabric", "quilt")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21", "1.21.1"]
+    def gameVersions = ["1.21.2", "1.21.3"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")
