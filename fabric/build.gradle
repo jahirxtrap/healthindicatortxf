@@ -20,15 +20,15 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":common")
 
     modImplementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 loom {
-    if (file("src/main/resources/${mod_id}.aw").exists()) {
-        accessWidenerPath.set(file("src/main/resources/${mod_id}.aw"))
+    def aw = file("src/main/resources/${mod_id}.aw")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
     }
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
@@ -49,10 +49,6 @@ loom {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-
 def resourceTargets = ['fabric.mod.json']
 def replaceProperties = [
         minecraft_version_range: fabric_minecraft_version_range,
@@ -65,13 +61,11 @@ def replaceProperties = [
 
 processResources {
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
-    exclude '**/data/forge/**', '**/data/neoforge/**'
     from project(":common").sourceSets.main.resources
+    exclude '**/data/forge/**', '**/data/neoforge/**'
 }
 
 jar {

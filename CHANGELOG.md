@@ -1,2 +1,1 @@
-- Added healing particles (<a href="https://github.com/jahirxtrap/healthindicatortxf/issues/6">Issue #6</a>)
-- Fixed number format
+- Some fixes

@@ -1,52 +1,48 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.moddev' version '2.0.42-beta'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
 version = "${version}-neoforge"
-jarJar.enable()
 base.archivesName = mod_id
 
-if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-runs {
-    configureEach {
-        modSource project.sourceSets.main
+neoForge {
+    version = neoforge_version
+
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers = at
     }
-    client {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+    runs {
+        configureEach {
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+        }
+        server {
+            server()
+        }
     }
-    server {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-    gameTestServer {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
     }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":common")
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     jarJar "com.jahirtrap:configlibtxf:${configlibtxf_version}-neoforge"
-}
-
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
-tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).matching(notNeoTask).configureEach {
-    source(project(":common").sourceSets.main.allJava)
 }
 
 def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']
@@ -61,22 +57,15 @@ def replaceProperties = [
 
 processResources {
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
-    exclude '**/data/fabric/**', '**/data/forge/**'
     from project(":common").sourceSets.main.resources
+    exclude '**/data/fabric/**', '**/data/forge/**'
 }
 
-tasks.jarJar.setArchiveClassifier('')
-tasks.jar.setArchiveClassifier('slim')
-tasks.jarJar.doLast { delete(jar.archiveFile) }
-jar.finalizedBy('jarJar')
-
 publishMods {
-    file = tasks.jarJar.archiveFile
+    file = jar.archiveFile
     displayName = "${mod_name} ${project.version}"
     type = STABLE
     modLoaders.addAll("neoforge")
