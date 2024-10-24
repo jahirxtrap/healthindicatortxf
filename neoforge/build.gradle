@@ -9,9 +9,11 @@ version = "${version}-neoforge"
 jarJar.enable()
 base.archivesName = mod_id
 
-if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
+def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+if (at.exists()) {
+    minecraft.accessTransformers.file = at
 }
+
 runs {
     configureEach {
         modSource project.sourceSets.main
@@ -41,14 +43,6 @@ dependencies {
     jarJar "com.jahirtrap:configlibtxf:${configlibtxf_version}-neoforge"
 }
 
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
-tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).matching(notNeoTask).configureEach {
-    source(project(":common").sourceSets.main.allJava)
-}
-
 def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: neoforge_minecraft_version_range,
@@ -61,13 +55,11 @@ def replaceProperties = [
 
 processResources {
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
-
     filesMatching(resourceTargets) {
         expand replaceProperties
     }
-    exclude '**/data/fabric/**', '**/data/forge/**'
     from project(":common").sourceSets.main.resources
+    exclude '**/data/fabric/**', '**/data/forge/**'
 }
 
 tasks.jarJar.setArchiveClassifier('')

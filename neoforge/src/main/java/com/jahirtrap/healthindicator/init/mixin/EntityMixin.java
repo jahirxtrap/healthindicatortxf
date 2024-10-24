@@ -61,7 +61,7 @@ public abstract class EntityMixin {
     @OnlyIn(Dist.CLIENT)
     private static void addParticle(LivingEntity livingEntity, EntityData entityData) {
         if (entityData.damage > 0 && !ModConfig.showDamageParticles) return;
-        else if (!ModConfig.showHealingParticles) return;
+        else if (entityData.damage < 0 && !ModConfig.showHealingParticles) return;
         ClientLevel clientLevel = Minecraft.getInstance().level;
         if (clientLevel == null) return;
         Entity entity = clientLevel.getEntity(livingEntity.getId());
