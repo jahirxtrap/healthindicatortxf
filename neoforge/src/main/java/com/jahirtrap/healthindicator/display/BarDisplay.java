@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -107,15 +108,15 @@ public class BarDisplay {
     }
 
     private void renderArmorIcon(GuiGraphics guiGraphics, int x) {
-        guiGraphics.blitSprite(ARMOR_FULL_SPRITE, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderType::guiTextured, ARMOR_FULL_SPRITE, x, 1, 9, 9);
     }
 
     private void renderHeartIcon(GuiGraphics guiGraphics, int x, LivingEntity entity) {
         ResourceLocation icon = HEART_FULL_SPRITE;
-        guiGraphics.blitSprite(HEART_CONTAINER_SPRITE, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderType::guiTextured, HEART_CONTAINER_SPRITE, x, 1, 9, 9);
 
         if (ModConfig.dynamicHeartTexture) icon = getHeartSprite(entity);
-        guiGraphics.blitSprite(icon, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderType::guiTextured, icon, x, 1, 9, 9);
     }
 
     private ResourceLocation getHeartSprite(LivingEntity entity) {

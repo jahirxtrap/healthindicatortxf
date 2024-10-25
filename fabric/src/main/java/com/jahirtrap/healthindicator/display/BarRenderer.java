@@ -5,7 +5,7 @@ import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,7 +81,7 @@ public class BarRenderer {
         float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
 
         RenderSystem.setShaderColor(r, g, b, 1);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
         RenderSystem.enableBlend();
 
@@ -115,7 +115,7 @@ public class BarRenderer {
         float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
 
         RenderSystem.setShaderColor(r, g, b, (float) alpha / 100);
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(CoreShaders.POSITION);
         RenderSystem.enableBlend();
 
         float zOffsetAmount = 0.1F;
