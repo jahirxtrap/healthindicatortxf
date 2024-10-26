@@ -87,7 +87,7 @@ public class RayTrace implements BlockGetter {
             return this.clipWithInteractionOverride(c.getFrom(), c.getTo(), pos, voxelshape, block);
         }, (c) -> {
             Vec3 vec3 = c.getFrom().subtract(c.getTo());
-            return BlockHitResult.miss(c.getTo(), Direction.getNearest(vec3), BlockPos.containing(c.getTo()));
+            return BlockHitResult.miss(c.getTo(), Direction.getApproximateNearest(vec3), BlockPos.containing(c.getTo()));
         });
     }
 
@@ -97,7 +97,7 @@ public class RayTrace implements BlockGetter {
     }
 
     @Override
-    public int getMinBuildHeight() {
+    public int getMinY() {
         return 0;
     }
 }
