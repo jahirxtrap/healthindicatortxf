@@ -11,7 +11,7 @@ public class EntityData {
     public long healthStamp, lastHealthStamp, damageStamp, lastDamageStamp, lastUpdate;
 
     public EntityData(LivingEntity livingEntity) {
-        long gameTimeNow = livingEntity.level.getGameTime();
+        long gameTimeNow = livingEntity.getLevel().getGameTime();
 
         this.lastUpdate = gameTimeNow;
 
@@ -21,7 +21,7 @@ public class EntityData {
     }
 
     public void update(LivingEntity livingEntity) {
-        long gameTimeNow = livingEntity.level.getGameTime();
+        long gameTimeNow = livingEntity.getLevel().getGameTime();
 
         this.lastUpdate = gameTimeNow;
 
