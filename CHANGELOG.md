@@ -1,1 +1,1 @@
-- Some fixes
+- Updated config lib
