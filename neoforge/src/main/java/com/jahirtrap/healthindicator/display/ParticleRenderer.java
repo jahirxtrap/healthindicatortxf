@@ -1,5 +1,6 @@
 package com.jahirtrap.healthindicator.display;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
@@ -35,6 +37,9 @@ public class ParticleRenderer extends Particle {
         this.alpha = alpha;
     }
 
+    public void render(@NotNull VertexConsumer vertexConsumer, @NotNull Camera camera, float partialTicks) {
+    }
+
     public void setColor(int color) {
         this.rCol = getRedFromColor(color);
         this.gCol = getGreenFromColor(color);
@@ -51,7 +56,7 @@ public class ParticleRenderer extends Particle {
     }
 
     @Override
-    public void render(@NotNull VertexConsumer vertexConsumer, @NotNull Camera camera, float partialTicks) {
+    public void renderCustom(@NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, @NotNull Camera camera, float partialTicks) {
         if (this.text == null || this.text.isEmpty()) return;
 
         Minecraft mc = Minecraft.getInstance();

@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.42-beta'
+    id 'net.neoforged.moddev' version '2.0.52-beta'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
@@ -23,7 +23,7 @@ neoForge {
             client()
         }
         data {
-            data()
+            clientData()
         }
         server {
             server()
@@ -70,7 +70,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("neoforge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21.2", "1.21.3"]
+    def gameVersions = ["1.21.4"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")
