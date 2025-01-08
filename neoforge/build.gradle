@@ -1,42 +1,44 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.gradle.userdev' version '7.0.107'
+    id 'net.neoforged.moddev' version '2.0.74'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
 version = "${version}-neoforge"
-jarJar.enable()
 base.archivesName = mod_id
 
-def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-if (at.exists()) {
-    minecraft.accessTransformers.file at
-}
+neoForge {
+    version = neoforge_version
 
-runs {
-    configureEach {
-        modSource project.sourceSets.main
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at)
     }
-    client {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+    runs {
+        configureEach {
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+        }
+        server {
+            server()
+        }
     }
-    server {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-    gameTestServer {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
     }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":common")
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -62,13 +64,8 @@ processResources {
     exclude '**/data/fabric/**', '**/data/forge/**'
 }
 
-tasks.jarJar.setArchiveClassifier('')
-tasks.jar.setArchiveClassifier('slim')
-tasks.jarJar.doLast { delete(jar.archiveFile) }
-jar.finalizedBy('jarJar')
-
 publishMods {
-    file = tasks.jarJar.archiveFile
+    file = jar.archiveFile
     displayName = "${mod_name} ${project.version}"
     type = STABLE
     modLoaders.addAll("neoforge")
