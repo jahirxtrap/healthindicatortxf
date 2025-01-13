@@ -10,6 +10,8 @@ public class ModConfig extends TXFConfig {
     public static boolean enableMod = true;
     @Entry(name = "Show Hud")
     public static boolean showHud = true;
+    @Entry(name = "Show Hud When Blind")
+    public static boolean showHudWhenBlind = true;
     @Entry(name = "Show Healing Particles")
     public static boolean showHealingParticles = false;
     @Entry(name = "Show Damage Particles")
