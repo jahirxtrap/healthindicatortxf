@@ -24,8 +24,8 @@ public class Hud extends Screen {
     }
 
     public void draw(GuiGraphics guiGraphics) {
+        if (this.minecraft != null && (this.minecraft.options.renderDebug || this.minecraft.options.hideGui)) return;
         float scale = (float) ModConfig.scale;
-        if (this.minecraft != null && this.minecraft.options.renderDebug) return;
         float x = determineX();
         float y = determineY();
         draw(guiGraphics, guiGraphics.pose(), x, y, scale);
