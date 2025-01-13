@@ -43,7 +43,7 @@ public class BarDisplay {
         String healthCur = String.valueOf(Math.min(Mth.ceil(health), Integer.parseInt(healthMax)));
         if (ModConfig.showHealthDecimals) {
             healthMax = formatText(maxHealth);
-            healthCur = formatText(Math.min(health, Float.parseFloat(healthMax)));
+            healthCur = formatText(Math.min(health, maxHealth));
         }
         String healthText = healthCur + "/" + healthMax;
         String armorText = String.valueOf(armorValue);
