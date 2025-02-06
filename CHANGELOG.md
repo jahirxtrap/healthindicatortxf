@@ -1,3 +1,1 @@
-- `showHudWhenBlind` config option ([Issue #9](https://github.com/jahirxtrap/healthindicatortxf/issues/9))
-- Hud will no longer be displayed in F1 mode ([Issue #12](https://github.com/jahirxtrap/healthindicatortxf/issues/12))
-- Some fixes
+- Fixed crash ([Issue #13](https://github.com/jahirxtrap/healthindicatortxf/issues/13))
