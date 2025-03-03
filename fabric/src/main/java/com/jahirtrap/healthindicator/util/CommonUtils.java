@@ -2,7 +2,6 @@ package com.jahirtrap.healthindicator.util;
 
 import com.jahirtrap.healthindicator.init.ModConfig;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +11,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CommonUtils {
     public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
@@ -26,8 +24,7 @@ public class CommonUtils {
 
     public static String getModName(LivingEntity entity) {
         String modId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
-        Optional<ModContainer> modContainerOptional = FabricLoader.getInstance().getModContainer(modId);
-        return modContainerOptional.map(container -> container.getMetadata().getName()).orElse(modId);
+        return FabricLoader.getInstance().getModContainer(modId).map(container -> container.getMetadata().getName()).orElse(modId);
     }
 
     public static String getEntityId(LivingEntity entity) {
