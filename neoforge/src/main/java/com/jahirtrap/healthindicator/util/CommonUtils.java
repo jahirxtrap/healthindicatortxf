@@ -8,11 +8,9 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CommonUtils {
     public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
@@ -26,8 +24,7 @@ public class CommonUtils {
 
     public static String getModName(LivingEntity entity) {
         String modId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
-        Optional<? extends ModContainer> modContainerOptional = ModList.get().getModContainerById(modId);
-        return modContainerOptional.map(container -> container.getModInfo().getDisplayName()).orElse(modId);
+        return ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId);
     }
 
     public static String getEntityId(LivingEntity entity) {
