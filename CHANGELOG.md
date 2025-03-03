@@ -1,1 +1,1 @@
-- Fixed crash ([Issue #13](https://github.com/jahirxtrap/healthindicatortxf/issues/13))
+- Updated config lib
