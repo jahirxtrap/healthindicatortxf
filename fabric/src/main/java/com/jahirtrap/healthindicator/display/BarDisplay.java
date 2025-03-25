@@ -24,10 +24,6 @@ public class BarDisplay {
         this.gui = gui;
     }
 
-    private String getEntityName(LivingEntity entity) {
-        return entity.getDisplayName().getString();
-    }
-
     public void draw(PoseStack poseStack, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1, yOffset = 2;
@@ -40,7 +36,7 @@ public class BarDisplay {
         int armorValue = entity.getArmorValue();
         boolean armor = armorValue > 0;
 
-        String name = getEntityName(entity);
+        String name = entity.getDisplayName().getString();
         float health = entity.getHealth() + entity.getAbsorptionAmount();
         float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
         String healthMax = String.valueOf(Mth.ceil(maxHealth));
@@ -85,8 +81,6 @@ public class BarDisplay {
 
         BarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        if (showName && showHealth && showArmor) GuiComponent.drawString(poseStack, mc.font, "", xOffset, 2, 0xffffff);
 
         if (showName && !name.isBlank()) {
             mc.font.drawShadow(poseStack, name, xOffset, yOffset, 0xffffff);
