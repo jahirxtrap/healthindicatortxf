@@ -93,7 +93,7 @@ public class Hud extends Screen {
         poseStack.translate(x, y, 0);
         poseStack.scale(scale, scale, scale);
         if (ModConfig.enableMod && ModConfig.showHud)
-            barDisplay.draw(guiGraphics, poseStack, entity);
+            barDisplay.draw(guiGraphics, entity);
         poseStack.popPose();
     }
 }
