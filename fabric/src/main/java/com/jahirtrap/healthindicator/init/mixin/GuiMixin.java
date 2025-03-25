@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
+import com.jahirtrap.healthindicator.util.CommonUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +13,6 @@ public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-        HealthIndicatorMod.HUD.draw(guiGraphics);
+        CommonUtils.HUD.draw(guiGraphics);
     }
 }
