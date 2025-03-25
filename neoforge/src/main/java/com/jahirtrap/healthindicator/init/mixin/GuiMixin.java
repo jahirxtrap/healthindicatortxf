@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
+import com.jahirtrap.healthindicator.util.CommonUtils;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,6 +14,6 @@ public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        HealthIndicatorMod.HUD.draw(guiGraphics);
+        CommonUtils.HUD.draw(guiGraphics);
     }
 }

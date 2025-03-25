@@ -1,5 +1,6 @@
 package com.jahirtrap.healthindicator.util;
 
+import com.jahirtrap.healthindicator.display.Hud;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +14,9 @@ import net.neoforged.fml.ModList;
 import java.util.List;
 
 public class CommonUtils {
+    public static final Hud HUD = new Hud();
+    public static final RayTrace RAYTRACE = new RayTrace();
+
     public enum EntityType {PASSIVE, HOSTILE, NEUTRAL}
 
     public static EntityType getEntityType(Entity entity) {
@@ -31,10 +35,10 @@ public class CommonUtils {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
     }
 
-    public static boolean checkBlacklist(List<String> blacklist, LivingEntity livingEntity) {
+    public static boolean checkBlacklist(List<String> blacklist, LivingEntity entity) {
         if (!blacklist.isEmpty()) {
             for (String entityId : blacklist) {
-                if (getEntityId(livingEntity).equals(entityId)) return true;
+                if (getEntityId(entity).equals(entityId)) return true;
             }
         }
         return false;
