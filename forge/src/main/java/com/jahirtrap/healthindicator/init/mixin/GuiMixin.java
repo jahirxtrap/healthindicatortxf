@@ -1,6 +1,6 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
+import com.jahirtrap.healthindicator.util.CommonUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +13,6 @@ public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void render(PoseStack poseStack, float f, CallbackInfo ci) {
-        HealthIndicatorMod.HUD.draw(poseStack);
+        CommonUtils.HUD.draw(poseStack);
     }
 }

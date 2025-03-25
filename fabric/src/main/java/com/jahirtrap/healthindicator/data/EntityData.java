@@ -10,25 +10,25 @@ public class EntityData {
     public float health, lastHealth, damage, lastDamage;
     public long healthStamp, lastHealthStamp, damageStamp, lastDamageStamp, lastUpdate;
 
-    public EntityData(LivingEntity livingEntity) {
-        long gameTimeNow = livingEntity.getLevel().getGameTime();
+    public EntityData(LivingEntity entity) {
+        long gameTimeNow = entity.getLevel().getGameTime();
 
         this.lastUpdate = gameTimeNow;
 
-        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
-        else this.health = livingEntity.getHealth();
+        if (entity instanceof Player) this.health = entity.getHealth() + entity.getAbsorptionAmount();
+        else this.health = entity.getHealth();
         this.healthStamp = gameTimeNow;
     }
 
-    public void update(LivingEntity livingEntity) {
-        long gameTimeNow = livingEntity.getLevel().getGameTime();
+    public void update(LivingEntity entity) {
+        long gameTimeNow = entity.getLevel().getGameTime();
 
         this.lastUpdate = gameTimeNow;
 
         this.lastHealth = this.health;
         this.lastHealthStamp = this.healthStamp;
-        if (livingEntity instanceof Player) this.health = livingEntity.getHealth() + livingEntity.getAbsorptionAmount();
-        else this.health = livingEntity.getHealth();
+        if (entity instanceof Player) this.health = entity.getHealth() + entity.getAbsorptionAmount();
+        else this.health = entity.getHealth();
         this.lastHealthStamp = gameTimeNow;
 
         if (this.health != this.lastHealth) {

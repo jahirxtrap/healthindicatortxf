@@ -1,8 +1,8 @@
 package com.jahirtrap.healthindicator.init.mixin;
 
-import com.jahirtrap.healthindicator.HealthIndicatorMod;
 import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
+import com.jahirtrap.healthindicator.util.CommonUtils;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,8 +25,8 @@ public abstract class PlayerMixin extends LivingEntity {
         if (!this.getLevel().isClientSide()) return;
         Player player = (Player) (Object) this;
         if (!ModConfig.showHudWhenBlind && player != null && player.hasEffect(MobEffects.BLINDNESS)) return;
-        HealthIndicatorMod.HUD.setEntity(HealthIndicatorMod.RAYTRACE.getEntityInCrosshair(0, ModConfig.distance));
+        CommonUtils.HUD.setEntity(CommonUtils.RAYTRACE.getEntityInCrosshair(0, ModConfig.distance));
         BarStates.tick();
-        HealthIndicatorMod.HUD.tick();
+        CommonUtils.HUD.tick();
     }
 }
