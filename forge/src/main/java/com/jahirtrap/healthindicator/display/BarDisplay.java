@@ -2,7 +2,6 @@ package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -24,7 +23,7 @@ public class BarDisplay {
         this.mc = mc;
     }
 
-    public void draw(GuiGraphics guiGraphics, PoseStack poseStack, LivingEntity entity) {
+    public void draw(GuiGraphics guiGraphics, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1, yOffset = 2;
         if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) barHeight = 5;
@@ -75,7 +74,7 @@ public class BarDisplay {
             }
         }
 
-        BarRenderer.render(poseStack, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
+        BarRenderer.render(guiGraphics, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (showName && !name.isBlank()) {

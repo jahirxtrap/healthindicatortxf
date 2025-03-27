@@ -3,9 +3,9 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.data.BarState;
 import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.CoreShaders;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +17,7 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 public class BarRenderer {
     private static final ResourceLocation GUI_BARS_TEXTURES = ResourceLocation.fromNamespaceAndPath(MODID, "textures/gui/bars.png");
 
-    public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
+    public static void render(GuiGraphics guiGraphics, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = getEntityType(entity);
         int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080, color4 = 0x000000, alpha4 = 0;
         if (entityType == EntityType.PASSIVE) {
@@ -40,92 +40,81 @@ public class BarRenderer {
         float percent2 = Math.min(state.previousHealthDisplay, entity.getMaxHealth()) / entity.getMaxHealth();
         int zOffset = 0;
 
-        Matrix4f m4f = poseStack.last().pose();
-
         if (!bar) width = 0;
         if (alpha4 > 0) {
             if (width >= wVal1 && width >= wVal2) oVal1 = 0;
-            drawBackground(m4f, color4, alpha4, zOffset++, wVal1, Math.max(Math.max(width, wVal1), wVal2), oVal1);
+            drawBackground(guiGraphics, color4, alpha4, zOffset++, wVal1, Math.max(Math.max(width, wVal1), wVal2), oVal1);
         }
         if (!bar) return;
         if (ModConfig.showBackgroundBar)
-            drawBar(m4f, width, height, 1, color3, zOffset++, true, armor);
+            drawBar(guiGraphics, width, height, 1, color3, zOffset++, true, armor);
         if (ModConfig.showSecondaryBar)
-            drawBar(m4f, width, height, percent2, color2, zOffset++, false, armor);
-        drawBar(m4f, width, height, percent, color, zOffset, false, armor);
+            drawBar(guiGraphics, width, height, percent2, color2, zOffset++, false, armor);
+        drawBar(guiGraphics, width, height, percent, color, zOffset, false, armor);
     }
 
-    private static void drawBar(Matrix4f matrix4f, int width, int height, float percent, int color, int zOffset, boolean back, boolean armor) {
-        float v = 10;
+    private static void drawBar(GuiGraphics guiGraphics, int width, int height, float percent, int color, int zOffset, boolean back, boolean armor) {
+        float v0 = 10;
 
         switch (ModConfig.barStyle) {
-            case VANILLA -> v -= height;
-            case DEFAULT -> v += height;
-            case ROUNDED -> v += height * 3;
-            case GRADIENT -> v += height * 5;
-            case MINIMALIST -> v += height * 7;
-            case MODERN -> v += height * 9;
+            case VANILLA -> v0 -= height;
+            case DEFAULT -> v0 += height;
+            case ROUNDED -> v0 += height * 3;
+            case GRADIENT -> v0 += height * 5;
+            case MINIMALIST -> v0 += height * 7;
+            case MODERN -> v0 += height * 9;
         }
 
         float c = 0.0078125F; // 1/128
-        float u = 0;
-        if (back) v -= height;
+        if (back) v0 -= height;
+        float u = 0, v = v0;
         int uw = Mth.ceil(128 * percent);
-        int y = 12;
+        int x = 0, y;
 
-        if (!ModConfig.showName && !ModConfig.showHealth && (!armor || !ModConfig.showArmor))
-            y = 0;
+        y = (!ModConfig.showName && !ModConfig.showHealth && (!armor || !ModConfig.showArmor)) ? 0 : 12;
 
         float size = percent * width;
 
-        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
-
-        RenderSystem.setShaderColor(r, g, b, 1);
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        RenderSystem.setShaderTexture(0, GUI_BARS_TEXTURES);
-        RenderSystem.enableBlend();
-
+        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F, a = 1;
         float zOffsetAmount = 0.1F;
 
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        guiGraphics.drawSpecial(buffer -> {
+            final VertexConsumer vertex = buffer.getBuffer(RenderType.guiTexturedOverlay(GUI_BARS_TEXTURES));
+            Matrix4f matrix = guiGraphics.pose().last().pose();
+            float z = zOffset * zOffsetAmount;
 
-        buffer.addVertex(matrix4f, 0, y, zOffset * zOffsetAmount)
-                .setUv(u * c, v * c);
-        buffer.addVertex(matrix4f, 0, y + height, zOffset * zOffsetAmount)
-                .setUv(u * c, (v + height) * c);
-        buffer.addVertex(matrix4f, size, y + height, zOffset * zOffsetAmount)
-                .setUv((u + uw) * c, (v + height) * c);
-        buffer.addVertex(matrix4f, size, y, zOffset * zOffsetAmount)
-                .setUv((u + uw) * c, v * c);
-        BufferUploader.drawWithShader(buffer.buildOrThrow());
+            vertex.addVertex(matrix, x, y, z).setUv(u * c, v * c).setColor(r, g, b, a);
+            vertex.addVertex(matrix, x, y + height, z).setUv(u * c, (v + height) * c).setColor(r, g, b, a);
+            vertex.addVertex(matrix, size, y + height, z).setUv((u + uw) * c, (v + height) * c).setColor(r, g, b, a);
+            vertex.addVertex(matrix, size, y, z).setUv((u + uw) * c, v * c).setColor(r, g, b, a);
+        });
     }
 
-    private static void drawBackground(Matrix4f matrix4f, int color, int alpha, int zOffset, int wVal1, int maxWidth, int minOffset) {
+    private static void drawBackground(GuiGraphics guiGraphics, int color, int alpha, int zOffset, int wVal1, int maxWidth, int minOffset) {
         int padding = 3;
-        int xw = maxWidth + minOffset + padding;
-        int yh = getHudHeight(wVal1) + 1 + padding;
-        int x = minOffset - padding;
-        int y = 1 - padding;
+        int xw0 = maxWidth + minOffset + padding;
+        int x0 = minOffset - padding;
 
         switch (ModConfig.position) {
-            case BOTTOM_LEFT, TOP_LEFT -> x -= 1;
-            case BOTTOM_RIGHT, TOP_RIGHT -> xw += 1;
+            case BOTTOM_LEFT, TOP_LEFT -> x0 -= 1;
+            case BOTTOM_RIGHT, TOP_RIGHT -> xw0 += 1;
         }
 
-        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F;
+        int xw = xw0, yh = getHudHeight(wVal1) + 1 + padding;
+        int x = x0, y = 1 - padding;
 
-        RenderSystem.setShaderColor(r, g, b, (float) alpha / 100);
-        RenderSystem.setShader(CoreShaders.POSITION);
-        RenderSystem.enableBlend();
-
+        float r = (color >> 16 & 255) / 255.0F, g = (color >> 8 & 255) / 255.0F, b = (color & 255) / 255.0F, a = (float) alpha / 100;
         float zOffsetAmount = 0.1F;
 
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+        guiGraphics.drawSpecial(buffer -> {
+            final VertexConsumer vertex = buffer.getBuffer(RenderType.guiOverlay());
+            Matrix4f matrix = guiGraphics.pose().last().pose();
+            float z = zOffset * zOffsetAmount;
 
-        buffer.addVertex(matrix4f, x, y, zOffset * zOffsetAmount);
-        buffer.addVertex(matrix4f, x, y + yh, zOffset * zOffsetAmount);
-        buffer.addVertex(matrix4f, xw, y + yh, zOffset * zOffsetAmount);
-        buffer.addVertex(matrix4f, xw, y, zOffset * zOffsetAmount);
-        BufferUploader.drawWithShader(buffer.buildOrThrow());
+            vertex.addVertex(matrix, x, y, z).setColor(r, g, b, a);
+            vertex.addVertex(matrix, x, y + yh, z).setColor(r, g, b, a);
+            vertex.addVertex(matrix, xw, y + yh, z).setColor(r, g, b, a);
+            vertex.addVertex(matrix, xw, y, z).setColor(r, g, b, a);
+        });
     }
 }
