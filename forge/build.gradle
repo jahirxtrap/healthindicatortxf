@@ -110,6 +110,7 @@ publishMods {
         accessToken = System.getenv("CURSEFORGE_TOKEN")
         projectId = "883384"
         minecraftVersions.addAll(gameVersions)
+        clientRequired = true
     }
 
     modrinth {
