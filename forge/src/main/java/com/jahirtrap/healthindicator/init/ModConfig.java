@@ -6,7 +6,7 @@ import com.jahirtrap.configlib.TXFConfig;
 import java.util.List;
 
 public class ModConfig extends TXFConfig {
-    public static final String GENERAL = "general", HUD = "hud", COLORS = "colors", ENTITIES = "entities";
+    public static final String GENERAL = "general", DISPLAY = "display", COLORS = "colors", ENTITIES = "entities";
 
     @Entry(category = GENERAL, name = "Enable Mod")
     public static boolean enableMod = true;
@@ -41,18 +41,20 @@ public class ModConfig extends TXFConfig {
     @Entry(category = GENERAL, name = "Bar Style")
     public static BarStyle barStyle = BarStyle.DEFAULT;
 
-    @Entry(category = HUD, name = "Distance", min = 0, max = Integer.MAX_VALUE)
+    @Entry(category = DISPLAY, name = "Distance", min = 0, max = Integer.MAX_VALUE)
     public static int distance = 60;
-    @Entry(category = HUD, name = "X Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
+    @Entry(category = DISPLAY, name = "X Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
     public static double xValue = 0.0;
-    @Entry(category = HUD, name = "Y Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
+    @Entry(category = DISPLAY, name = "Y Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
     public static double yValue = 0.0;
-    @Entry(category = HUD, name = "Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
+    @Entry(category = DISPLAY, name = "Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
     public static double scale = 1.0;
-    @Entry(category = HUD, name = "Hide Delay", min = 0, max = Integer.MAX_VALUE)
+    @Entry(category = DISPLAY, name = "Hide Delay", min = 0, max = Integer.MAX_VALUE)
     public static int hideDelay = 40;
-    @Entry(category = HUD, name = "Position")
+    @Entry(category = DISPLAY, name = "Position")
     public static Position position = Position.TOP_LEFT;
+    @Entry(category = DISPLAY, name = "Particle Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
+    public static double particleScale = 1.0;
 
     @Entry(category = COLORS, name = "Hud Background Opacity", min = 0, max = 100, isSlider = true)
     public static int hudBackgroundOpacity = 0;
