@@ -39,7 +39,7 @@ public class ModConfig extends TXFConfig {
     @Entry(name = "Bar Style")
     public static BarStyle barStyle = BarStyle.DEFAULT;
     @Comment(centered = true)
-    public static Comment hud;
+    public static Comment display;
     @Entry(name = "Distance", min = 0, max = Integer.MAX_VALUE)
     public static int distance = 60;
     @Entry(name = "X Value", min = Double.NEGATIVE_INFINITY, max = Double.POSITIVE_INFINITY)
@@ -52,6 +52,8 @@ public class ModConfig extends TXFConfig {
     public static int hideDelay = 40;
     @Entry(name = "Position")
     public static Position position = Position.TOP_LEFT;
+    @Entry(name = "Particle Scale", min = 0.0, max = Double.POSITIVE_INFINITY)
+    public static double particleScale = 1.0;
     @Comment(centered = true)
     public static Comment colors;
     @Entry(name = "Hud Background Opacity", min = 0, max = 100, isSlider = true)
