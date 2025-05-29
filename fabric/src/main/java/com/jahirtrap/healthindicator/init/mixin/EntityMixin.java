@@ -75,7 +75,8 @@ public abstract class EntityMixin {
 
         String damageString = formatDamageText(entityData.damage);
         int color = getColor(0xfcfcfc, ModConfig.damageParticleColor);
-        if (entityData.damage < 0) color = getColor(0x00fc00, ModConfig.healingParticleColor);
+        if (entityData.damage < 0 && !ModConfig.showHealingParticles)
+            color = getColor(0x00fc00, ModConfig.healingParticleColor);
 
         double posX = livingEntity.getX();
         double posY = (livingEntity.getRemainingFireTicks() > 0) ? livingEntity.getBoundingBox().maxY + 1.24 : livingEntity.getBoundingBox().maxY + 0.24;
@@ -84,6 +85,7 @@ public abstract class EntityMixin {
         DamageParticle damageParticle = new DamageParticle(clientLevel, posX, posY, posZ);
         damageParticle.setText(damageString);
         damageParticle.setColor(color);
+        damageParticle.setScale(ModConfig.particleScale);
         damageParticle.setAnimationSize(1, 1.5);
         damageParticle.setAnimationFade(true);
         damageParticle.setLifetime(20);
