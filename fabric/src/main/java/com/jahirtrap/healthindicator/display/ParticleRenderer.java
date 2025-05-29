@@ -15,7 +15,8 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class ParticleRenderer extends Particle {
     private String text;
-    private double particleScale;
+    private double scale = 1;
+    private double animationScale;
     private Double animationMinSize, animationMaxSize;
     private Boolean animationFade;
 
@@ -41,6 +42,10 @@ public class ParticleRenderer extends Particle {
         this.bCol = getBlueFromColor(color);
     }
 
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
     public void setAnimationSize(double min, double max) {
         this.animationMinSize = min;
         this.animationMaxSize = max;
@@ -62,10 +67,9 @@ public class ParticleRenderer extends Particle {
         float particleZ = (float) (this.zo + (this.z - this.zo) * partialTicks - cameraPos.z());
 
         float textX = (float) (-mc.font.width(this.text) / 2);
-        float textY = 0;
+        float textY = -mc.font.wordWrapHeight(this.text, 0);
 
         int textColor = getColorFromRGBA(this.rCol, this.gCol, this.bCol, this.alpha);
-        int shadowColor = getColorFromRGBA(this.rCol * 0.314F, this.gCol * 0.314F, this.bCol * 0.314F, this.alpha);
 
         this.animateSize(partialTicks);
         this.animateFade(partialTicks);
@@ -80,13 +84,11 @@ public class ParticleRenderer extends Particle {
 
         var buffer = mc.renderBuffers().bufferSource();
 
-        if (this.particleScale != 0) matrix = matrix.scale((float) this.particleScale, (float) this.particleScale, 1);
+        if (this.animationScale != 0)
+            matrix = matrix.scale((float) this.animationScale, (float) this.animationScale, 1);
 
-        matrix = matrix.translate(0, 0, 1);
-        mc.font.drawInBatch(this.text, textX, textY, textColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-        matrix = matrix.translate(0, 0, -2);
-        mc.font.drawInBatch(this.text, textX, textY, shadowColor, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-        matrix.translate(0, 0, 1);
+        matrix = matrix.scale((float) this.scale, (float) this.scale, 1);
+        mc.font.drawInBatch(this.text, textX, textY, textColor, true, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
 
         buffer.endBatch();
     }
@@ -103,7 +105,7 @@ public class ParticleRenderer extends Particle {
         double d2 = -3D * (this.age - 1 + partialTicks) / this.lifetime * (this.animationMaxSize - this.animationMinSize) + 2.5D * this.animationMaxSize - 2.5D * this.animationMinSize;
         double d3 = -(d1 + Math.abs(d1)) + 2D * this.animationMaxSize - 2D * this.animationMinSize;
         double d4 = -(d2 + Math.abs(d2)) + 2D * this.animationMaxSize - 2D * this.animationMinSize;
-        this.particleScale = -(d3 + Math.abs(d3) + d4 + Math.abs(d4)) / 4D + this.animationMaxSize;
+        this.animationScale = -(d3 + Math.abs(d3) + d4 + Math.abs(d4)) / 4D + this.animationMaxSize;
     }
 
     public void animateFade(float partialTicks) {
