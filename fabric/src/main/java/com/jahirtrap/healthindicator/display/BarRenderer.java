@@ -19,7 +19,7 @@ public class BarRenderer {
 
     public static void render(PoseStack poseStack, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = getEntityType(entity);
-        int color = 0x8000ff, color2 = 0x400080, color3 = 0x808080, color4 = 0x000000, alpha4 = 0;
+        int color = 0x8000ff, color2 = 0x400080;
         if (entityType == EntityType.PASSIVE) {
             color = getColor(0x00ff00, ModConfig.passiveColor);
             color2 = getColor(0x008000, ModConfig.passiveColorSecondary);
@@ -30,9 +30,9 @@ public class BarRenderer {
             color = getColor(0x0000ff, ModConfig.neutralColor);
             color2 = getColor(0x000080, ModConfig.neutralColorSecondary);
         }
-        color3 = getColor(0x808080, ModConfig.backgroundBarColor);
-        color4 = getColor(0x000000, ModConfig.hudBackgroundColor);
-        alpha4 = ModConfig.hudBackgroundOpacity;
+        int color3 = getColor(0x808080, ModConfig.backgroundBarColor);
+        int color4 = getColor(0x000000, ModConfig.hudBackgroundColor);
+        int alpha4 = ModConfig.hudBackgroundOpacity;
 
         BarState state = BarStates.getState(entity);
 
