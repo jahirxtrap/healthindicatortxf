@@ -1,1 +1,1 @@
-- particleScale config option ([Issue #11](https://github.com/jahirxtrap/healthindicatortxf/issues/11))
+- Update to 1.21.6

@@ -1,10 +1,9 @@
 package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.init.ModConfig;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -75,41 +74,40 @@ public class BarDisplay {
         }
 
         BarRenderer.render(guiGraphics, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (showName && !name.isBlank()) {
-            guiGraphics.drawString(mc.font, name, xOffset, yOffset, 0xffffff);
+            guiGraphics.drawString(mc.font, name, xOffset, yOffset, 0xffffffff);
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
             renderHeartIcon(guiGraphics, xOffset, entity);
             xOffset += 10;
-            guiGraphics.drawString(mc.font, healthText, xOffset, yOffset, 0xffffff);
+            guiGraphics.drawString(mc.font, healthText, xOffset, yOffset, 0xffffffff);
             xOffset += mc.font.width(healthText) + 5;
         }
         if (armor && showArmor) {
             renderArmorIcon(guiGraphics, xOffset);
             xOffset += 10;
-            guiGraphics.drawString(mc.font, armorText, xOffset, yOffset, 0xffffff);
+            guiGraphics.drawString(mc.font, armorText, xOffset, yOffset, 0xffffffff);
         }
         if (showModName && !modNameText.isBlank()) {
             yOffset = 15 + barHeight;
             if (offAux == 0) yOffset -= 12;
             if (!showBar) yOffset -= barHeight + 2;
-            guiGraphics.drawString(mc.font, modNameText, xOffsetM, yOffset, getColor(0x5555ff, ModConfig.modNameColor));
+            guiGraphics.drawString(mc.font, modNameText, xOffsetM, yOffset, (255 << 24) | (getColor(0x5555ff, ModConfig.modNameColor) & 0xffffff));
         }
     }
 
     private void renderArmorIcon(GuiGraphics guiGraphics, int x) {
-        guiGraphics.blitSprite(RenderType::guiTextured, ARMOR_FULL_SPRITE, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_FULL_SPRITE, x, 1, 9, 9);
     }
 
     private void renderHeartIcon(GuiGraphics guiGraphics, int x, LivingEntity entity) {
         ResourceLocation icon = HEART_FULL_SPRITE;
-        guiGraphics.blitSprite(RenderType::guiTextured, HEART_CONTAINER_SPRITE, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HEART_CONTAINER_SPRITE, x, 1, 9, 9);
 
         if (ModConfig.dynamicHeartTexture) icon = getHeartSprite(entity);
-        guiGraphics.blitSprite(RenderType::guiTextured, icon, x, 1, 9, 9);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, x, 1, 9, 9);
     }
 
     private ResourceLocation getHeartSprite(LivingEntity entity) {

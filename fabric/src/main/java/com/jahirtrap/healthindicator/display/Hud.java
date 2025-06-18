@@ -2,13 +2,13 @@ package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.init.ModConfig.Position;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Matrix3x2fStack;
 
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
@@ -83,17 +83,17 @@ public class Hud extends Screen {
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
 
-    private void draw(GuiGraphics guiGraphics, PoseStack poseStack, float x, float y, float scale) {
+    private void draw(GuiGraphics guiGraphics, Matrix3x2fStack matrix, float x, float y, float scale) {
         if (entity == null) return;
         if (!ModConfig.showName && !ModConfig.showHealth && !ModConfig.showArmor && !ModConfig.showBar && !ModConfig.showModName)
             return;
         if (checkBlacklist(ModConfig.blacklist, entity) || checkBlacklist(ModConfig.barBlacklist, entity)) return;
 
-        poseStack.pushPose();
-        poseStack.translate(x, y, 0);
-        poseStack.scale(scale, scale, scale);
+        matrix.pushMatrix();
+        matrix.translate(x, y);
+        matrix.scale(scale, scale);
         if (ModConfig.enableMod && ModConfig.showHud)
             barDisplay.draw(guiGraphics, entity);
-        poseStack.popPose();
+        matrix.popMatrix();
     }
 }
