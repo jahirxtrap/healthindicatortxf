@@ -8,7 +8,8 @@
     "PlayerMixin"
   ],
   "client": [
-    "GuiMixin"
+    "GuiMixin",
+    "ParticleEngineMixin"
   ],
   "injectors": {
     "defaultRequire": 1
