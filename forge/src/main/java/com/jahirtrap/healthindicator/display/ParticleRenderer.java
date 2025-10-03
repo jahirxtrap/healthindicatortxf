@@ -1,21 +1,35 @@
 package com.jahirtrap.healthindicator.display;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.ParticleGroup;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.ParticleGroupRenderState;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.jahirtrap.healthindicator.HealthIndicatorMod.MODID;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class ParticleRenderer extends Particle {
+    public static final ParticleRenderType CUSTOM = new ParticleRenderType(MODID + ":particle_renderer");
+    private float rCol = 1;
+    private float gCol = 1;
+    private float bCol = 1;
+    private float alpha = 1;
     private String text;
     private double scale = 1;
     private double animationScale;
@@ -38,9 +52,6 @@ public class ParticleRenderer extends Particle {
         this.alpha = alpha;
     }
 
-    public void render(@NotNull VertexConsumer vertexConsumer, @NotNull Camera camera, float partialTicks) {
-    }
-
     public void setColor(int color) {
         this.rCol = getRedFromColor(color);
         this.gCol = getGreenFromColor(color);
@@ -61,46 +72,8 @@ public class ParticleRenderer extends Particle {
     }
 
     @Override
-    public void renderCustom(@NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, @NotNull Camera camera, float partialTicks) {
-        if (this.text == null || this.text.isEmpty()) return;
-
-        Minecraft mc = Minecraft.getInstance();
-
-        Vec3 cameraPos = camera.getPosition();
-        float particleX = (float) (this.xo + (this.x - this.xo) * partialTicks - cameraPos.x());
-        float particleY = (float) (this.yo + (this.y - this.yo) * partialTicks - cameraPos.y());
-        float particleZ = (float) (this.zo + (this.z - this.zo) * partialTicks - cameraPos.z());
-
-        float textX = (float) (-mc.font.width(this.text) / 2);
-        float textY = -mc.font.wordWrapHeight(this.text, 0);
-
-        int textColor = getColorFromRGBA(this.rCol, this.gCol, this.bCol, this.alpha);
-
-        this.animateSize(partialTicks);
-        this.animateFade(partialTicks);
-
-        if (this.alpha == 0) return;
-
-        Matrix4f matrix = new Matrix4f();
-        matrix = matrix.translate(particleX, particleY, particleZ);
-        matrix = matrix.rotate(camera.rotation());
-        matrix = matrix.rotate((float) Math.PI, 0, 1, 0);
-        matrix = matrix.scale(-0.024F, -0.024F, -0.024F);
-
-        var buffer = mc.renderBuffers().bufferSource();
-
-        if (this.animationScale != 0)
-            matrix = matrix.scale((float) this.animationScale, (float) this.animationScale, 1);
-
-        matrix = matrix.scale((float) this.scale, (float) this.scale, 1);
-        mc.font.drawInBatch(this.text, textX, textY, textColor, true, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-
-        buffer.endBatch();
-    }
-
-    @Override
-    public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.CUSTOM;
+    public @NotNull ParticleRenderType getGroup() {
+        return CUSTOM;
     }
 
     public void animateSize(float partialTicks) {
@@ -140,6 +113,77 @@ public class ParticleRenderer extends Particle {
 
             this.yd = (0.12D * (2D * (this.age - 1) - this.lifetime) * (2D * (this.age - 1) - this.lifetime) / (this.lifetime * this.lifetime));
             this.move(this.xd, this.yd, this.zd);
+        }
+    }
+
+    public static class ParticleRendererGroup extends ParticleGroup<ParticleRenderer> {
+        public ParticleRendererGroup(ParticleEngine engine) {
+            super(engine);
+        }
+
+        public static final class Entry {
+            public final Matrix4f pose;
+            public final String text;
+            public final int color;
+            public final float scale;
+
+            Entry(Matrix4f pose, String text, int color, float scale) {
+                this.pose = pose;
+                this.text = text;
+                this.color = color;
+                this.scale = scale;
+            }
+        }
+
+        public record State(List<Entry> entries) implements ParticleGroupRenderState {
+            @Override
+            public void submit(SubmitNodeCollector collector, CameraRenderState cameraRenderState) {
+                var mc = Minecraft.getInstance();
+
+                for (Entry entry : entries) {
+                    if (entry.text == null || entry.text.isEmpty()) continue;
+
+                    float textX = (float) (-mc.font.width(entry.text) / 2);
+                    float textY = -mc.font.wordWrapHeight(entry.text, 0);
+
+                    PoseStack poseStack = new PoseStack();
+                    poseStack.last().pose().set(entry.pose);
+                    poseStack.scale(entry.scale, entry.scale, 1);
+
+                    collector.submitText(poseStack, textX, textY, Component.literal(entry.text).getVisualOrderText(), true, Font.DisplayMode.NORMAL, 0x00F000F0, entry.color, 0, 0);
+                }
+            }
+        }
+
+
+        @Override
+        public @NotNull ParticleGroupRenderState extractRenderState(Frustum frustum, Camera camera, float partialTick) {
+            List<Entry> entries = new ArrayList<>(this.particles.size());
+            Vec3 pos = camera.getPosition();
+
+            for (ParticleRenderer p : this.particles) {
+                if (p.alpha == 0) continue;
+
+                float x = (float) (p.xo + (p.x - p.xo) * partialTick - pos.x());
+                float y = (float) (p.yo + (p.y - p.yo) * partialTick - pos.y());
+                float z = (float) (p.zo + (p.z - p.zo) * partialTick - pos.z());
+
+                int color = getColorFromRGBA(p.rCol, p.gCol, p.bCol, p.alpha);
+
+                p.animateSize(partialTick);
+                p.animateFade(partialTick);
+
+                Matrix4f matrix = new Matrix4f()
+                        .translate(x, y, z)
+                        .rotate(camera.rotation())
+                        .rotate((float) Math.PI, 0, 1, 0)
+                        .scale(-0.024f, -0.024f, -0.024f);
+
+                float scale = (float) ((p.animationScale != 0 ? p.animationScale : 1) * p.scale);
+                entries.add(new Entry(matrix, p.text, color, scale));
+            }
+
+            return new State(entries);
         }
     }
 }
