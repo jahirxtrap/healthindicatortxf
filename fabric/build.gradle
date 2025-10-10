@@ -83,7 +83,7 @@ publishMods {
     type = BETA
     modLoaders.addAll("fabric", "quilt")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21.9"]
+    def gameVersions = ["1.21.9", "1.21.10"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")
