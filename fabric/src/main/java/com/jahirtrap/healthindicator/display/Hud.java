@@ -19,7 +19,6 @@ public class Hud extends Screen {
 
     public Hud() {
         super(Component.empty());
-        this.minecraft = Minecraft.getInstance();
         barDisplay = new BarDisplay(minecraft);
     }
 

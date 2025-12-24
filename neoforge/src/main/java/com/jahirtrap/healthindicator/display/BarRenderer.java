@@ -5,14 +5,14 @@ import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 
 import static com.jahirtrap.healthindicator.HealthIndicatorMod.MODID;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class BarRenderer {
-    private static final ResourceLocation GUI_BARS_TEXTURES = ResourceLocation.fromNamespaceAndPath(MODID, "textures/gui/bars.png");
+    private static final Identifier GUI_BARS_TEXTURES = Identifier.fromNamespaceAndPath(MODID, "textures/gui/bars.png");
 
     public static void render(GuiGraphics guiGraphics, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = getEntityType(entity);

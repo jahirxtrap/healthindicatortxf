@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.state.ParticleGroupRenderState;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
@@ -144,7 +145,7 @@ public class ParticleRenderer extends Particle {
                     if (entry.text == null || entry.text.isEmpty()) continue;
 
                     float textX = (float) (-mc.font.width(entry.text) / 2);
-                    float textY = -mc.font.wordWrapHeight(entry.text, 0);
+                    float textY = -mc.font.wordWrapHeight(FormattedText.of(entry.text), 0);
 
                     PoseStack poseStack = new PoseStack();
                     poseStack.last().pose().set(entry.pose);
@@ -159,7 +160,7 @@ public class ParticleRenderer extends Particle {
         @Override
         public @NotNull ParticleGroupRenderState extractRenderState(Frustum frustum, Camera camera, float partialTick) {
             List<Entry> entries = new ArrayList<>(this.particles.size());
-            Vec3 pos = camera.getPosition();
+            Vec3 pos = camera.position();
 
             for (ParticleRenderer p : this.particles) {
                 if (p.alpha == 0) continue;

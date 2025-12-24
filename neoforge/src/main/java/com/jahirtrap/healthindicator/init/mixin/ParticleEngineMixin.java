@@ -24,7 +24,7 @@ public abstract class ParticleEngineMixin {
     @Shadow
     @Final
     @Mutable
-    private static List<ParticleRenderType> RENDER_ORDER;
+    private List<ParticleRenderType> particleRenderOrder;
 
     @Inject(method = "createParticleGroup", at = @At("HEAD"), cancellable = true)
     private void createParticleGroup(ParticleRenderType type, CallbackInfoReturnable<ParticleGroup<?>> cir) {
@@ -34,7 +34,7 @@ public abstract class ParticleEngineMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(CallbackInfo ci) {
-        RENDER_ORDER = new ArrayList<>(RENDER_ORDER);
-        RENDER_ORDER.add(CUSTOM);
+        particleRenderOrder = new ArrayList<>(particleRenderOrder);
+        particleRenderOrder.add(CUSTOM);
     }
 }

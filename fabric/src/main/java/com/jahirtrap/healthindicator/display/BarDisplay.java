@@ -4,7 +4,7 @@ import com.jahirtrap.healthindicator.init.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -12,9 +12,9 @@ import net.minecraft.world.entity.player.Player;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class BarDisplay {
-    private static final ResourceLocation ARMOR_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/armor_full");
-    private static final ResourceLocation HEART_CONTAINER_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/container");
-    private static final ResourceLocation HEART_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/full");
+    private static final Identifier ARMOR_FULL_SPRITE = Identifier.withDefaultNamespace("hud/armor_full");
+    private static final Identifier HEART_CONTAINER_SPRITE = Identifier.withDefaultNamespace("hud/heart/container");
+    private static final Identifier HEART_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/full");
     private final Minecraft mc;
     private int infoWidth;
 
@@ -103,21 +103,21 @@ public class BarDisplay {
     }
 
     private void renderHeartIcon(GuiGraphics guiGraphics, int x, LivingEntity entity) {
-        ResourceLocation icon = HEART_FULL_SPRITE;
+        Identifier icon = HEART_FULL_SPRITE;
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HEART_CONTAINER_SPRITE, x, 1, 9, 9);
 
         if (ModConfig.dynamicHeartTexture) icon = getHeartSprite(entity);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, x, 1, 9, 9);
     }
 
-    private ResourceLocation getHeartSprite(LivingEntity entity) {
-        final ResourceLocation HEART_FROZEN_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/frozen_full");
-        final ResourceLocation HEART_ABSORBING_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/absorbing_full");
-        final ResourceLocation HEART_X_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/hardcore_full");
-        final ResourceLocation HEART_X_FROZEN_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/frozen_hardcore_full");
-        final ResourceLocation HEART_X_ABSORBING_FULL_SPRITE = ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_full");
+    private Identifier getHeartSprite(LivingEntity entity) {
+        final Identifier HEART_FROZEN_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/frozen_full");
+        final Identifier HEART_ABSORBING_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/absorbing_full");
+        final Identifier HEART_X_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/hardcore_full");
+        final Identifier HEART_X_FROZEN_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/frozen_hardcore_full");
+        final Identifier HEART_X_ABSORBING_FULL_SPRITE = Identifier.withDefaultNamespace("hud/heart/absorbing_hardcore_full");
 
-        ResourceLocation icon = HEART_FULL_SPRITE;
+        Identifier icon = HEART_FULL_SPRITE;
         boolean hardcore = false;
         // if (WITHER) icon = WITHERED_SPRITE; if (POISON) icon = POISONED_SPRITE;
         if (entity instanceof Player && mc.level != null && mc.level.getLevelData().isHardcore()) {
