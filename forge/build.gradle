@@ -30,6 +30,10 @@ minecraft {
     if (at.exists()) {
         accessTransformers.from(at)
     }
+    def mixin = file("src/main/resources/${mod_id}.mixins.json")
+    if (mixin.exists()) {
+        jar.manifest.attributes('MixinConfigs': "${mod_id}.mixins.json")
+    }
     runs {
         configureEach {
             workingDir = layout.projectDirectory.dir('run')
