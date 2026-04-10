@@ -31,8 +31,5 @@
 		"minecraft": "${minecraft_version_range}",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"jars": [{
-      		"file": "META-INF/jars/configlibtxf-${configlibtxf_version}-fabric.jar"
-    	}]
+	}
 }

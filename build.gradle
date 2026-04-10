@@ -1,11 +1,11 @@
 plugins {
-    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.4.1"
 }
 
 subprojects {
     apply plugin: 'java'
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
     jar {
         manifest {
@@ -26,9 +26,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-        flatDir {
-            dir 'libs'
-        }
     }
 
     tasks.withType(JavaCompile).configureEach {

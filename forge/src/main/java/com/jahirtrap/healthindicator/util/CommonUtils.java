@@ -28,7 +28,7 @@ public class CommonUtils {
 
     public static String getModName(LivingEntity entity) {
         String modId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace();
-        return ModList.get().getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId);
+        return ModList.getModContainerById(modId).map(container -> container.getModInfo().getDisplayName()).orElse(modId);
     }
 
     public static String getEntityId(LivingEntity entity) {

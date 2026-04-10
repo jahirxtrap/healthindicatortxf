@@ -2,7 +2,7 @@ package com.jahirtrap.healthindicator.display;
 
 import com.jahirtrap.healthindicator.init.ModConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -22,7 +22,7 @@ public class BarDisplay {
         this.mc = mc;
     }
 
-    public void draw(GuiGraphics guiGraphics, LivingEntity entity) {
+    public void draw(GuiGraphicsExtractor guiGraphics, LivingEntity entity) {
         int barWidth = 128, barHeight = 6;
         int xOffset = 1, xOffsetM = 1, yOffset = 2;
         if (ModConfig.barStyle == ModConfig.BarStyle.VANILLA) barHeight = 5;
@@ -76,33 +76,33 @@ public class BarDisplay {
         BarRenderer.render(guiGraphics, entity, barWidth, barHeight, armor, showBar, offAux, mc.font.width(modNameText), Math.min(xOffset, xOffsetM));
 
         if (showName && !name.isBlank()) {
-            guiGraphics.drawString(mc.font, name, xOffset, yOffset, 0xffffffff);
+            guiGraphics.text(mc.font, name, xOffset, yOffset, 0xffffffff);
             xOffset += mc.font.width(name) + 5;
         }
         if (showHealth) {
             renderHeartIcon(guiGraphics, xOffset, entity);
             xOffset += 10;
-            guiGraphics.drawString(mc.font, healthText, xOffset, yOffset, 0xffffffff);
+            guiGraphics.text(mc.font, healthText, xOffset, yOffset, 0xffffffff);
             xOffset += mc.font.width(healthText) + 5;
         }
         if (armor && showArmor) {
             renderArmorIcon(guiGraphics, xOffset);
             xOffset += 10;
-            guiGraphics.drawString(mc.font, armorText, xOffset, yOffset, 0xffffffff);
+            guiGraphics.text(mc.font, armorText, xOffset, yOffset, 0xffffffff);
         }
         if (showModName && !modNameText.isBlank()) {
             yOffset = 15 + barHeight;
             if (offAux == 0) yOffset -= 12;
             if (!showBar) yOffset -= barHeight + 2;
-            guiGraphics.drawString(mc.font, modNameText, xOffsetM, yOffset, (255 << 24) | (getColor(0x5555ff, ModConfig.modNameColor) & 0xffffff));
+            guiGraphics.text(mc.font, modNameText, xOffsetM, yOffset, (255 << 24) | (getColor(0x5555ff, ModConfig.modNameColor) & 0xffffff));
         }
     }
 
-    private void renderArmorIcon(GuiGraphics guiGraphics, int x) {
+    private void renderArmorIcon(GuiGraphicsExtractor guiGraphics, int x) {
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_FULL_SPRITE, x, 1, 9, 9);
     }
 
-    private void renderHeartIcon(GuiGraphics guiGraphics, int x, LivingEntity entity) {
+    private void renderHeartIcon(GuiGraphicsExtractor guiGraphics, int x, LivingEntity entity) {
         Identifier icon = HEART_FULL_SPRITE;
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HEART_CONTAINER_SPRITE, x, 1, 9, 9);
 

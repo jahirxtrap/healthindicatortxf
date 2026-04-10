@@ -3,7 +3,7 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.data.BarState;
 import com.jahirtrap.healthindicator.data.BarStates;
 import com.jahirtrap.healthindicator.init.ModConfig;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +14,7 @@ import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 public class BarRenderer {
     private static final Identifier GUI_BARS_TEXTURES = Identifier.fromNamespaceAndPath(MODID, "textures/gui/bars.png");
 
-    public static void render(GuiGraphics guiGraphics, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
+    public static void render(GuiGraphicsExtractor guiGraphics, LivingEntity entity, int width, int height, boolean armor, boolean bar, int wVal1, int wVal2, int oVal1) {
         EntityType entityType = getEntityType(entity);
         int color = 0x8000ff, color2 = 0x400080;
         if (entityType == EntityType.PASSIVE) {
@@ -49,7 +49,7 @@ public class BarRenderer {
         drawBar(guiGraphics, width, height, percent, color, false, armor);
     }
 
-    private static void drawBar(GuiGraphics guiGraphics, int width, int height, float percent, int color, boolean back, boolean armor) {
+    private static void drawBar(GuiGraphicsExtractor guiGraphics, int width, int height, float percent, int color, boolean back, boolean armor) {
         int v = 10;
 
         switch (ModConfig.barStyle) {
@@ -69,7 +69,7 @@ public class BarRenderer {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GUI_BARS_TEXTURES, 0, y, 0, v, size, height, 128, 128, argb);
     }
 
-    private static void drawBackground(GuiGraphics guiGraphics, int color, int alpha, int wVal1, int maxWidth, int minOffset) {
+    private static void drawBackground(GuiGraphicsExtractor guiGraphics, int color, int alpha, int wVal1, int maxWidth, int minOffset) {
         int padding = 3;
         int xw = maxWidth + minOffset + padding;
         int x = minOffset - padding;

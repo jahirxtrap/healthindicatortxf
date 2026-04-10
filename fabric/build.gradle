@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom' version '1.13-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
@@ -17,22 +17,18 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     compileOnly project(":common")
 
-    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-fabric"
+    include "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-fabric"
 }
 
 loom {
     def aw = file("src/main/resources/${mod_id}.aw")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
-    }
-    mixin {
-        useLegacyMixinAp.set(true)
-        defaultRefmapName.set("${mod_id}.refmap.json")
     }
     runs {
         client {
@@ -56,8 +52,7 @@ def replaceProperties = [
         loader_version_range: fabric_loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
         mod_author: mod_author, mod_description: mod_description,
-        mod_url: mod_url, mod_issues: mod_issues, side: fabric_side,
-        configlibtxf_version: configlibtxf_version
+        mod_url: mod_url, mod_issues: mod_issues, side: fabric_side
 ]
 
 processResources {
@@ -69,22 +64,13 @@ processResources {
     exclude '**/data/forge/**', '**/data/neoforge/**'
 }
 
-jar {
-    from('libs') {
-        include '*.jar'
-        into('META-INF/jars')
-    }
-}
-
-jar.finalizedBy('remapJar')
-
 publishMods {
-    file = remapJar.archiveFile
+    file = tasks.jar.archiveFile
     displayName = "${mod_name} ${project.version}"
     type = BETA
     modLoaders.addAll("fabric", "quilt")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21.11"]
+    def gameVersions = ["26.1", "26.1.1", "26.1.2"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

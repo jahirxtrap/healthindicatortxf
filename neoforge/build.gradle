@@ -1,12 +1,19 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.134'
+    id 'net.neoforged.moddev' version '2.0.141'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
 version = "${version}-neoforge"
 base.archivesName = mod_id
+
+dependencies {
+    compileOnly project(":common")
+
+    implementation "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"
+    jarJar "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"
+}
 
 neoForge {
     version = neoforge_version
@@ -38,13 +45,6 @@ neoForge {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
-dependencies {
-    compileOnly project(":common")
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    jarJar "com.jahirtrap:configlibtxf:${configlibtxf_version}-neoforge"
-}
-
 def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: neoforge_minecraft_version_range,
@@ -70,7 +70,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("neoforge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["1.21.11"]
+    def gameVersions = ["26.1", "26.1.1", "26.1.2"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

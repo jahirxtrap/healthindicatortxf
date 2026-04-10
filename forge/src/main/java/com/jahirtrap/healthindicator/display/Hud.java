@@ -3,7 +3,7 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.init.ModConfig.Position;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +22,7 @@ public class Hud extends Screen {
         barDisplay = new BarDisplay(minecraft);
     }
 
-    public void draw(GuiGraphics guiGraphics) {
+    public void draw(GuiGraphicsExtractor guiGraphics) {
         if (this.minecraft != null && (this.minecraft.getDebugOverlay().showDebugScreen() || this.minecraft.options.hideGui))
             return;
         float scale = (float) ModConfig.scale;
@@ -77,12 +77,12 @@ public class Hud extends Screen {
 
         if (entity != null && !ModConfig.showInvisibleEntities && entity.isInvisible() && !entity.isCurrentlyGlowing() && !entity.isOnFire())
             setEntityWork(null);
-        else if (entity != null && !ModConfig.showBosses && entity.getType().is(Tags.EntityTypes.BOSSES))
+        else if (entity != null && !ModConfig.showBosses && entity.is(Tags.EntityTypes.BOSSES))
             setEntityWork(null);
         else if (entity != null && entity != this.entity) setEntityWork(entity);
     }
 
-    private void draw(GuiGraphics guiGraphics, Matrix3x2fStack matrix, float x, float y, float scale) {
+    private void draw(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack matrix, float x, float y, float scale) {
         if (entity == null) return;
         if (!ModConfig.showName && !ModConfig.showHealth && !ModConfig.showArmor && !ModConfig.showBar && !ModConfig.showModName)
             return;
