@@ -11,8 +11,7 @@ base.archivesName = mod_id
 dependencies {
     compileOnly project(":common")
 
-    implementation "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"
-    jarJar "io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"
+    implementation(jarJar("io.github.jahirxtrap:configlibtxf:${configlibtxf_version}-neoforge"))
 }
 
 neoForge {
