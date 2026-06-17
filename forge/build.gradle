@@ -88,7 +88,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("forge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["26.1", "26.1.1", "26.1.2"]
+    def gameVersions = ["26.2"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

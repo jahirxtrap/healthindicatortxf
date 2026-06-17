@@ -1,1 +1,1 @@
-- Updated config lib
+- Update to 26.2

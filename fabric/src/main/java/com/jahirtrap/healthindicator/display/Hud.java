@@ -3,7 +3,6 @@ package com.jahirtrap.healthindicator.display;
 import com.jahirtrap.healthindicator.init.ModConfig;
 import com.jahirtrap.healthindicator.init.ModConfig.Position;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -23,7 +22,7 @@ public class Hud extends Screen {
     }
 
     public void draw(GuiGraphicsExtractor guiGraphics) {
-        if (this.minecraft != null && (this.minecraft.getDebugOverlay().showDebugScreen() || this.minecraft.options.hideGui))
+        if (this.minecraft != null && (this.minecraft.getDebugOverlay().showDebugScreen() || this.minecraft.gui.hud.isHidden()))
             return;
         float scale = (float) ModConfig.scale;
         float x = determineX();

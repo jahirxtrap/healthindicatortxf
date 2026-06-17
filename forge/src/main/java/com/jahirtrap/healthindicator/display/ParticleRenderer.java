@@ -26,7 +26,7 @@ import static com.jahirtrap.healthindicator.HealthIndicatorMod.MODID;
 import static com.jahirtrap.healthindicator.util.CommonUtils.*;
 
 public class ParticleRenderer extends Particle {
-    public static final ParticleRenderType CUSTOM = new ParticleRenderType(MODID + ":particle_renderer");
+    public static final ParticleRenderType CUSTOM = new ParticleRenderType(MODID + ":particle_renderer", "HI");
     private float rCol = 1;
     private float gCol = 1;
     private float bCol = 1;
