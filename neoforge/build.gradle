@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java-library'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.147'
     id 'me.modmuss50.mod-publish-plugin' version '0.6.3'
 }
 
@@ -69,7 +69,7 @@ publishMods {
     type = STABLE
     modLoaders.addAll("neoforge")
     changelog = rootProject.file("CHANGELOG.md").text
-    def gameVersions = ["26.2"]
+    def gameVersions = ["26.3"]
 
     curseforge {
         accessToken = System.getenv("CURSEFORGE_TOKEN")
@@ -87,6 +87,6 @@ publishMods {
 
 ["publishCurseforge", "publishModrinth", "publishMods"].each { task ->
     tasks.named(task) {
-        mustRunAfter(":forge:$task")
+        mustRunAfter(":fabric:$task")
     }
 }
