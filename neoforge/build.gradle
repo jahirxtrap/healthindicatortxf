@@ -87,6 +87,6 @@ publishMods {
 
 ["publishCurseforge", "publishModrinth", "publishMods"].each { task ->
     tasks.named(task) {
-        mustRunAfter(":fabric:$task")
+        mustRunAfter(":forge:$task")
     }
 }
